@@ -12,6 +12,7 @@ import multer from 'multer';
 
 // routers
 import ApplicationRouter from './v1/Application/Application.Router.js'
+import UserRouter from './v1/User/User.Router.js'
 
 const app = express()
 
@@ -66,6 +67,8 @@ app.use(function(err, req, res, next) {
 
 // app base routes
 app.use("/v1/Application", ApplicationRouter)
+app.use("/v1/User", UserRouter)
+
 
 // handles all the unused links
 app.all("/*", (req, res) => {

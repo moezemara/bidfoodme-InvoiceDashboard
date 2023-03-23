@@ -1,6 +1,7 @@
 import { createPool } from "mysql"
 import config from '../config/config.js'
 import RegisterBranch from './RegisterBranch/RegisterBranch.js'
+import Account from './Account/Account.js'
 
 export default class Database {
   constructor() {
@@ -13,6 +14,7 @@ export default class Database {
     })
 
     this.RegisterBranch = new RegisterBranch(this.pool)
+    this.Account = new Account(this.pool)
   }
 
 }
