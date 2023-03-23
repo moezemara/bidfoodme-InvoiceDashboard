@@ -1,6 +1,6 @@
-import * as response from './response.js'
+import * as response from './Response.js'
 import jwt from 'jsonwebtoken'
-import config from '../config/config.js'
+import config from '../config/Config.js'
 
 export async function basic(req, res, next) {
     const token = req.headers["authorization"]

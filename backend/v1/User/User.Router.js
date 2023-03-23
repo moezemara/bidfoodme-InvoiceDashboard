@@ -1,8 +1,8 @@
-import {GenerateToken, AddAccount} from './user.controller.js';
+import {GenerateToken, AddAccount} from './User.Controller.js';
 import express from 'express'
 import * as schema from './User.Schema.js'
-import * as auth from '../../utils/authChecker.js'
-import * as schemaChecker from '../../utils/schemaChecker.js'
+import * as auth from '../../utils/AuthChecker.js'
+import * as schemaChecker from '../../utils/SchemaChecker.js'
 
 const router = express.Router()
 

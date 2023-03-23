@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto'
 import VerifyFinish from './utils/VerifyFinish.js'
 import { direct_check } from '../../../utils/SchemaChecker.js'
 import * as schema from './RegisterBranch.Schema.js'
-import { ValidateFields } from './utils/fileUtils.js'
+import { ValidateFields } from './utils/FileUtils.js'
 import upload from './utils/multer.js'
 
 export async function CreateApplication(req, res) {

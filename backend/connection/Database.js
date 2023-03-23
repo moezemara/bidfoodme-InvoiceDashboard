@@ -1,5 +1,5 @@
 import { createPool } from "mysql"
-import config from '../config/config.js'
+import config from '../config/Config.js'
 import RegisterBranch from './RegisterBranch/RegisterBranch.js'
 import Account from './Account/Account.js'
 

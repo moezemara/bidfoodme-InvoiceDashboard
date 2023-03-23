@@ -1,9 +1,9 @@
 import multer from 'multer'
 import { randomUUID } from 'crypto'
 import path from 'path'
-import { ValidateFileType, ValidateFields } from './fileUtils.js'
-import config from '../../../../Config/config.js'
-import * as response from '../../../../utils/response.js'
+import { ValidateFileType, ValidateFields } from './FileUtils.js'
+import config from '../../../../config/Config.js'
+import * as response from '../../../../utils/Response.js'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

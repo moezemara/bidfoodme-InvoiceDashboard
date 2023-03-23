@@ -7,7 +7,7 @@ import config from "./config/Config.js"
 import helmet from "helmet"
 import hpp from "hpp"
 import Database from "./connection/Database.js"
-import * as response from './utils/response.js'
+import * as response from './utils/Response.js'
 import multer from 'multer';
 
 // routers

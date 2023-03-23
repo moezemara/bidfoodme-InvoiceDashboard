@@ -1,6 +1,6 @@
 import joi from 'joi'
 import config from '../../../config/Config.js'
-import countries from '../../../utils/countries.js'
+import countries from '../../../utils/Countries.js'
 
 export const SavePageProgress_params = joi.object({
     step: joi.string().valid(...config.Applications.RegisterBranch.Pages).required()
