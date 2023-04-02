@@ -9,14 +9,14 @@ import * as FormStyles from './FormStyles';
 
 import Timer from './utils/Timer';
 
-import { RegisterBranchContext } from './Contexts/RegisterBranchContext';
+import { RequestCreditContext } from './Contexts/RequestCreditContext';
 import * as ApplicationApi from './utils/ApplicationApi';
 
 
 const Form = () => {
   const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiNDYzMjMzMGEtOTRiMS00NjZmLWE0ZDgtNWY5MzNmYTE3MmZkIiwiaWF0IjoxNjc5OTYwMDU0LCJleHAiOjE2ODAzMjAwNTR9.Beq0vTV2aDrgfKU6H9UQ5Hfa3UH57FZTVdITblUlK60"
 
-  const { LoadSavedProgress, isDataLoaded } = React.useContext(RegisterBranchContext);
+  const { LoadSavedProgress, isDataLoaded } = React.useContext(RequestCreditContext);
 
   const [ data, setData ] = useState({
     general_info: {},
@@ -200,7 +200,8 @@ const Form = () => {
     const currentTimerValue = getCurrentTimerValue();
 
     for (let i = 0; i < currentSteps.length; i++) {
-      const stepData = getStepData(currentSteps[i]);      
+      const stepData = getStepData(currentSteps[i]);
+      
       let response = ''
       if (currentSteps[i] === 'uploads'){
         response = await ApplicationApi.SaveProgressUploads(token, stepData)
@@ -211,10 +212,11 @@ const Form = () => {
       if (response.success !== 1){
         return;
       }
-
+      
       response = await ApplicationApi.UpdateTime(token, currentTimerValue[0], {time_spent: currentTimerValue[1]})
       console.log(response)
     }
+    
   };
 
   const handleFinishClick = async () => {
@@ -249,6 +251,9 @@ const Form = () => {
                 <FormStyles.FormName>
                   BidFood Request Form
                   </FormStyles.FormName>
+                <FormStyles.FormName>
+                
+                </FormStyles.FormName>
                 <FormStyles.FormDescription>Lorem ipsum dolor sit amet, consectetur adipiscing elit</FormStyles.FormDescription>
             </div>
             <FormStyles.FormStepContainer>

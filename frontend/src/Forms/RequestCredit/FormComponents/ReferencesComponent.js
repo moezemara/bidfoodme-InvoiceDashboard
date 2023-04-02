@@ -7,10 +7,10 @@ import {
 
 import DataTable from './DataTable/DataTable';
 import { LabelStyle, FormStepName, FormStepDescription } from './FormComponentsStyles';
-import { RegisterBranchContext } from '../Contexts/RegisterBranchContext';
+import { RequestCreditContext } from '../Contexts/RequestCreditContext';
 
 const ReferencesComponent = ({ handleOnDataChange }) => {
-  const { data, updateData } = React.useContext(RegisterBranchContext);
+  const { data, updateData } = React.useContext(RequestCreditContext);
 
   const classes = LabelStyle();
 

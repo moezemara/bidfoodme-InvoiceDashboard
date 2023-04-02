@@ -14,10 +14,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FormStepName, FormStepDescription } from './FormComponentsStyles';
 import dayjs from 'dayjs';
 
-import { RegisterBranchContext } from '../Contexts/RegisterBranchContext';
+import { RequestCreditContext } from '../Contexts/RequestCreditContext';
 
 const GeneralInfoComponent = ({ handleOnDataChange }) => {
-  const { data, updateData } = React.useContext(RegisterBranchContext);
+  const { data, updateData } = React.useContext(RequestCreditContext);
 
   // state for the whole form
   const [formState, setFormState] = useState({

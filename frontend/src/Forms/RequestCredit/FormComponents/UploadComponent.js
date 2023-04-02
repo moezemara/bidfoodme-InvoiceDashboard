@@ -10,7 +10,7 @@ import {
     Typography
   } from '@mui/material';
 import { LabelStyle, UploadLabelStyle, FormStepName, FormStepDescription } from './FormComponentsStyles';
-import { RegisterBranchContext } from '../Contexts/RegisterBranchContext';
+import { RequestCreditContext } from '../Contexts/RequestCreditContext';
 
 
 const fileTypes = ["JPEG", "PNG", "PDF"];
@@ -19,7 +19,7 @@ function UploadComponent({ handleOnDataChange }) {
   const UploadLabelClass = UploadLabelStyle();
   const LabelClass = LabelStyle();
 
-  const { data, updateData } = React.useContext(RegisterBranchContext);
+  const { data, updateData } = React.useContext(RequestCreditContext);
 
   // state for the whole form
   const [formState, setFormState] = useState({
