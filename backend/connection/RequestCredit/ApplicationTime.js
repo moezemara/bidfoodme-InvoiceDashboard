@@ -1,29 +1,30 @@
 /*
-CREATE TABLE `license_info` (
+CREATE TABLE `application_time` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `license_number` VARCHAR(255) NOT NULL,
-    `vat_number` VARCHAR(255) NOT NULL,
-    `license_expiration` DATE NOT NULL,
+    `general` INT NULL,
+    `contact` INT NULL,
+    `references` INT NULL,
+    `uploads` INT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
-    `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
+    `submission_date` DATETIME NULL,
+    `total_time` INT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`application_id`) REFERENCES `applications`(`application_id`),
     UNIQUE (`application_id`)
 );
-
 */
 
-export default class LicenseInfo {
+export default class ApplicationTime {
     constructor(pool){
         this.pool = pool
     }
 
-    // select license info by id
-    SelectLicenseInfoById(data) {
+    // select application time by id
+    SelectApplicationTimeById(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_license_info WHERE id = ?`,
+                `SELECT * FROM requestcredit_application_time WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -38,15 +39,71 @@ export default class LicenseInfo {
         })
     }
 
-    // select license info by application id
-    SelectLicenseInfoByApplicationId(data) {
+    // select application time by application id
+    SelectApplicationTimeByApplicationId(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT
-                license_number,
-                vat_number,
-                license_expiration
-                FROM registerbranch_license_info WHERE application_id = ?`,
+                `SELECT * FROM requestcredit_application_time WHERE application_id = ?`,
+                [
+                    data.application_id
+                ],
+                (error, results, fields) => {
+                    if (error) {
+                    reject(error)
+                    }else{
+                    resolve(results)
+                    }
+                }
+            )
+        })
+    }
+    
+    // get time spent on specific step
+    GetTimeSpentOnStep(data){
+        return new Promise((resolve, reject) =>{
+            this.pool.query(
+                `SELECT ? FROM requestcredit_application_time WHERE application_id = ?`,
+                [
+                    data.step,
+                    data.application_id
+                ],
+                (error, results, fields) => {
+                    if (error) {
+                    reject(error)
+                    }else{
+                    resolve(results)
+                    }
+                }
+            )
+        })
+    }
+
+    // update time spent on specific step by application id
+    UpdateTimeSpentOnStepByApplicationId(data){
+        return new Promise((resolve, reject) =>{
+            this.pool.query(
+                `UPDATE requestcredit_application_time SET ?? = ? WHERE application_id = ?`,
+                [
+                    data.step,
+                    data.time_spent,
+                    data.application_id
+                ],
+                (error, results, fields) => {
+                    if (error) {
+                    reject(error)
+                    }else{
+                    resolve(results)
+                    }
+                }
+            )
+        })
+    }
+
+    // update submission date by application id to current date
+    UpdateSubmissionDateByApplicationId(data){
+        return new Promise((resolve, reject) =>{
+            this.pool.query(
+                `UPDATE requestcredit_application_time SET submission_date = NOW() WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -61,54 +118,4 @@ export default class LicenseInfo {
         })
     }
 
-    // update license info by application id
-    UpdateLicenseInfoByApplicationId(data) {
-        return new Promise((resolve, reject) =>{
-            this.pool.query(
-                `UPDATE registerbranch_license_info
-                SET
-                    license_number = ?,
-                    vat_number = ?,
-                    license_expiration = ?
-                WHERE application_id = ?`,
-                [
-                    data.license_number,
-                    data.vat_number,
-                    data.license_expiration,
-                    data.application_id
-                ],
-                (error, results, fields) => {
-                    if (error) {
-                    reject(error)
-                    }else{
-                    resolve(results)
-                    }
-                }
-            )
-        })
-    }
-
-    // insert license info
-    InsertLicenseInfo(data) {
-        return new Promise((resolve, reject) =>{
-            this.pool.query(
-                `INSERT INTO registerbranch_license_info
-                (application_id, license_number, vat_number, license_expiration)
-                VALUES (?,?,?,?)`,
-                [
-                    data.application_id,
-                    data.license_number,
-                    data.vat_number,
-                    data.license_expiration
-                ],
-                (error, results, fields) => {
-                    if (error) {
-                    reject(error)
-                    }else{
-                    resolve(results)
-                    }
-                }
-            )
-        })
-    }
 }

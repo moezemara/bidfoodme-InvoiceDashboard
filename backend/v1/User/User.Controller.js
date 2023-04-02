@@ -2,6 +2,7 @@ import * as response from '../../utils/Response.js'
 import { randomUUID } from 'crypto'
 import jwt from 'jsonwebtoken'
 import config from '../../config/Config.js'
+
 export async function GenerateToken(req, res, next) {
     const database = req.app.get('database');
 
@@ -25,22 +26,22 @@ export async function GenerateToken(req, res, next) {
 
 export async function AddAccount(req, res, next) {
     const database = req.app.get('database');
-    const account_id = randomUUID()
+    const account_id = req.body.account_id
 
     try{
         const get_account_action = await database.Account.SelectAccountByAccountId({account_id: account_id})
         
         if (get_account_action.length != 0) {
-            return response.fail(res, 'account already exist')
+            return response.fail(res, 'Account already exist')
         }
 
         const add_account_action = await database.Account.InsertAccount({account_id: account_id})
         
         if (add_account_action.affectedRows == 0) {
-            return response.fail(res, 'failed to add account')
+            return response.fail(res, 'Failed to add account')
         }
 
-        return response.success(res, {account_id: account_id})
+        return response.success(res, "Account added successfully") 
     }
     catch (error) {
         return response.system(res, error)

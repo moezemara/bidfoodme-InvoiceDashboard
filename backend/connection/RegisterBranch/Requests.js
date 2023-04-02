@@ -7,7 +7,7 @@ export default class Requests {
     SelectRequestById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM requests WHERE id = ?`,
+                `SELECT * FROM registerbranch_requests WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -26,7 +26,10 @@ export default class Requests {
     SelectRequestByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM requests WHERE application_id = ?`,
+                `SELECT
+                credit_limit,
+                credit_period
+                FROM registerbranch_requests WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -45,13 +48,13 @@ export default class Requests {
     UpdateRequestByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE requests SET
-                credit_period = ?,
-                credit_limit = ?
+                `UPDATE registerbranch_requests SET
+                credit_limit = ?,
+                credit_period = ?
                 WHERE application_id = ?`,
                 [
-                    data.credit_period,
                     data.credit_limit,
+                    data.credit_period,
                     data.application_id
                 ],
                 (error, results, fields) => {
@@ -69,11 +72,11 @@ export default class Requests {
     InsertRequest(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO requests (application_id, credit_period, credit_limit) VALUES (?, ?, ?)`,
+                `INSERT INTO registerbranch_requests (application_id, credit_limit, credit_period) VALUES (?, ?, ?)`,
                 [
                     data.application_id,
-                    data.credit_period,
-                    data.credit_limit
+                    data.credit_limit,
+                    data.credit_period
                 ],
                 (error, results, fields) => {
                     if (error) {

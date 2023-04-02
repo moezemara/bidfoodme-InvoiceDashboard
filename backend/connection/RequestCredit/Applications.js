@@ -7,7 +7,7 @@ export default class Applications {
     InsertApplication(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-              `INSERT INTO registerbranch_applications (account_id, application_id) VALUES (?, ?)`,
+              `INSERT INTO requestcredit_applications (account_id, application_id) VALUES (?, ?)`,
               [
                 data.account_id,
                 data.application_id
@@ -27,7 +27,7 @@ export default class Applications {
     UpdateStatus(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE registerbranch_applications SET status = ? WHERE application_id = ?`,
+                `UPDATE requestcredit_applications SET status = ? WHERE application_id = ?`,
                 [
                     data.status,
                     data.application_id
@@ -47,7 +47,7 @@ export default class Applications {
     SelectApplicationById(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_applications WHERE id = ?`,
+                `SELECT * FROM requestcredit_applications WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -66,7 +66,7 @@ export default class Applications {
     SelectApplicationByAccountId(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_applications WHERE account_id = ?`,
+                `SELECT * FROM requestcredit_applications WHERE account_id = ?`,
                 [
                     data.account_id
                 ],
@@ -85,7 +85,7 @@ export default class Applications {
     SelectApplicationByAccountIdAndStatus(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_applications WHERE account_id = ? AND status = ?`,
+                `SELECT * FROM requestcredit_applications WHERE account_id = ? AND status = ?`,
                 [
                     data.account_id,
                     data.status
@@ -105,7 +105,7 @@ export default class Applications {
     UpdateApplicationStatusByApplicationId(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE registerbranch_applications SET status = ? WHERE application_id = ?`,
+                `UPDATE requestcredit_applications SET status = ? WHERE application_id = ?`,
                 [
                     data.status,
                     data.application_id

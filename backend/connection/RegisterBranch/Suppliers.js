@@ -25,7 +25,7 @@ export default class Suppliers {
     SelectSupplierById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM suppliers WHERE id = ?`,
+                `SELECT * FROM registerbranch_suppliers WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -44,7 +44,14 @@ export default class Suppliers {
     SelectSuppliersByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM suppliers WHERE application_id = ?`,
+                `SELECT
+                name,
+                contact,
+                designation,
+                address,
+                phone,
+                email                
+                FROM registerbranch_suppliers WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -63,7 +70,7 @@ export default class Suppliers {
     SelectSupplierByApplicationIdAndSupplierId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM suppliers WHERE application_id = ? AND id = ?`,
+                `SELECT * FROM registerbranch_suppliers WHERE application_id = ? AND id = ?`,
                 [
                     data.application_id,
                     data.id
@@ -83,7 +90,7 @@ export default class Suppliers {
     UpdateSupplierByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE suppliers SET name = ?, contact = ?, designation = ?, address = ?, phone = ?, email = ? WHERE application_id = ? AND id = ?`,
+                `UPDATE registerbranch_suppliers SET name = ?, contact = ?, designation = ?, address = ?, phone = ?, email = ? WHERE application_id = ? AND id = ?`,
                 [
                     data.name,
                     data.contact,
@@ -109,7 +116,7 @@ export default class Suppliers {
     InsertSupplier(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO suppliers (application_id, name, contact, designation, address, phone, email) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO registerbranch_suppliers (application_id, name, contact, designation, address, phone, email) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
                     data.name,
@@ -134,7 +141,7 @@ export default class Suppliers {
     DeleteSuppliersByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `DELETE FROM suppliers WHERE application_id = ?`,
+                `DELETE FROM registerbranch_suppliers WHERE application_id = ?`,
                 [
                     data.application_id
                 ],

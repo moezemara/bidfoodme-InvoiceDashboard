@@ -2,9 +2,12 @@
 CREATE TABLE `general` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
+    `first_name` VARCHAR(255) NOT NULL,
+    `last_name` VARCHAR(255) NOT NULL,
+    `country` VARCHAR(255) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
-    `address` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(255) NOT NULL,
+    `po_box` VARCHAR(255) NOT NULL,
     `service_years` INT NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
@@ -24,7 +27,7 @@ export default class General {
     SelectGeneralInfoById(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM general WHERE id = ?`,
+                `SELECT * FROM registerbranch_general WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -43,7 +46,15 @@ export default class General {
     SelectGeneralInfoByApplicationId(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM general WHERE application_id = ?`,
+                `SELECT
+                first_name,
+                last_name,
+                country,
+                city,
+                phone,
+                po_box,
+                service_years
+                FROM registerbranch_general WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -62,16 +73,14 @@ export default class General {
     UpdateGeneralInfoByApplicationId(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE general SET
-                name = ?,
-                city = ?,
-                address = ?,
-                service_years = ?
-                WHERE application_id = ?`,
+                `UPDATE registerbranch_general SET first_name = ?, last_name = ?, country = ?, city = ?, phone = ?, po_box = ?, service_years = ? WHERE application_id = ?`,
                 [
-                    data.name,
+                    data.first_name,
+                    data.last_name,
+                    data.country,
                     data.city,
-                    data.address,
+                    data.phone,
+                    data.po_box,
                     data.service_years,
                     data.application_id
                 ],
@@ -90,12 +99,15 @@ export default class General {
     InsertGeneralInfo(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO general (application_id, name, city, address, service_years) VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO registerbranch_general (application_id, first_name, last_name, country, city, phone, po_box, service_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
-                    data.name,
+                    data.first_name,
+                    data.last_name,
+                    data.country,
                     data.city,
-                    data.address,
+                    data.phone,
+                    data.po_box,
                     data.service_years
                 ],
                 (error, results, fields) => {

@@ -25,7 +25,7 @@ export default class BankInfo {
     SelectBankInfoById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_bank_info WHERE id = ?`,
+                `SELECT * FROM requestcredit_bank_info WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -51,7 +51,7 @@ export default class BankInfo {
                 bank_iban,
                 bank_swift,
                 bank_account_type                
-                FROM registerbranch_bank_info WHERE application_id = ?`,
+                FROM requestcredit_bank_info WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -70,7 +70,7 @@ export default class BankInfo {
     UpdateBankInfoByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE registerbranch_bank_info SET bank_name = ?, bank_city = ?, bank_account_number = ?, bank_iban = ?, bank_swift = ?, bank_account_type = ? WHERE application_id = ?`,
+                `UPDATE requestcredit_bank_info SET bank_name = ?, bank_city = ?, bank_account_number = ?, bank_iban = ?, bank_swift = ?, bank_account_type = ? WHERE application_id = ?`,
                 [
                     data.bank_name,
                     data.bank_city,
@@ -95,7 +95,7 @@ export default class BankInfo {
     InsertBankInfo(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO registerbranch_bank_info (application_id, bank_name, bank_city, bank_account_number, bank_iban, bank_swift, bank_account_type) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO requestcredit_bank_info (application_id, bank_name, bank_city, bank_account_number, bank_iban, bank_swift, bank_account_type) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
                     data.bank_name,

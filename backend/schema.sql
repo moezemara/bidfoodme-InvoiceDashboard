@@ -22,9 +22,12 @@ CREATE TABLE `applications` (
 CREATE TABLE `general` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
+    `first_name` VARCHAR(255) NOT NULL,
+    `last_name` VARCHAR(255) NOT NULL,
+    `country` VARCHAR(255) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
-    `address` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(255) NOT NULL,
+    `po_box` VARCHAR(255) NOT NULL,
     `service_years` INT NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
@@ -38,7 +41,7 @@ CREATE TABLE `license_info` (
     `application_id` VARCHAR(255) NOT NULL,
     `license_number` VARCHAR(255) NOT NULL,
     `vat_number` VARCHAR(255) NOT NULL,
-    `license_expiration` DATE NOT NULL,
+    `license_expiration` VARCHAR(255) NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -49,10 +52,10 @@ CREATE TABLE `license_info` (
 CREATE TABLE `contacts` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `type` VARCHAR(255) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NULL,
     `phone` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NULL,
     `nationality` VARCHAR(255) NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
@@ -77,6 +80,22 @@ CREATE TABLE `bank_info` (
     UNIQUE (`application_id`)
 );
 
+CREATE TABLE `suppliers` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `application_id` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `contact` VARCHAR(255) NOT NULL,
+    `designation` VARCHAR(255) NOT NULL,
+    `address` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `creation_date` DATETIME NOT NULL DEFAULT now(),
+    `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`application_id`) REFERENCES `applications`(`application_id`),
+    UNIQUE (`application_id`, `id`)
+);
+
 CREATE TABLE `documents` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
@@ -95,27 +114,12 @@ CREATE TABLE `documents` (
     UNIQUE (`application_id`, `filename`)
 );
 
-CREATE TABLE `suppliers` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `application_id` VARCHAR(255) NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
-    `contact` VARCHAR(255) NOT NULL,
-    `designation` VARCHAR(255) NOT NULL,
-    `address` VARCHAR(255) NOT NULL,
-    `phone` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `creation_date` DATETIME NOT NULL DEFAULT now(),
-    `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`application_id`) REFERENCES `applications`(`application_id`),
-    UNIQUE (`application_id`, `id`)
-);
 
 CREATE TABLE `requests` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `credit_period` VARCHAR(255) NOT NULL,
     `credit_limit` VARCHAR(255) NOT NULL,
+    `credit_period` VARCHAR(255) NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -126,16 +130,13 @@ CREATE TABLE `requests` (
 CREATE TABLE `application_time` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `general` INT NULL,
-    `license` INT NULL,
-    `contacts` INT NULL,
-    `bank` INT NULL,
-    `suppliers` INT NULL,
-    `uploads` INT NULL,
-    `requests` INT NULL,
+    `general` INT NULL DEFAULT 0,
+    `contacts` INT NULL DEFAULT 0,
+    `references` INT NULL DEFAULT 0,
+    `uploads` INT NULL DEFAULT 0,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `submission_date` DATETIME NULL,
-    `total_time` INT NULL,
+    `total_time` INT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`application_id`) REFERENCES `applications`(`application_id`),
     UNIQUE (`application_id`)
@@ -144,16 +145,4 @@ CREATE TABLE `application_time` (
 CREATE TRIGGER `application_time_insert` AFTER INSERT ON `applications` FOR EACH ROW
 BEGIN
     INSERT INTO `application_time` (`application_id`) VALUES (NEW.application_id);
-END
-
-CREATE TRIGGER `application_time_update` AFTER UPDATE ON `applications` FOR EACH ROW
-BEGIN
-    IF NEW.status = 'submitted' THEN
-        UPDATE `application_time` SET `submission_date` = now() WHERE `application_id` = NEW.application_id;
-    END IF;
-END
-
-CREATE TRIGGER `application_time_update_total` AFTER UPDATE ON `application_time` FOR EACH ROW
-BEGIN
-    UPDATE `application_time` SET `total_time` = `general` + `license` + `contacts` + `bank_info` + `documents` + `suppliers` + `requests` WHERE `application_id` = NEW.application_id;
 END

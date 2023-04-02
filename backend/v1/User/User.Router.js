@@ -7,7 +7,7 @@ import * as schemaChecker from '../../utils/SchemaChecker.js'
 const router = express.Router()
 
 router.post("/GenerateToken", auth.admin, schemaChecker.checkbody(schema.GenerateToken_body), GenerateToken)
-router.post("/AddAccount", auth.admin, AddAccount)
+router.post("/AddAccount", auth.admin, schemaChecker.checkbody(schema.AddAccount_body), AddAccount)
 
 
 export default router;

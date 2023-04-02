@@ -1,12 +1,13 @@
 /*
-CREATE TABLE `contacts` (
+CREATE TABLE `suppliers` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `title` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NULL,
-    `phone` VARCHAR(255) NULL,
-    `nationality` VARCHAR(255) NULL,
+    `contact` VARCHAR(255) NOT NULL,
+    `designation` VARCHAR(255) NOT NULL,
+    `address` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -15,16 +16,16 @@ CREATE TABLE `contacts` (
 );
 */
 
-export default class Contacts {
+export default class Suppliers {
     constructor(pool){
         this.pool = pool
     }
 
-    // select Contact by id
-    SelectContactById(data) {
+    // select suppliers by id
+    SelectSupplierById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_contacts WHERE id = ?`,
+                `SELECT * FROM requestcredit_suppliers WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -39,17 +40,18 @@ export default class Contacts {
         })
     }
 
-    // select Contacts by application id
-    SelectContactsByApplicationId(data) {
+    // select suppliers by application id
+    SelectSuppliersByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
                 `SELECT
-                title,
                 name,
-                email,
+                contact,
+                designation,
+                address,
                 phone,
-                nationality
-                FROM registerbranch_contacts WHERE application_id = ?`,
+                email                
+                FROM requestcredit_suppliers WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -64,31 +66,11 @@ export default class Contacts {
         })
     }
 
-    // select Contacts by application id and contact title
-    SelectContactsByApplicationIdAndContactTitle(data) {
+    // select suppliers by application id and supplier id
+    SelectSupplierByApplicationIdAndSupplierId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_contacts WHERE application_id = ? AND title = ?`,
-                [
-                    data.application_id,
-                    data.title
-                ],
-                (error, results, fields) => {
-                    if (error) {
-                    reject(error)
-                    }else{
-                    resolve(results)
-                    }
-                }
-            )
-        })
-    }
-
-    // select Contact by application id and contact id
-    SelectContactByApplicationIdAndContactId(data) {
-        return new Promise((resolve, reject) =>{
-            this.pool.query(
-                `SELECT * FROM registerbranch_contacts WHERE application_id = ? AND id = ?`,
+                `SELECT * FROM requestcredit_suppliers WHERE application_id = ? AND id = ?`,
                 [
                     data.application_id,
                     data.id
@@ -104,23 +86,18 @@ export default class Contacts {
         })
     }
 
-    // update Contact info by application id and contact id
-    UpdateContactByApplicationIdAndContactId(data) {
+    // update suppliers by application id
+    UpdateSupplierByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE registerbranch_contacts SET
-                title = ?,
-                name = ?,
-                email = ?,
-                phone = ?,
-                nationality = ?
-                WHERE application_id = ? AND id = ?`,
+                `UPDATE requestcredit_suppliers SET name = ?, contact = ?, designation = ?, address = ?, phone = ?, email = ? WHERE application_id = ? AND id = ?`,
                 [
-                    data.title,
                     data.name,
-                    data.email,
+                    data.contact,
+                    data.designation,
+                    data.address,
                     data.phone,
-                    data.nationality,
+                    data.email,
                     data.application_id,
                     data.id
                 ],
@@ -135,18 +112,19 @@ export default class Contacts {
         })
     }
 
-    // insert Contact
-    InsertContact(data) {
+    // insert suppliers
+    InsertSupplier(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO registerbranch_contacts (application_id, title, name, email, phone, nationality) VALUES (?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO requestcredit_suppliers (application_id, name, contact, designation, address, phone, email) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
-                    data.title,
                     data.name,
-                    data.email,
+                    data.contact,
+                    data.designation,
+                    data.address,
                     data.phone,
-                    data.nationality
+                    data.email
                 ],
                 (error, results, fields) => {
                     if (error) {
@@ -159,31 +137,11 @@ export default class Contacts {
         })
     }
 
-    // delete Contacts by application id and title
-    DeleteContactsByApplicationIdAndTitle(data) {
+    // delete suppliers by application id
+    DeleteSuppliersByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `DELETE FROM registerbranch_contacts WHERE application_id = ? AND title = ?`,
-                [
-                    data.application_id,
-                    data.title
-                ],
-                (error, results, fields) => {
-                    if (error) {
-                    reject(error)
-                    }else{
-                    resolve(results)
-                    }
-                }
-            )
-        })
-    }
-
-    // delete Contact by application id
-    DeleteContactsByApplicationId(data) {
-        return new Promise((resolve, reject) =>{
-            this.pool.query(
-                `DELETE FROM registerbranch_contacts WHERE application_id = ?`,
+                `DELETE FROM requestcredit_suppliers WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -196,6 +154,5 @@ export default class Contacts {
                 }
             )
         })
-    }
-
+    }    
 }

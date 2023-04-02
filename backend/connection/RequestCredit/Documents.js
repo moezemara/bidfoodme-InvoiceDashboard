@@ -1,53 +1,13 @@
-export default class Applications {
+export default class Documents {
     constructor(pool){
         this.pool = pool
     }
 
-    // insert application
-    InsertApplication(data){
+    // select documents by id
+    SelectDocumentsById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-              `INSERT INTO registerbranch_applications (account_id, application_id) VALUES (?, ?)`,
-              [
-                data.account_id,
-                data.application_id
-              ],
-              (error, results, fields) => {
-                if (error) {
-                  reject(error)
-                }else{
-                  resolve(results)
-                }
-              }
-            )
-        })
-    }
-
-    // update status
-    UpdateStatus(data){
-        return new Promise((resolve, reject) =>{
-            this.pool.query(
-                `UPDATE registerbranch_applications SET status = ? WHERE application_id = ?`,
-                [
-                    data.status,
-                    data.application_id
-                ],
-                (error, results, fields) => {
-                    if (error) {
-                    reject(error)
-                    }else{
-                    resolve(results)
-                    }
-                }
-            )
-        })
-    }
-
-    // select application by id
-    SelectApplicationById(data){
-        return new Promise((resolve, reject) =>{
-            this.pool.query(
-                `SELECT * FROM registerbranch_applications WHERE id = ?`,
+                `SELECT * FROM requestcredit_documents WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -61,53 +21,16 @@ export default class Applications {
             )
         })
     }
-    
-    // select application by account id
-    SelectApplicationByAccountId(data){
-        return new Promise((resolve, reject) =>{
-            this.pool.query(
-                `SELECT * FROM registerbranch_applications WHERE account_id = ?`,
-                [
-                    data.account_id
-                ],
-                (error, results, fields) => {
-                    if (error) {
-                    reject(error)
-                    }else{
-                    resolve(results)
-                    }
-                }
-            )
-        })
-    }
 
-    // select application by account id and status
-    SelectApplicationByAccountIdAndStatus(data){
+    // select documents by application id
+    SelectDocumentsByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_applications WHERE account_id = ? AND status = ?`,
+                `SELECT
+                fieldname,
+                originalname
+                FROM requestcredit_documents WHERE application_id = ?`,
                 [
-                    data.account_id,
-                    data.status
-                ],
-                (error, results, fields) => {
-                    if (error) {
-                    reject(error)
-                    }else{
-                    resolve(results)
-                    }
-                }
-            )
-        })
-    }
-
-    // update application status by application id
-    UpdateApplicationStatusByApplicationId(data){
-        return new Promise((resolve, reject) =>{
-            this.pool.query(
-                `UPDATE registerbranch_applications SET status = ? WHERE application_id = ?`,
-                [
-                    data.status,
                     data.application_id
                 ],
                 (error, results, fields) => {
@@ -121,4 +44,89 @@ export default class Applications {
         })
     }
 
+    // select documents by application id and document type
+    SelectDocumentsByApplicationIdAndDocumentType(data) {
+        return new Promise((resolve, reject) =>{
+            this.pool.query(
+                `SELECT * FROM requestcredit_documents WHERE application_id = ? AND fieldname = ?`,
+                [
+                    data.application_id,
+                    data.document_type
+                ],
+                (error, results, fields) => {
+                    if (error) {
+                    reject(error)
+                    }else{
+                    resolve(results)
+                    }
+                }
+            )
+        })
+    }
+
+    // insert documents
+    InsertDocument(data){
+        return new Promise((resolve, reject) =>{
+            this.pool.query(
+                `INSERT INTO requestcredit_documents (application_id, destination, encoding, fieldname, filename, originalname, mimetype, path, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    data.application_id,
+                    data.destination,
+                    data.encoding,
+                    data.fieldname,
+                    data.filename,
+                    data.originalname,
+                    data.mimetype,
+                    data.path,
+                    data.size
+                ],
+                (error, results, fields) => {
+                    if (error) {
+                    reject(error)
+                    }else{
+                    resolve(results)
+                    }
+                }
+            )
+        })
+    }
+
+    // delete documents by application id and document number
+    DeleteDocumentsByApplicationIdAndDocumentType(data) {
+        return new Promise((resolve, reject) =>{
+            this.pool.query(
+                `DELETE FROM requestcredit_documents WHERE application_id = ? AND document_type = ?`,
+                [
+                    data.application_id,
+                    data.document_type
+                ],
+                (error, results, fields) => {
+                    if (error) {
+                    reject(error)
+                    }else{
+                    resolve(results)
+                    }
+                }
+            )
+        })
+    }
+
+    // delete documents by application id
+    DeleteDocumentsByApplicationId(data) {
+        return new Promise((resolve, reject) =>{
+            this.pool.query(
+                `DELETE FROM requestcredit_documents WHERE application_id = ?`,
+                [
+                    data.application_id
+                ],
+                (error, results, fields) => {
+                    if (error) {
+                    reject(error)
+                    }else{
+                    resolve(results)
+                    }
+                }
+            )
+        })
+    }
 }

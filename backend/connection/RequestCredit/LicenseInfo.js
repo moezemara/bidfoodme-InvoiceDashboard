@@ -1,31 +1,29 @@
 /*
-CREATE TABLE `bank_info` (
+CREATE TABLE `license_info` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `bank_name` VARCHAR(255) NOT NULL,
-    `bank_city` VARCHAR(255) NOT NULL,
-    `bank_account_number` VARCHAR(255) NOT NULL,
-    `bank_iban` VARCHAR(255) NOT NULL,
-    `bank_swift` VARCHAR(255) NOT NULL,
-    `bank_account_type` VARCHAR(255) NOT NULL,
+    `license_number` VARCHAR(255) NOT NULL,
+    `vat_number` VARCHAR(255) NOT NULL,
+    `license_expiration` DATE NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`application_id`) REFERENCES `applications`(`application_id`),
     UNIQUE (`application_id`)
 );
+
 */
 
-export default class BankInfo {
+export default class LicenseInfo {
     constructor(pool){
         this.pool = pool
     }
 
-    // select bank info by id
-    SelectBankInfoById(data) {
+    // select license info by id
+    SelectLicenseInfoById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_bank_info WHERE id = ?`,
+                `SELECT * FROM requestcredit_license_info WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -40,18 +38,15 @@ export default class BankInfo {
         })
     }
 
-    // select bank info by application id
-    SelectBankInfoByApplicationId(data) {
+    // select license info by application id
+    SelectLicenseInfoByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
                 `SELECT
-                bank_name,
-                bank_city,
-                bank_account_number,
-                bank_iban,
-                bank_swift,
-                bank_account_type                
-                FROM registerbranch_bank_info WHERE application_id = ?`,
+                license_number,
+                vat_number,
+                license_expiration
+                FROM requestcredit_license_info WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -66,18 +61,20 @@ export default class BankInfo {
         })
     }
 
-    // update bank info by application id
-    UpdateBankInfoByApplicationId(data) {
+    // update license info by application id
+    UpdateLicenseInfoByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE registerbranch_bank_info SET bank_name = ?, bank_city = ?, bank_account_number = ?, bank_iban = ?, bank_swift = ?, bank_account_type = ? WHERE application_id = ?`,
+                `UPDATE requestcredit_license_info
+                SET
+                    license_number = ?,
+                    vat_number = ?,
+                    license_expiration = ?
+                WHERE application_id = ?`,
                 [
-                    data.bank_name,
-                    data.bank_city,
-                    data.bank_account_number,
-                    data.bank_iban,
-                    data.bank_swift,
-                    data.bank_account_type,
+                    data.license_number,
+                    data.vat_number,
+                    data.license_expiration,
                     data.application_id
                 ],
                 (error, results, fields) => {
@@ -91,19 +88,18 @@ export default class BankInfo {
         })
     }
 
-    // insert bank info
-    InsertBankInfo(data) {
+    // insert license info
+    InsertLicenseInfo(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO registerbranch_bank_info (application_id, bank_name, bank_city, bank_account_number, bank_iban, bank_swift, bank_account_type) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO requestcredit_license_info
+                (application_id, license_number, vat_number, license_expiration)
+                VALUES (?,?,?,?)`,
                 [
                     data.application_id,
-                    data.bank_name,
-                    data.bank_city,
-                    data.bank_account_number,
-                    data.bank_iban,
-                    data.bank_swift,
-                    data.bank_account_type
+                    data.license_number,
+                    data.vat_number,
+                    data.license_expiration
                 ],
                 (error, results, fields) => {
                     if (error) {

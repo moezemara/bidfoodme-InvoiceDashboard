@@ -24,7 +24,7 @@ export default class Contacts {
     SelectContactById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_contacts WHERE id = ?`,
+                `SELECT * FROM requestcredit_contacts WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -49,7 +49,7 @@ export default class Contacts {
                 email,
                 phone,
                 nationality
-                FROM registerbranch_contacts WHERE application_id = ?`,
+                FROM requestcredit_contacts WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -68,7 +68,7 @@ export default class Contacts {
     SelectContactsByApplicationIdAndContactTitle(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_contacts WHERE application_id = ? AND title = ?`,
+                `SELECT * FROM requestcredit_contacts WHERE application_id = ? AND title = ?`,
                 [
                     data.application_id,
                     data.title
@@ -88,7 +88,7 @@ export default class Contacts {
     SelectContactByApplicationIdAndContactId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_contacts WHERE application_id = ? AND id = ?`,
+                `SELECT * FROM requestcredit_contacts WHERE application_id = ? AND id = ?`,
                 [
                     data.application_id,
                     data.id
@@ -108,7 +108,7 @@ export default class Contacts {
     UpdateContactByApplicationIdAndContactId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE registerbranch_contacts SET
+                `UPDATE requestcredit_contacts SET
                 title = ?,
                 name = ?,
                 email = ?,
@@ -139,7 +139,7 @@ export default class Contacts {
     InsertContact(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO registerbranch_contacts (application_id, title, name, email, phone, nationality) VALUES (?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO requestcredit_contacts (application_id, title, name, email, phone, nationality) VALUES (?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
                     data.title,
@@ -163,7 +163,7 @@ export default class Contacts {
     DeleteContactsByApplicationIdAndTitle(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `DELETE FROM registerbranch_contacts WHERE application_id = ? AND title = ?`,
+                `DELETE FROM requestcredit_contacts WHERE application_id = ? AND title = ?`,
                 [
                     data.application_id,
                     data.title
@@ -183,7 +183,7 @@ export default class Contacts {
     DeleteContactsByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `DELETE FROM registerbranch_contacts WHERE application_id = ?`,
+                `DELETE FROM requestcredit_contacts WHERE application_id = ?`,
                 [
                     data.application_id
                 ],

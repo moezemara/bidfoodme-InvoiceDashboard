@@ -7,7 +7,7 @@ export default class Documents {
     SelectDocumentsById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM documents WHERE id = ?`,
+                `SELECT * FROM registerbranch_documents WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -26,7 +26,10 @@ export default class Documents {
     SelectDocumentsByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM documents WHERE application_id = ?`,
+                `SELECT
+                fieldname,
+                originalname
+                FROM registerbranch_documents WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -45,7 +48,7 @@ export default class Documents {
     SelectDocumentsByApplicationIdAndDocumentType(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM documents WHERE application_id = ? AND fieldname = ?`,
+                `SELECT * FROM registerbranch_documents WHERE application_id = ? AND fieldname = ?`,
                 [
                     data.application_id,
                     data.document_type
@@ -65,7 +68,7 @@ export default class Documents {
     InsertDocument(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO documents (application_id, destination, encoding, fieldname, filename, originalname, mimetype, path, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO registerbranch_documents (application_id, destination, encoding, fieldname, filename, originalname, mimetype, path, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
                     data.destination,
@@ -92,7 +95,7 @@ export default class Documents {
     DeleteDocumentsByApplicationIdAndDocumentType(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `DELETE FROM documents WHERE application_id = ? AND document_type = ?`,
+                `DELETE FROM registerbranch_documents WHERE application_id = ? AND document_type = ?`,
                 [
                     data.application_id,
                     data.document_type
@@ -112,7 +115,7 @@ export default class Documents {
     DeleteDocumentsByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `DELETE FROM documents WHERE application_id = ?`,
+                `DELETE FROM registerbranch_documents WHERE application_id = ?`,
                 [
                     data.application_id
                 ],

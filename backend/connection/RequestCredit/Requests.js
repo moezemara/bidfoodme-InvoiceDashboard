@@ -1,29 +1,13 @@
-/*
-CREATE TABLE `license_info` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `application_id` VARCHAR(255) NOT NULL,
-    `license_number` VARCHAR(255) NOT NULL,
-    `vat_number` VARCHAR(255) NOT NULL,
-    `license_expiration` DATE NOT NULL,
-    `creation_date` DATETIME NOT NULL DEFAULT now(),
-    `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`application_id`) REFERENCES `applications`(`application_id`),
-    UNIQUE (`application_id`)
-);
-
-*/
-
-export default class LicenseInfo {
+export default class Requests {
     constructor(pool){
         this.pool = pool
     }
 
-    // select license info by id
-    SelectLicenseInfoById(data) {
+    // select requests by id
+    SelectRequestById(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `SELECT * FROM registerbranch_license_info WHERE id = ?`,
+                `SELECT * FROM requestcredit_requests WHERE id = ?`,
                 [
                     data.id
                 ],
@@ -38,15 +22,14 @@ export default class LicenseInfo {
         })
     }
 
-    // select license info by application id
-    SelectLicenseInfoByApplicationId(data) {
+    // select requests by application id
+    SelectRequestByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
                 `SELECT
-                license_number,
-                vat_number,
-                license_expiration
-                FROM registerbranch_license_info WHERE application_id = ?`,
+                credit_limit,
+                credit_period
+                FROM requestcredit_requests WHERE application_id = ?`,
                 [
                     data.application_id
                 ],
@@ -61,20 +44,17 @@ export default class LicenseInfo {
         })
     }
 
-    // update license info by application id
-    UpdateLicenseInfoByApplicationId(data) {
+    // update requests by application id
+    UpdateRequestByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE registerbranch_license_info
-                SET
-                    license_number = ?,
-                    vat_number = ?,
-                    license_expiration = ?
+                `UPDATE requestcredit_requests SET
+                credit_limit = ?,
+                credit_period = ?
                 WHERE application_id = ?`,
                 [
-                    data.license_number,
-                    data.vat_number,
-                    data.license_expiration,
+                    data.credit_limit,
+                    data.credit_period,
                     data.application_id
                 ],
                 (error, results, fields) => {
@@ -88,18 +68,15 @@ export default class LicenseInfo {
         })
     }
 
-    // insert license info
-    InsertLicenseInfo(data) {
+    // insert requests
+    InsertRequest(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO registerbranch_license_info
-                (application_id, license_number, vat_number, license_expiration)
-                VALUES (?,?,?,?)`,
+                `INSERT INTO requestcredit_requests (application_id, credit_limit, credit_period) VALUES (?, ?, ?)`,
                 [
                     data.application_id,
-                    data.license_number,
-                    data.vat_number,
-                    data.license_expiration
+                    data.credit_limit,
+                    data.credit_period
                 ],
                 (error, results, fields) => {
                     if (error) {
@@ -111,4 +88,5 @@ export default class LicenseInfo {
             )
         })
     }
+
 }
