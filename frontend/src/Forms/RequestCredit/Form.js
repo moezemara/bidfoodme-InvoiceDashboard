@@ -129,6 +129,7 @@ const Form = () => {
       "vatfile": "vat"
     }
 
+
     const fieldData = {}
     // get the current step data
     switch (step) {
@@ -198,10 +199,8 @@ const Form = () => {
 
     // get the current timer value
     const currentTimerValue = getCurrentTimerValue();
-
     for (let i = 0; i < currentSteps.length; i++) {
       const stepData = getStepData(currentSteps[i]);
-      
       let response = ''
       if (currentSteps[i] === 'uploads'){
         response = await ApplicationApi.SaveProgressUploads(token, stepData)
@@ -209,9 +208,10 @@ const Form = () => {
         response = await ApplicationApi.SaveProgress(token, currentSteps[i], stepData)
       }
       
-      if (response.success !== 1){
-        return;
-      }
+      // if (response.success !== 1){
+      //   console.log("failed to save")
+      //   return;
+      // }
       
       response = await ApplicationApi.UpdateTime(token, currentTimerValue[0], {time_spent: currentTimerValue[1]})
       console.log(response)

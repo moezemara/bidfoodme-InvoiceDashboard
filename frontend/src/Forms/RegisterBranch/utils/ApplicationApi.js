@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const base_url = "http://localhost:3001/v1/";
+const base_url = "http://156.214.141.141:3001/v1/";
 
 export async function request(api, method, headers, body = []) {
     const url = base_url + api;

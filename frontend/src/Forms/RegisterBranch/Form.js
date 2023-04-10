@@ -41,6 +41,7 @@ const Form = () => {
 
   // handle next and back button click
   const handleNextClick = () => {
+    // if any problems occurs return 
     setCurrentStep(currentStep + 1);
   };
 
@@ -209,7 +210,8 @@ const Form = () => {
       }
       
       if (response.success !== 1){
-        return;
+        // TODO: handle error
+        return response;
       }
 
       response = await ApplicationApi.UpdateTime(token, currentTimerValue[0], {time_spent: currentTimerValue[1]})
