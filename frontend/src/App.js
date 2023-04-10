@@ -9,7 +9,7 @@ import RegisterBranchForm from './Forms/RegisterBranch/Form';
 import RequestCreditForm from './Forms/RequestCredit/Form';
 import { RegisterBranchProvider } from './Forms/RegisterBranch/Contexts/RegisterBranchContext';
 import { RequestCreditProvider } from './Forms/RequestCredit/Contexts/RequestCreditContext';
-
+import FormRedirector from './Forms/FormRedirector';
 
 function App() {
 // create router to each component
@@ -34,6 +34,7 @@ function App() {
   return (
     <Router>
         <Routes>
+          <Route path="/" element={<FormRedirector/>}/>
           <Route path="/register-branch" element={<RegisterBranchFormPage/>}/>
           <Route path="/request-credit" element={<RequestCreditFormPage/>}/>
         </Routes>
