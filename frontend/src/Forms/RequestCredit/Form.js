@@ -227,7 +227,7 @@ const Form = () => {
   }
 
   const LoadSavedProgress_Parent = async () => {
-    const loadedData = await LoadSavedProgress();
+    const loadedData = await LoadSavedProgress(token);
     if(loadedData === null){
       setData(loadedData);
     }

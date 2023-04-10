@@ -42,7 +42,7 @@ export async function LoadSavedProgress(token){
     const response = await request(api, method, headers);
     const data = await response.json();
 
-    if (data.success == 0 && data.message == "No saved progress found"){
+    if (data.success === 0 && data.message === "No saved progress found"){
         Create(token)
     }
 

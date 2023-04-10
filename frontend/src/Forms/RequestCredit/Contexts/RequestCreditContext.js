@@ -33,9 +33,7 @@ export const RequestCreditProvider = ({ children }) => {
     setData(newData);
   };
 
-  const LoadSavedProgress = async () => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiNDYzMjMzMGEtOTRiMS00NjZmLWE0ZDgtNWY5MzNmYTE3MmZkIiwiaWF0IjoxNjc5OTYwMDU0LCJleHAiOjE2ODAzMjAwNTR9.Beq0vTV2aDrgfKU6H9UQ5Hfa3UH57FZTVdITblUlK60"
-
+  const LoadSavedProgress = async (token) => {
     const response = await ApplicationApi.LoadSavedProgress(token);
    
     if (response.success === 0 || response.success === -1) {
