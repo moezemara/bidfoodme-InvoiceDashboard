@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken'
 import config from '../config/Config.js'
 
 export async function basic(req, res, next) {
-    // const token = req.headers["authorization"]
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMTIzNDUiLCJpYXQiOjE2ODA0NjA0NDgsImV4cCI6MTY4MDgyMDQ0OH0.O6jkJInJZleR09oD3-JXGZJ1V6ut6WSVy5gppBknlLU"
+    const token = req.headers["Authorization"]
+    
     if(!token){
         return response.fail(res, 'session expired')
     }
@@ -42,7 +42,7 @@ export async function basic(req, res, next) {
 export function admin(req, res, next) {
     // check for admin token in header
 
-    const token = req.headers["admin-authorization"]
+    const token = req.headers["Admin-Authorization"]
 
     if(!token){
         return response.fail(res, 'Unauthorized')

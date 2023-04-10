@@ -20,7 +20,7 @@ export async function Create(token){
     const method = "POST";
 
     const headers = {
-        "authorization": token,
+        "Authorization": token,
         "Content-Type": "application/json"
     }
 
@@ -35,7 +35,7 @@ export async function LoadSavedProgress(token){
     const method = "GET";
 
     const headers = {
-        "authorization": token,
+        "Authorization": token,
         "Content-Type": "application/json"
     }
 
@@ -50,7 +50,7 @@ export async function SaveProgress(token, step, body){
     const method = "POST";
 
     const headers = {
-        "authorization": token,
+        "Authorization": token,
         "Content-Type": "application/json"
     }
 
@@ -71,7 +71,7 @@ export async function SaveProgressUploads(token, files){
     }
 
     const headers = {
-        "authorization": token
+        "Authorization": token
     };
 
     // use axios to send form data
@@ -87,7 +87,7 @@ export async function UpdateTime(token, step, body){
     const method = "POST";
 
     const headers = {
-        "authorization": token,
+        "Authorization": token,
         "Content-Type": "application/json"
     }
 
@@ -102,7 +102,7 @@ export async function Finish(token){
     const method = "POST";
 
     const headers = {
-        "authorization": token,
+        "Authorization": token,
         "Content-Type": "application/json"
     }
 
