@@ -6,6 +6,7 @@ import ContactComponent from './FormComponents/ContactComponent';
 import ReferencesComponent from './FormComponents/ReferencesComponent';
 import UploadComponent from './FormComponents/UploadComponent';
 import * as FormStyles from './FormStyles';
+import { useSearchParams } from 'react-router-dom';
 
 import Timer from './utils/Timer';
 
@@ -14,9 +15,10 @@ import * as ApplicationApi from './utils/ApplicationApi';
 
 
 const Form = () => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiNDYzMjMzMGEtOTRiMS00NjZmLWE0ZDgtNWY5MzNmYTE3MmZkIiwiaWF0IjoxNjc5OTYwMDU0LCJleHAiOjE2ODAzMjAwNTR9.Beq0vTV2aDrgfKU6H9UQ5Hfa3UH57FZTVdITblUlK60"
-
   const { LoadSavedProgress, isDataLoaded } = React.useContext(RegisterBranchContext);
+  const [searchParams] = useSearchParams();
+
+  const token = searchParams.get("ss");
 
   const [ data, setData ] = useState({
     general_info: {},

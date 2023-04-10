@@ -1,6 +1,9 @@
 import React from 'react';
-
+import { useSearchParams } from 'react-router-dom';
 const FormRedirector = () => {
+
+  const [searchParams] = useSearchParams();
+
   const containerStyle = {
     backgroundColor: '#FFFFFF',
     width: '400px',
@@ -26,15 +29,16 @@ const FormRedirector = () => {
   return (
     <div style={{ backgroundColor: '#677ddb', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div style={containerStyle}>
-        <button style={buttonStyle} onClick={() => window.location.href = '/register-branch'}>
+        <button style={buttonStyle} onClick={() => window.location.href = `/register-branch?ss=${searchParams.get("ss")}`}>
           Register Branch
         </button>
-        <button style={buttonStyle} onClick={() => window.location.href = '/request-credit'}>
+        <button style={buttonStyle} onClick={() => window.location.href = `/request-credit?ss=${searchParams.get("ss")}`}>
           Request Credit
         </button>
       </div>
     </div>
   );
+  
 };
 
 export default FormRedirector;
