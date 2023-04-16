@@ -125,7 +125,6 @@ const ContactComponent = ({ handleOnDataChange }) => {
             default_row.Phone.data = row.phone
             default_row.Mobile.data = row.mobile
             default_row.Email.data = row.email
-            default_row.Shareholder_Percentage.data = row.shareholder_percentage
           }
         });
 
