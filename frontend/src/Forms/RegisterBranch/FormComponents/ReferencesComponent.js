@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 
 import DataTable from './DataTable/DataTable';
-import { LabelStyle, FormStepName, FormStepDescription } from './FormComponentsStyles';
+import { LabelStyle, FormStepName, FormStepDescription, CustomInputLabel, InputTitle, ContentWrapper } from './FormComponentsStyles';
 import { RegisterBranchContext } from '../Contexts/RegisterBranchContext';
 
 const ReferencesComponent = ({ handleOnDataChange }) => {
@@ -57,17 +57,17 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
   };
 
   const columns = [
-    { field: "Name", headerName: "Name", type: "text"},
-    { field: "Contact", headerName: "Contact", type: "text"},
-    { field: "Designation", headerName: "Designation", type: "text"},
-    { field: "Address", headerName: "Address", type: "text"},
-    { field: "Phone", headerName: "Phone", type: "text"},
-    { field: "Email", headerName: "Email", type: "text"}
+    { field: "Name", headerName: "Name", type: "text", cellWidth: "16%" },
+    { field: "Contact", headerName: "Contact", type: "text", cellWidth: "16%" },
+    { field: "Designation", headerName: "Designation", type: "text", cellWidth: "16%" },
+    { field: "Address", headerName: "Address", type: "text", cellWidth: "16%" },
+    { field: "Phone", headerName: "Phone", type: "text", cellWidth: "16%" },
+    { field: "Email", headerName: "Email", type: "text", cellWidth: "16%" }
   ];
 
 
   const supplier_information_default_rows = []
-  if(formState.supplier_information !== undefined && formState.supplier_information.length > 0) {
+  if (formState.supplier_information !== undefined && formState.supplier_information.length > 0) {
     data.references_info.supplier_information.forEach((row) => {
       supplier_information_default_rows.push({
         Name: { data: row.name, editable: true },
@@ -79,62 +79,89 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
       })
     })
   }
-  
+
 
   return (
-    <div>
-      <FormStepName>References</FormStepName>
-      <FormStepDescription>In this step, please provide your financial information</FormStepDescription>
-      <Typography variant="h6" className={classes.label}>Bank Details</Typography>
-      <Grid container spacing={7}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-          label="Name" variant="outlined" fullWidth 
-          onChange={(e) => handleFormDataChange('bank_name', e.target.value)}
-          value = {formState.bank_name}
-          />
+    <>
+      <ContentWrapper>
+        <FormStepName>References</FormStepName>
+        <FormStepDescription>In this step, please provide your financial information</FormStepDescription>
+        <Typography variant="h6" className={classes.label}>Banking Details</Typography>
+        <Grid container rowSpacing={2} columnSpacing={{ md: 4 }}>
+          <Grid item xs={12} sm={6}>
+            <InputTitle>Name</InputTitle>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <InputTitle>City</InputTitle>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              onChange={(e) => handleFormDataChange('bank_name', e.target.value)}
+              value={formState.bank_name}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              onChange={(e) => handleFormDataChange('bank_city', e.target.value)}
+              value={formState.bank_city}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <InputTitle>Swift</InputTitle>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <InputTitle>IBAN</InputTitle>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              onChange={(e) => handleFormDataChange('bank_swift', e.target.value)}
+              value={formState.bank_swift}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              onChange={(e) => handleFormDataChange('bank_iban', e.target.value)}
+              value={formState.bank_iban}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <InputTitle>Account</InputTitle>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <InputTitle></InputTitle>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id='account_id'
+              onChange={(e) => handleFormDataChange('bank_account_number', e.target.value)}
+              value={formState.bank_account_number}
+            />
+            <CustomInputLabel htmlFor="account_id" style={{ marginTop: "10px" }}>
+              Account Number
+            </CustomInputLabel>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id='account_id_2'
+              onChange={(e) => handleFormDataChange('bank_account_type', e.target.value)}
+              value={formState.bank_account_type}
+            />
+            <CustomInputLabel htmlFor="account_id_2" style={{ marginTop: "10px" }}>
+              Account type
+            </CustomInputLabel>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-          label="City" variant="outlined" fullWidth
-          onChange={(e) => handleFormDataChange('bank_city', e.target.value)}
-          value = {formState.bank_city}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-          label="Account Number" variant="outlined" fullWidth
-          onChange={(e) => handleFormDataChange('bank_account_number', e.target.value)}
-          value = {formState.bank_account_number}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-          label="IBAN" variant="outlined" fullWidth
-          onChange={(e) => handleFormDataChange('bank_iban', e.target.value)}
-          value = {formState.bank_iban}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <TextField
-          label="Swift" variant="outlined" fullWidth
-          onChange={(e) => handleFormDataChange('bank_swift', e.target.value)}
-          value = {formState.bank_swift}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-          label="Account Type" variant="outlined" fullWidth
-          onChange={(e) => handleFormDataChange('bank_account_type', e.target.value)}
-          value = {formState.bank_account_type}
-          />
-        </Grid>
-      </Grid>
-
-      <Typography variant="h6" className={classes.label}>Supplier Information</Typography>
-      <DataTable onDataTableChange={handleSupplier_InformationChange} columns={columns} defaultRows={supplier_information_default_rows}/>
-    </div>
-  );  
+        <Typography variant="h6" className={classes.label} style={{ marginTop: '75px' }}>Supplier Information</Typography>
+      </ContentWrapper>
+      <DataTable onDataTableChange={handleSupplier_InformationChange} columns={columns} defaultRows={supplier_information_default_rows} addRow_bTn_ColsPan={6} unique_key={'Supplier_Information_1'} />
+    </>
+  );
 };
 
 export default ReferencesComponent;

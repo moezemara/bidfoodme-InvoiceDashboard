@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import {
   Grid,
   TextField,
-  InputAdornment,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
+  InputAdornment
 } from '@mui/material';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { FormStepName, FormStepDescription } from './FormComponentsStyles';
+import { FormStepName, FormStepDescription, CustomInputLabel, InputTitle } from './FormComponentsStyles';
 import dayjs from 'dayjs';
 
 import { RegisterBranchContext } from '../Contexts/RegisterBranchContext';
@@ -21,8 +18,9 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
 
   // state for the whole form
   const [formState, setFormState] = useState({
-    first_name: data.general_info.first_name || '',
-    last_name: data.general_info.last_name || '',
+    outlet_legal_name: data.general_info.outlet_legal_name || '',
+    outlet_trade_name: data.general_info.outlet_trade_name || '',
+    outlet_address: data.general_info.outlet_address || '',
     country: data.general_info.country || '',
     city: data.general_info.city || '',
     phone: data.general_info.phone || '',
@@ -35,105 +33,160 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
 
   // function to update form data and call callback
   const handleFormDataChange = (field, value) => {
-    
     const updatedFormState = { ...formState, [field]: value };
     // setFormState(updatedFormState);
     updateData('general_info', updatedFormState);
     setFormState(updatedFormState);
-    handleOnDataChange({...data, general_info: updatedFormState});
+    handleOnDataChange({ ...data, general_info: updatedFormState });
   };
 
   return (
     <>
-    <FormStepName>General Information</FormStepName>
-    <FormStepDescription>Let's begin by filling out your general information</FormStepDescription>
-    <Grid container spacing={7}>
-      <Grid item xs={12} sm={6}>
+      <FormStepName>General Information</FormStepName>
+      <FormStepDescription>Let's begin by filling out your general information</FormStepDescription>
+      <Grid container rowSpacing={2} columnSpacing={{ md: 4 }}>
+        <Grid item xs={12}>
+          <InputTitle>Outlet / Group</InputTitle>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            id="outlet_legal_name"
+            onChange={(e) => handleFormDataChange('outlet_legal_name', e.target.value)}
+            value={formState.outlet_legal_name}
+          />
+          <CustomInputLabel htmlFor="outlet_legal_name" className='input_label'>
+            Legal Name
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            id="outlet_trade_name"
+            onChange={(e) => handleFormDataChange('outlet_trade_name', e.target.value)}
+            value={formState.outlet_trade_name}
+          />
+          <CustomInputLabel htmlFor="outlet_trade_name">
+            Trade Name
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12}>
+          <InputTitle>Outlet Invoicing Address</InputTitle>
+        </Grid>
+        <Grid item xs={12} sm={12}>
         <TextField
-          label="First Name" variant="outlined" fullWidth
-          onChange={(e) => handleFormDataChange('first_name', e.target.value)}
-          value={formState.first_name}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-        label="Last Name" variant="outlined" fullWidth
-        onChange={(e) => handleFormDataChange('last_name', e.target.value)}
-        value={formState.last_name}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-        label="Country" variant="outlined" fullWidth
-        onChange={(e) => handleFormDataChange('country', e.target.value)}
-        value={formState.country}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-        label="City" variant="outlined" fullWidth
-        onChange={(e) => handleFormDataChange('city', e.target.value)}
-        value={formState.city}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-        label="Phone Number" variant="outlined" fullWidth
-        onChange={(e) => handleFormDataChange('phone', e.target.value)}
-        value={formState.phone}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-        label="P.O. Box" variant="outlined" fullWidth
-        onChange={(e) => handleFormDataChange('po_box', e.target.value)}
-        value={formState.po_box}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-        label="Years in Food Service" variant="outlined" fullWidth
-        onChange={(e) => handleFormDataChange('service_years', e.target.value)}
-        value={formState.service_years}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-        label="VAT Registration Number" variant="outlined" fullWidth
-        onChange={(e) => handleFormDataChange('vat_number', e.target.value)}
-        value={formState.vat_number}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <FormControl variant="outlined" fullWidth>
-          <InputLabel htmlFor="trade-license-number">Trade License Number</InputLabel>
-          <OutlinedInput
+            fullWidth
+            id="outlet_address_input"
+            onChange={(e) => handleFormDataChange('outlet_address', e.target.value)}
+            value={formState.outlet_address}
+          />
+          <CustomInputLabel htmlFor="outlet_address_input">
+            Full address
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            id="city_input"
+            onChange={(e) => handleFormDataChange('country', e.target.value)}
+            value={formState.country}
+          />
+          <CustomInputLabel htmlFor="city_input">
+            City
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            id="country_input"
+            onChange={(e) => handleFormDataChange('city', e.target.value)}
+            value={formState.city}
+          />
+          <CustomInputLabel htmlFor="country_input">
+            Country
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12}>
+          <InputTitle>Trade License</InputTitle>
+        </Grid >
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
             id="trade-license-number"
-            label="Trade License Number"
             placeholder="1234 1234 1234 1234"
-            inputProps={{ maxLength: 19 }}
+            InputProps={{ maxLength: 19 }}
             endAdornment={<InputAdornment position="end"> </InputAdornment>}
             onChange={(e) => handleFormDataChange('license_number', e.target.value)}
             value={formState.license_number}
           />
-        </FormControl>
-      </Grid>
-      <Grid item xs={12} sm={6}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label="Trade License Expiration Date"
-          inputVariant="outlined"
-          views={['month', 'year']}
-          slotProps={{ textField: { fullWidth: true } }}
-          onChange={(newValue) => handleFormDataChange('license_expiration', dayjs(newValue).format('YYYY-MM'))}
-          dateFormat="yy-mm"
-          inputFormat="yy-mm"
-          value={formState.license_expiration ? dayjs(data.general_info.license_expiration) : null}
-        />
-        </LocalizationProvider>
-      </Grid>
-
-    </Grid>
+          <CustomInputLabel htmlFor="trade-license-number">
+            Trade license number
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              inputVariant="outlined"
+              views={['month', 'year']}
+              placeholder="Example : 10/23"
+              slotProps={{ textField: { fullWidth: true } }}
+              onChange={(newValue) => handleFormDataChange('license_expiration', dayjs(newValue).format('YYYY-MM'))}
+              dateFormat="yy-mm"
+              inputFormat="yy-mm"
+              value={formState.license_expiration ? dayjs(data.general_info.license_expiration) : null}
+            />
+            <CustomInputLabel htmlFor="trade-license-number">
+              Trade license expiration date
+            </CustomInputLabel>
+          </LocalizationProvider>
+        </Grid>
+        <Grid item xs={6}>
+          <InputTitle>Phone number</InputTitle>
+        </Grid >
+        <Grid item xs={6}>
+          <InputTitle>P.O. Box</InputTitle>
+        </Grid >
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            onChange={(e) => handleFormDataChange('phone', e.target.value)}
+            value={formState.phone}
+          />
+          <CustomInputLabel htmlFor="">
+            &nbsp;
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            onChange={(e) => handleFormDataChange('po_box', e.target.value)}
+            value={formState.po_box}
+          />
+          <CustomInputLabel htmlFor="">
+            &nbsp;
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={6}>
+          <InputTitle>Number of years in fund service</InputTitle>
+        </Grid>
+        <Grid item xs={6}>
+          <InputTitle>Vat registration number</InputTitle>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+          fullWidth
+          onChange={(e) => handleFormDataChange('service_years', e.target.value)}
+          value={formState.service_years}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            onChange={(e) => handleFormDataChange('vat_number', e.target.value)}
+            value={formState.vat_number}
+          />
+        </Grid>
+      </Grid >
     </>
   );
 };

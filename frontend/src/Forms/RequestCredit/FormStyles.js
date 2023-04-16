@@ -63,10 +63,10 @@ export const FormDivider = styled.div`
 `;
 
 export const FormName = styled.h2`
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  text-align: center;
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;  
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
@@ -75,19 +75,32 @@ export const FormName = styled.h2`
 `;
 
 export const FormButton = styled.button`
-  background-color: #e6ebff;
-  color: #6f84dd;
+  background-color: #e5ebff;
+  color: #627cd8;
   padding: 1rem 4rem;
-  border-radius: 10px;
+  border-radius: 5px;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 550;
-  margin-right: 0.5rem;
+  margin-right: 1.5rem;
   transition: all 0.3s ease-in-out;
+  cursor:pointer;
+  min-width:190px;
+  border: 1px solid transparent;
+  box-sizing:border-box;
 
   &:hover {
     background-color: #6f84dd;
     color: #fff;
+  }
+  &.border_btn{
+    background-color:transparent;
+    border:1px solid #627cd8;
+
+    &:hover{
+      background-color: #6f84dd;
+      color: #fff;
+    }
   }
 
   @media (max-width: 768px) {
@@ -120,9 +133,10 @@ export const FormFooter = styled.div`
 `;
 
 export const FormDescription = styled.p`
-  font-size: 1rem;
-  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
   text-align: center;
+  font-weight:500;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
@@ -135,36 +149,11 @@ export const FormStepContainer = styled.div`
   justify-content: center;
   margin-bottom: 3rem;
 
-  .form-step-divider {
-    width: 1.5rem;
-    height: 0.2rem;
-    background-color: ${props => props.active ? '#6f84dd' : '#dddddd'};
-    margin-top: 1.4rem;
-    margin-left: -0.75rem;
-    margin-right: -0.75rem;
-    flex-shrink: 0;
-    transition: background-color 0.3s ease;
-  }
-
-  .form-step-divider.active {
-    background-color: #6f84dd;
-  }
-
-  /* Add styles for the dashed lines */
-  &:before {
-    content: '';
-    width: calc(10rem - 4px);
-    height: 2px;
-    border-top: 2px dashed #ccc;
-    position: absolute;
-    left: calc(10rem + 1.5rem);
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: -1;
-  }
-
-  &:first-child:before {
-    display: none;
+  .customContainer{
+    width:90%;
+    display: flex;
+    justify-content: space-between;
+    margin:0 auto;
   }
   
   @media (max-width: 768px) {
@@ -196,35 +185,83 @@ export const FormStep = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-weight: 500;
-  width: 10rem;
+  font-weight: 500;  
   flex-shrink: 0;
   position: relative;
+  width:150px;
 
   &:last-child {
-    margin-right: 0;
-  }
-
-  .step-number {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 70%;
-    background-color: ${props => props.active ? '#e6ebff' : '#f2f2f2'};
-    color: ${props => props.active ? '#6f84dd' : '#dddddd'};
+    margin-right: 0;    
+  } 
+  
+  .step-number {    
+    position:relative;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 70%;   
+    display: -webkit-box;   
+    display: -ms-flexbox;   
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    border: 2px solid ${props => props.active ? '#eaf5ff' : '#f2f2f2'};
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    font-size: 1.2rem;
+    background-color: #e4fbe8;
+    color:#34d24d;    
+  }
+  &:not(:last-child){
+    &:after{
+      content: '';
+      width: 75%;      
+      border-top: 2px dashed #34d24d;
+      position: absolute;
+      left: 92%;
+      top: 1.6rem;
+      -webkit-transform: translateY(-50%);
+          -ms-transform: translateY(-50%);
+              transform: translateY(-50%);  
+    }  
+  }
+  
+  .step-name {
+    margin-top: 0.5rem;    
+    font-size: 0.9rem;
+    text-align: center;
+    color:#34d24d;
   }
 
-  .step-name {
-    margin-top: 0.5rem;
-    color: ${props => props.active ? '#6f84dd' : '#999'};
-    font-size: 0.8rem;
-    // text-transform: uppercase;
-    text-align: center;
+
+  // Active Step
+  &.active{
+    .step-number{
+      background-color:#e5ebff;
+      color: #627cd8;    
+    }
+    &:after{
+      border-color:#627cd8;
+    }
+    .step-name{
+      color:#627cd8;
+    }
+  }     
+
+  // Uncheck Step 
+  &.active ~ &{    
+    .step-number{
+      background-color: #f9f9f9;
+      color: #d8d8d8;
+    }
+    &:after{
+      border-color:#d8d8d8;
+    }                
   }
+  &.active ~ & .step-name{
+    color:#d8d8d8;
+  }
+
 
   /* Responsive styles */
   @media screen and (max-width: 768px) {

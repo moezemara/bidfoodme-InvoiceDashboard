@@ -1,7 +1,4 @@
 
-
-
-
 function ConstructContact(contacts){
     const ownerContacts = []
     const departmentContacts = []

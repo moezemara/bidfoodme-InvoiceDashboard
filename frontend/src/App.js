@@ -1,7 +1,7 @@
 import './App.css';
 import {
   BrowserRouter as Router,
-  Routes ,
+  Routes,
   Route
 } from "react-router-dom";
 
@@ -9,12 +9,11 @@ import RegisterBranchForm from './Forms/RegisterBranch/Form';
 import RequestCreditForm from './Forms/RequestCredit/Form';
 import { RegisterBranchProvider } from './Forms/RegisterBranch/Contexts/RegisterBranchContext';
 import { RequestCreditProvider } from './Forms/RequestCredit/Contexts/RequestCreditContext';
-import FormRedirector from './Forms/FormRedirector';
+import MainForm from './Forms/MainForm/MainForm';
+
 
 function App() {
-// create router to each component
-
-
+  // create router for each component
   const RegisterBranchFormPage = () => {
     return (
       <RegisterBranchProvider>
@@ -32,13 +31,15 @@ function App() {
   }
 
   return (
-    <Router>
+    <>
+      <Router>
         <Routes>
-          <Route path="/" element={<FormRedirector/>}/>
-          <Route path="/register-branch" element={<RegisterBranchFormPage/>}/>
-          <Route path="/request-credit" element={<RequestCreditFormPage/>}/>
+          <Route path="/" element={<MainForm />} />
+          <Route path="/register-branch" element={<RegisterBranchFormPage />} />
+          <Route path="/request-credit" element={<RequestCreditFormPage />} />
         </Routes>
-    </Router>
+      </Router>
+    </>
   );
 }
 

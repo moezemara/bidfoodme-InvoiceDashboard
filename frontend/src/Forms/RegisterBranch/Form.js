@@ -6,21 +6,21 @@ import ContactComponent from './FormComponents/ContactComponent';
 import ReferencesComponent from './FormComponents/ReferencesComponent';
 import UploadComponent from './FormComponents/UploadComponent';
 import * as FormStyles from './FormStyles';
-import { useSearchParams } from 'react-router-dom';
-
+import CheckIcon from '@mui/icons-material/Check';
+import { Link, useSearchParams } from 'react-router-dom';
 import Timer from './utils/Timer';
-
 import { RegisterBranchContext } from './Contexts/RegisterBranchContext';
 import * as ApplicationApi from './utils/ApplicationApi';
 
 
 const Form = () => {
-  const { LoadSavedProgress, isDataLoaded } = React.useContext(RegisterBranchContext);
   const [searchParams] = useSearchParams();
+
+  const { LoadSavedProgress, isDataLoaded } = React.useContext(RegisterBranchContext);
 
   const token = searchParams.get("ss");
 
-  const [ data, setData ] = useState({
+  const [data, setData] = useState({
     general_info: {},
     license_info: {},
     contacts_info: {
@@ -43,7 +43,6 @@ const Form = () => {
 
   // handle next and back button click
   const handleNextClick = () => {
-    // if any problems occurs return 
     setCurrentStep(currentStep + 1);
   };
 
@@ -115,7 +114,7 @@ const Form = () => {
     let submissionData = []
 
     const steps_keys = {
-      'general': ["first_name", "last_name", "country", "city", "phone", "po_box", "service_years"],
+      'general': ["outlet_legal_name", "outlet_trade_name", "outlet_address", "country", "city", "phone", "po_box", "service_years"],
       'license': ["vat_number", "license_number", "license_expiration"],
       'contacts': ["Owner_Contact", "Department_Contact"],
       'bank': ["bank_name", "bank_city", "bank_account_number", "bank_iban", "bank_swift", "bank_account_type"],
@@ -158,7 +157,7 @@ const Form = () => {
           }
         }
 
-        
+
         break;
       case 'bank':
         for (let i = 0; i < steps_keys[step].length; i++) {
@@ -179,7 +178,7 @@ const Form = () => {
             continue;
           }
 
-          if (step === 'uploads' && uploads_original_names[key] !== undefined){
+          if (step === 'uploads' && uploads_original_names[key] !== undefined) {
             fieldData[uploads_original_names[key]] = data.upload_info[key];
             continue;
           }
@@ -201,24 +200,22 @@ const Form = () => {
 
     // get the current timer value
     const currentTimerValue = getCurrentTimerValue();
-
+    console.log(currentSteps)
     for (let i = 0; i < currentSteps.length; i++) {
-      const stepData = getStepData(currentSteps[i]);      
+      console.log(currentSteps[i])
+      const stepData = getStepData(currentSteps[i]);
       let response = ''
-      if (currentSteps[i] === 'uploads'){
+      if (currentSteps[i] === 'uploads') {
         response = await ApplicationApi.SaveProgressUploads(token, stepData)
-      }else{
+      } else {
         response = await ApplicationApi.SaveProgress(token, currentSteps[i], stepData)
       }
-      
-      if (response.success !== 1){
-        // TODO: handle error
-        return response;
-      }
-
-      response = await ApplicationApi.UpdateTime(token, currentTimerValue[0], {time_spent: currentTimerValue[1]})
-      console.log(response)
+      console.log(response)      
     }
+
+    let response = await ApplicationApi.UpdateTime(token, currentTimerValue[0], { time_spent: currentTimerValue[1] })
+    console.log(response)
+
   };
 
   const handleFinishClick = async () => {
@@ -228,7 +225,7 @@ const Form = () => {
 
   const LoadSavedProgress_Parent = async () => {
     const loadedData = await LoadSavedProgress(token);
-    if(loadedData === null){
+    if (loadedData === null) {
       setData(loadedData);
     }
   }
@@ -239,72 +236,76 @@ const Form = () => {
     // eslint-disable-next-line
   }, []);
 
-
-  
   return (
     <>
-    <FormStyles.Container>
-      <FormStyles.FormContainer>
-        <FormStyles.FormHeader>
-            <FormStyles.FormLogo src={require("./images/bidfood-logo.png")} alt="Logo" />
-        </FormStyles.FormHeader>
-        <FormStyles.FormDivider />
-            <div>
-                <FormStyles.FormName>
-                  BidFood Request Form
-                  </FormStyles.FormName>
-                <FormStyles.FormDescription>Lorem ipsum dolor sit amet, consectetur adipiscing elit</FormStyles.FormDescription>
+      <FormStyles.Container>
+        <FormStyles.FormContainer>
+          <FormStyles.FormHeader>
+            <Link to="/">
+              <FormStyles.FormLogo src={require("./images/bidfood-logo.png")} alt="Logo" />
+            </Link>
+          </FormStyles.FormHeader>
+          <FormStyles.FormDivider />
+          <div>
+            <FormStyles.FormName>
+              BidFood Request Form
+            </FormStyles.FormName>
+            <FormStyles.FormDescription>Lorem ipsum dolor sit amet, consectetur adipiscing elit</FormStyles.FormDescription>
+          </div>
+          <FormStyles.FormStepContainer>
+            <div className={`customContainer`}>
+              <FormStyles.FormStep active={currentStep >= 1} className={`${currentStep === 1 ? "active" : ""}`}>
+                <div className="step-number"> {currentStep < 2 ? '1' : <CheckIcon />}</div>
+                <div className="step-name">General Information</div>
+                <div className={`form-step-divider`} />
+              </FormStyles.FormStep>
+              <FormStyles.FormStep active={currentStep >= 2} className={`${currentStep === 2 ? "active" : ""}`}>
+                <div className="step-number">{currentStep < 3 ? '2' : <CheckIcon />}</div>
+                <div className="step-name">Contact</div>
+                <div className={`form-step-divider`} />
+              </FormStyles.FormStep>
+              <FormStyles.FormStep active={currentStep >= 3} className={`${currentStep === 3 ? "active" : ""}`}>
+                <div className="step-number">{currentStep < 4 ? '3' : <CheckIcon />}</div>
+                <div className="step-name">References</div>
+                <div className={`form-step-divider`} />
+              </FormStyles.FormStep>
+              <FormStyles.FormStep active={currentStep >= 4} className={`${currentStep === 4 ? "active" : ""}`}>
+                <div>
+                  <div className="step-number">{currentStep < 5 ? '4' : <CheckIcon />}</div>
+                  <div className="step-name">Upload</div>
+                  <div className={`form-step-divider`} />
+                </div>
+              </FormStyles.FormStep>
             </div>
-            <FormStyles.FormStepContainer>
-            <FormStyles.FormStep active={currentStep >= 1}>
-  <div className="step-number">1</div>
-  <div className="step-name">General Information</div>
-  <div className={`form-step-divider ${currentStep === 1 ? "active" : ""}`} />
-</FormStyles.FormStep>
-  <FormStyles.FormStep active={currentStep >= 2}>
-    <div className="step-number">2</div>
-    <div className="step-name">Contact</div>
-    <div className={`form-step-divider ${currentStep === 2 ? "active" : ""}`} />
-  </FormStyles.FormStep>
-  <FormStyles.FormStep active={currentStep >= 3}>
-    <div className="step-number">3</div>
-    <div className="step-name">References</div>
-    <div className={`form-step-divider ${currentStep === 3 ? "active" : ""}`} />
-  </FormStyles.FormStep>
-  <FormStyles.FormStep active={currentStep >= 4}>
-    <div className="step-number">4</div>
-    <div className="step-name">Upload</div>
-    <div className={`form-step-divider ${currentStep === 4 ? "active" : ""}`} />
-  </FormStyles.FormStep>
-</FormStyles.FormStepContainer>
- 
-            <FormStyles.FormStepCard>
-                {/* <FormStyles.FormStepName>General Information</FormStyles.FormStepName>
+          </FormStyles.FormStepContainer>
+
+          <FormStyles.FormStepCard>
+            {/* <FormStyles.FormStepName>General Information</FormStyles.FormStepName>
                 <FormStyles.FormStepDescription>Let's begin by filling out your general information</FormStyles.FormStepDescription> */}
 
-                {/* if current step is 1, show the GeneralInfoComponent and stat generalcounter also do not make it count from 0 again*/}
+            {/* if current step is 1, show the GeneralInfoComponent and stat generalcounter also do not make it count from 0 again*/}
 
 
-                {currentStep === 1 && isDataLoaded && <><GeneralInfoComponent handleOnDataChange={handleOnDataChange}/> <Timer onTimerChange={handleOnGeneralTimerChange} startFrom={generalTimerValue} /></>}
-                {currentStep === 2 && isDataLoaded && <><ContactComponent handleOnDataChange={handleOnDataChange}/> <Timer onTimerChange={handleOnContactTimerChange} startFrom={contactTimerValue} /></>}
-                {currentStep === 3 && isDataLoaded && <><ReferencesComponent handleOnDataChange={handleOnDataChange}/> <Timer onTimerChange={handleOnReferencesTimerChange} startFrom={referencesTimerValue} /></>}
-                {currentStep === 4 && isDataLoaded && <><UploadComponent handleOnDataChange={handleOnDataChange}/> <Timer onTimerChange={handleOnUploadTimerChange} startFrom={uploadTimerValue} /></>}
-                
-            </FormStyles.FormStepCard>
+            {currentStep === 1 && isDataLoaded && <><GeneralInfoComponent handleOnDataChange={handleOnDataChange} /> <Timer onTimerChange={handleOnGeneralTimerChange} startFrom={generalTimerValue} /></>}
+            {currentStep === 2 && isDataLoaded && <><ContactComponent handleOnDataChange={handleOnDataChange} /> <Timer onTimerChange={handleOnContactTimerChange} startFrom={contactTimerValue} /></>}
+            {currentStep === 3 && isDataLoaded && <><ReferencesComponent handleOnDataChange={handleOnDataChange} /> <Timer onTimerChange={handleOnReferencesTimerChange} startFrom={referencesTimerValue} /></>}
+            {currentStep === 4 && isDataLoaded && <><UploadComponent handleOnDataChange={handleOnDataChange} /> <Timer onTimerChange={handleOnUploadTimerChange} startFrom={uploadTimerValue} /></>}
 
-            <FormStyles.FormFooter>
-                {/* if current step is 1, disable the back button */}
-                {currentStep !== 1 && <FormStyles.FormButton onClick={handleBackClick}>Back</FormStyles.FormButton>}
-                {/* if current step is 4, don't show the next button */}
-                {currentStep !== 4 && <FormStyles.FormButton onClick={handleNextClick}>Next</FormStyles.FormButton>}
-                <FormStyles.FormButton onClick={handleSaveClick}>Save</FormStyles.FormButton>
-                {/* if current step is 4, show Finish button*/}
-                {currentStep === 4 && <FormStyles.FormButton onClick={handleFinishClick}>Finish</FormStyles.FormButton>}
-                </FormStyles.FormFooter>
+          </FormStyles.FormStepCard>
+
+          <FormStyles.FormFooter>
+            {/* if current step is 1, disable the back button */}
+            {currentStep !== 1 && <FormStyles.FormButton className={`border_btn`} onClick={handleBackClick}>Previous</FormStyles.FormButton>}
+            {/* if current step is 4, don't show the next button */}
+            {currentStep !== 4 && <FormStyles.FormButton onClick={handleNextClick}>Next</FormStyles.FormButton>}
+            <FormStyles.FormButton onClick={handleSaveClick}>Save</FormStyles.FormButton>
+            {/* if current step is 4, show Finish button*/}
+            {currentStep === 4 && <FormStyles.FormButton onClick={handleFinishClick}>Finish</FormStyles.FormButton>}
+          </FormStyles.FormFooter>
         </FormStyles.FormContainer>
-    </FormStyles.Container>
+      </FormStyles.Container>
     </>
   );
 };
-  
+
 export default Form;
