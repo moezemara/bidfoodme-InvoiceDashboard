@@ -7,8 +7,9 @@ export const SavePageProgress_params = joi.object({
 })
 
 export const SavePageProgress_body_general = joi.object({
-    first_name: joi.string().required(),
-    last_name: joi.string().required(),
+    outlet_legal_name: joi.string().required(),
+    outlet_trade_name: joi.string().required(),
+    outlet_address: joi.string().required(),
     country: joi.string().required(),
     city: joi.string().required(),
     phone: joi.string().required(),
@@ -26,8 +27,9 @@ export const SavePageProgress_body_contacts = joi.array().items(joi.object({
     title: joi.string().required(),
     name: joi.string().required(),
     phone: joi.string().optional(),
+    mobile: joi.string().optional(),
     email: joi.string().email().optional(),
-    nationality: joi.string().optional()
+    shareholder_percentage: joi.number().integer().min(0).max(100).optional()
 }))
 
 export const SavePageProgress_body_bank = joi.object({

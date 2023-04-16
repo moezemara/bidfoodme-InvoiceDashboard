@@ -6,6 +6,7 @@ import * as schema from './RequestCredit.Schema.js'
 import { ValidateFields } from './utils/FileUtils.js'
 import upload from './utils/multer.js'
 import config from '../../../config/Config.js'
+import {refreshAccessToken, sendEnvelope} from '../../../docusign/DocuSignHandler.js'
 
 export async function CreateApplication(req, res) {
     const database = req.app.get('database');
@@ -334,9 +335,81 @@ export async function FinishApplication(req, res) {
             }
         )
 
+        
+        // sign document
+        const sign_document_action = await DocuSign(database, application_id)
 
-        return response.success(res, 'Application finished successfully')
+
+
+        return response.success(res, 'Application finished successfully, envelope_id: ' + sign_document_action)
     } catch (error) {
         return response.system(res, error)
     }
+}
+
+async function DocuSign(database, application_id) {
+    let token = await database.DocuSign.SelectAccessToken()
+
+    if (token === undefined) {
+        token = await database.DocuSign.SelectLastExpiredToken()
+        if (token === undefined) {
+            return response.fail(res, 'No token found')
+        }
+    }
+
+    // if token is expired, refresh it
+    // token.created_at is in date format
+    const create_time = Math.floor(token.created_at.getTime() / 1000)
+    const current_time = Math.floor(Date.now() / 1000)
+
+
+    if (current_time - create_time + 60 > token.expires_in) {
+        const new_token = await refreshAccessToken(token)
+
+        if (new_token == false) {
+            return response.fail(res, 'Failed to refresh token')
+        }
+
+        await database.DocuSign.UpdateTokenStatus({id: token.id, expired: 1})
+        await database.DocuSign.InsertAccessToken(new_token)
+        token = new_token
+    }
+
+
+    // get form data
+    const get_general_info_action = await database.RequestCredit.General.SelectGeneralInfoByApplicationId({application_id: application_id})
+    const get_license_info_action = await database.RequestCredit.LicenseInfo.SelectLicenseInfoByApplicationId({application_id: application_id})
+    const get_contacts_info_action = await database.RequestCredit.Contacts.SelectContactsByApplicationId({application_id: application_id})
+    const get_bank_info_action = await database.RequestCredit.BankInfo.SelectBankInfoByApplicationId({application_id: application_id})
+    const get_suppliers_info_action = await database.RequestCredit.Suppliers.SelectSuppliersByApplicationId({application_id: application_id})
+    const get_requests_info_action = await database.RequestCredit.Requests.SelectRequestByApplicationId({application_id: application_id})
+
+
+    const document_data = {
+        ...get_general_info_action[0],
+        ...get_license_info_action[0],
+        ...get_bank_info_action[0],
+        ...get_requests_info_action[0],
+        suppliers: get_suppliers_info_action,
+        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner"),
+        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner"),
+    }
+
+
+    const envelopeArgs = {
+        signerEmail: "midoezzatem@gmail.com",
+        signerName: document_data.outlet_legal_name,
+        status: "sent",
+        document_data: document_data
+    }
+    
+    const args = {
+        accessToken: token.access_token,
+        envelopeArgs: envelopeArgs
+    }
+
+
+    const envelope = await sendEnvelope(args)
+
+    return envelope
 }

@@ -8,6 +8,5 @@ const router = express.Router()
 
 router.post("/GenerateToken", auth.admin, schemaChecker.checkbody(schema.GenerateToken_body), GenerateToken)
 router.post("/AddAccount", auth.admin, schemaChecker.checkbody(schema.AddAccount_body), AddAccount)
-// router.post("/DocuSign", DocuSign)
 
 export default router;

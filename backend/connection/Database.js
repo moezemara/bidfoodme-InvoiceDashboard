@@ -3,6 +3,7 @@ import config from '../config/Config.js'
 import RegisterBranch from './RegisterBranch/RegisterBranch.js'
 import RequestCredit from './RequestCredit/RequestCredit.js'
 import Account from './Account/Account.js'
+import DocuSign from './DocuSign/DocuSign.js'
 
 export default class Database {
   constructor() {
@@ -17,6 +18,7 @@ export default class Database {
     this.RegisterBranch = new RegisterBranch(this.pool)
     this.RequestCredit = new RequestCredit(this.pool)
     this.Account = new Account(this.pool)
+    this.DocuSign = new DocuSign(this.pool)
   }
 
 }

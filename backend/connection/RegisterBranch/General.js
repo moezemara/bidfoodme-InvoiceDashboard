@@ -2,8 +2,9 @@
 CREATE TABLE `general` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `first_name` VARCHAR(255) NOT NULL,
-    `last_name` VARCHAR(255) NOT NULL,
+    `outlet_legal_name` VARCHAR(255) NOT NULL,
+    `outlet_trade_name` VARCHAR(255) NOT NULL,
+    `outlet_address` VARCHAR(255) NOT NULL,
     `country` VARCHAR(255) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(255) NOT NULL,
@@ -47,8 +48,9 @@ export default class General {
         return new Promise((resolve, reject) =>{
             this.pool.query(
                 `SELECT
-                first_name,
-                last_name,
+                outlet_legal_name,
+                outlet_trade_name,
+                outlet_address,
                 country,
                 city,
                 phone,
@@ -73,10 +75,11 @@ export default class General {
     UpdateGeneralInfoByApplicationId(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE registerbranch_general SET first_name = ?, last_name = ?, country = ?, city = ?, phone = ?, po_box = ?, service_years = ? WHERE application_id = ?`,
+                `UPDATE registerbranch_general SET outlet_legal_name = ?, outlet_trade_name = ?, outlet_address ,country = ?, city = ?, phone = ?, po_box = ?, service_years = ? WHERE application_id = ?`,
                 [
-                    data.first_name,
-                    data.last_name,
+                    data.outlet_legal_name,
+                    data.outlet_trade_name,
+                    data.outlet_address,
                     data.country,
                     data.city,
                     data.phone,
@@ -99,11 +102,12 @@ export default class General {
     InsertGeneralInfo(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO registerbranch_general (application_id, first_name, last_name, country, city, phone, po_box, service_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO registerbranch_general (application_id, outlet_legal_name, outlet_trade_name, outlet_address, country, city, phone, po_box, service_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
-                    data.first_name,
-                    data.last_name,
+                    data.outlet_legal_name,
+                    data.outlet_trade_name,
+                    data.outlet_address,
                     data.country,
                     data.city,
                     data.phone,

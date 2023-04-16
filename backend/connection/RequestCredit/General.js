@@ -47,8 +47,9 @@ export default class General {
         return new Promise((resolve, reject) =>{
             this.pool.query(
                 `SELECT
-                first_name,
-                last_name,
+                outlet_legal_name,
+                outlet_trade_name,
+                outlet_address,
                 country,
                 city,
                 phone,
@@ -73,10 +74,11 @@ export default class General {
     UpdateGeneralInfoByApplicationId(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE requestcredit_general SET first_name = ?, last_name = ?, country = ?, city = ?, phone = ?, po_box = ?, service_years = ? WHERE application_id = ?`,
+                `UPDATE requestcredit_general SET outlet_legal_name = ?, outlet_trade_name = ?, outlet_address ,country = ?, city = ?, phone = ?, po_box = ?, service_years = ? WHERE application_id = ?`,
                 [
-                    data.first_name,
-                    data.last_name,
+                    data.outlet_legal_name,
+                    data.outlet_trade_name,
+                    data.outlet_address,
                     data.country,
                     data.city,
                     data.phone,
@@ -99,11 +101,12 @@ export default class General {
     InsertGeneralInfo(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO requestcredit_general (application_id, first_name, last_name, country, city, phone, po_box, service_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO requestcredit_general (application_id, outlet_legal_name, outlet_trade_name, outlet_address, country, city, phone, po_box, service_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
-                    data.first_name,
-                    data.last_name,
+                    data.outlet_legal_name,
+                    data.outlet_trade_name,
+                    data.outlet_address,
                     data.country,
                     data.city,
                     data.phone,

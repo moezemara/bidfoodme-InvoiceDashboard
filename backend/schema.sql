@@ -22,8 +22,9 @@ CREATE TABLE `applications` (
 CREATE TABLE `general` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
-    `first_name` VARCHAR(255) NOT NULL,
-    `last_name` VARCHAR(255) NOT NULL,
+    `outlet_legal_name` VARCHAR(255) NOT NULL,
+    `outlet_trade_name` VARCHAR(255) NOT NULL,
+    `outlet_address` VARCHAR(255) NOT NULL,
     `country` VARCHAR(255) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(255) NOT NULL,
@@ -55,8 +56,9 @@ CREATE TABLE `contacts` (
     `title` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(255) NULL,
+    `mobile` VARCHAR(255) NULL,
     `email` VARCHAR(255) NULL,
-    `nationality` VARCHAR(255) NULL,
+    `shareholder_percentage` VARCHAR(255) NULL,
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -141,6 +143,19 @@ CREATE TABLE `application_time` (
     FOREIGN KEY (`application_id`) REFERENCES `applications`(`application_id`),
     UNIQUE (`application_id`)
 );
+
+
+CREATE TABLE `docusign_sessions` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `access_token` TEXT NOT NULL,
+    `refresh_token` TEXT NOT NULL,
+    `expires_in` INT NOT NULL,
+    `token_type` VARCHAR(255) NOT NULL,
+    `scope` VARCHAR(255) NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT now(),
+    `expired` INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`)
+)
 
 CREATE TRIGGER `application_time_insert` AFTER INSERT ON `applications` FOR EACH ROW
 BEGIN
