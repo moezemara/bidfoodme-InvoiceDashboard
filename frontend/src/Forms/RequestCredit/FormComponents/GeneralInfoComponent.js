@@ -115,7 +115,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             id="trade-license-number"
             placeholder="1234 1234 1234 1234"
             InputProps={{ maxLength: 19 }}
-            endAdornment={<InputAdornment position="end"> </InputAdornment>}
+            endadornment={<InputAdornment position="end"> </InputAdornment>}
             onChange={(e) => handleFormDataChange('license_number', e.target.value)}
             value={formState.license_number}
           />

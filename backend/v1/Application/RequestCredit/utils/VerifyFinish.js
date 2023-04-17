@@ -28,6 +28,25 @@ export default async function VerifyFinish(database, application_id) {
         return {status: false, message: 'Please complete owners or partners contacts info'}
     }
 
+    let authorised_signature = false
+
+    for (let i = 0; i < get_contacts_info_action_owner.length; i++){
+        if (get_contacts_info_action_owner[i].authorised_signature == 'Yes'){
+            authorised_signature = true
+        }
+    }
+
+    for (let i = 0; i < get_contacts_info_action_partner.length; i++){
+        if (get_contacts_info_action_partner[i].authorised_signature == 'Yes'){
+            authorised_signature = true
+        }
+    }
+
+    if (authorised_signature == false){
+        return {status: false, message: 'Please select authorised signature'}
+    }
+    
+
     if (get_contacts_info_action_manager.length == 0){
         return {status: false, message: 'Please complete manager contacts info'}
     }

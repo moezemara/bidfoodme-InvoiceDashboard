@@ -59,6 +59,7 @@ CREATE TABLE `contacts` (
     `mobile` VARCHAR(255) NULL,
     `email` VARCHAR(255) NULL,
     `shareholder_percentage` VARCHAR(255) NULL,
+    `authorised_signature` VARCHAR(255) NULL DEFAULT 'No',
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),

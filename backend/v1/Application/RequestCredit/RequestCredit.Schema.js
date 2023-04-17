@@ -29,7 +29,8 @@ export const SavePageProgress_body_contacts = joi.array().items(joi.object({
     phone: joi.string().optional(),
     mobile: joi.string().optional(),
     email: joi.string().email().optional(),
-    shareholder_percentage: joi.number().integer().min(0).max(100).optional()
+    shareholder_percentage: joi.number().integer().min(0).max(100).optional(),
+    authorised_signature: joi.string().optional()
 }))
 
 export const SavePageProgress_body_bank = joi.object({

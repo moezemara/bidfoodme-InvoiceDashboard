@@ -144,8 +144,15 @@ const Form = () => {
         break;
       case 'contacts':
         const contactData = data.contacts_info;
+        console.log(contactData)
 
-        submissionData.push(...contactData.Owner_Contact, ...contactData.Department_Contact);
+        if (contactData.Owner_Contact){
+          submissionData.push(...contactData.Owner_Contact)
+        }
+        
+        if (contactData.Department_Contact){
+          submissionData.push(...contactData.Department_Contact)
+        }
 
         // if key has null value remove the whole key
         for (let i = 0; i < submissionData.length; i++) {

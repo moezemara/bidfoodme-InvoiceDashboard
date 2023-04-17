@@ -397,7 +397,7 @@ async function DocuSign(database, application_id) {
 
 
     const envelopeArgs = {
-        signerEmail: "midoezzatem@gmail.com",
+        signerEmail: document_data.owners.filter(owner => owner.authorised_signature == "Yes")[0].email,
         signerName: document_data.outlet_legal_name,
         status: "sent",
         document_data: document_data

@@ -25,7 +25,8 @@ const ContactComponent = ({ handleOnDataChange }) => {
         phone: row.Phone.data,
         mobile: row.Mobile.data,
         email: row.Email.data,
-        shareholder_percentage: row.Shareholder_Percentage.data
+        shareholder_percentage: row.Shareholder_Percentage.data,
+        authorised_signature: row.Authorised_Signature.data
       })
     })
 
@@ -57,12 +58,13 @@ const ContactComponent = ({ handleOnDataChange }) => {
   };
 
   const Owner_Contact_fields = [
-    { field: "Title", headerName: "Title", type: "select", options: ["Owner", "Partner"], cellWidth: "16.5%"},
-    { field: "Name", headerName: "Name", type: "text", cellWidth: "16.5%" },
-    { field: "Phone", headerName: "Phone number", type: "text", cellWidth: "16.5%" },
-    { field: "Mobile", headerName: "Mobile number", type: "text", cellWidth: "16.5%" },
-    { field: "Email", headerName: "Email", type: "text", cellWidth: "16.5%" },
-    { field: "Shareholder_Percentage", headerName: "Shareholder Percentage", type: "text", cellWidth: "16.5%"}
+    { field: "Title", headerName: "Title", type: "select", options: ["Owner", "Partner"], cellWidth: "14.3%"},
+    { field: "Name", headerName: "Name", type: "text", cellWidth: "14.3%" },
+    { field: "Phone", headerName: "Phone number", type: "text", cellWidth: "14.3%" },
+    { field: "Mobile", headerName: "Mobile number", type: "text", cellWidth: "14.3%" },
+    { field: "Email", headerName: "Email", type: "text", cellWidth: "14.3%" },
+    { field: "Shareholder_Percentage", headerName: "Shareholder Percentage", type: "text", cellWidth: "14.3%"},
+    { field: "Authorised_Signature", headerName: "Authorised Signature", type: "radio", cellWidth: "14.3%", CellAlign: 'center'}
   ];
 
   const Department_Contact_fields = [
@@ -110,6 +112,8 @@ const ContactComponent = ({ handleOnDataChange }) => {
         Phone: { data: row.phone, editable: true },
         Mobile: { data: row.mobile, editable: true },
         Email: { data: row.email, editable: true },
+        Shareholder_Percentage: { data: row.shareholder_percentage, editable: true },
+        Authorised_Signature: { data: row.authorised_signature, editable: true }
       });
     });
   }
@@ -148,7 +152,7 @@ const ContactComponent = ({ handleOnDataChange }) => {
       <FormStepDescription>At this stage, we require your contact information</FormStepDescription>
       <BlockTitle>Owners/Partners</BlockTitle>
       <BlockDescription>Please add at least one field to the table before submitting</BlockDescription>
-      <DataTable onDataTableChange={handleOwner_ContactChange} columns={Owner_Contact_fields} defaultRows={Owner_contact_defaultRows} addRow_bTn_ColsPan={4} unique_key={'Owner_Contact_1'} />
+      <DataTable onDataTableChange={handleOwner_ContactChange} columns={Owner_Contact_fields} defaultRows={Owner_contact_defaultRows} addRow_bTn_ColsPan={4} unique_key={'Owner_Contact_1'} checkBox={true}/>
       <Typography variant="h6" className={classes.label}>Account department</Typography>
       <DataTable onDataTableChange={handleDepartment_ContactChange} columns={Department_Contact_fields} defaultRows={Department_Contact_defaultRows} unique_key={'Department_Contact_1'} />
     </ContactSecWrapper>
