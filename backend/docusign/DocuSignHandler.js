@@ -2,6 +2,7 @@ import docusign from 'docusign-esign'
 import config from '../config/Config.js'
 import axios from 'axios'
 import fs from 'fs-extra'
+import html_pdf from "html-pdf";
 
 import CreditApplicationForm from './documents/CreditApplicationForm.js'
 
@@ -40,7 +41,7 @@ export async function sendEnvelope(args) {
     results = null;
 
   // Step 1. Make the envelope request body
-  let envelope = makeEnvelope(args.envelopeArgs);
+  let envelope = await makeEnvelope(args.envelopeArgs);
 
   // Step 2. call Envelopes::create API method
   // Exceptions will be caught by the calling function
@@ -53,7 +54,7 @@ export async function sendEnvelope(args) {
   return envelopeId;
 };
 
-function makeEnvelope(args) {
+async function makeEnvelope(args) {
 
   // create the envelope definition
   let env = new docusign.EnvelopeDefinition();
@@ -61,11 +62,21 @@ function makeEnvelope(args) {
 
   // add the documents
   let doc1 = new docusign.Document()
-  let doc1b64 = Buffer.from(CreditApplicationForm(args.document_data)).toString("base64")
+  let doc1_html = CreditApplicationForm(args.document_data)
 
-  doc1.documentBase64 = doc1b64;
+  const pdf_buffer = await new Promise((resolve, reject) => {
+    html_pdf.create(doc1_html).toBuffer((err, buffer) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(buffer);
+      }
+    });
+  });
+
+  doc1.documentBase64 = pdf_buffer.toString("base64");
   doc1.name = "Credit Application Form"; // can be different from actual file name
-  doc1.fileExtension = "html"; // Source data format. Signed docs are always pdf.
+  doc1.fileExtension = "pdf"; // Source data format. Signed docs are always pdf.
   doc1.documentId = "1"; // a label used to reference the doc
 
   // The order in the docs array determines the order in the envelope
