@@ -2,7 +2,7 @@ import docusign from 'docusign-esign'
 import config from '../config/Config.js'
 import axios from 'axios'
 import fs from 'fs-extra'
-import html_pdf from "html-pdf";
+import puppeteer from 'puppeteer'
 
 import CreditApplicationForm from './documents/CreditApplicationForm.js'
 
@@ -64,17 +64,18 @@ async function makeEnvelope(args) {
   let doc1 = new docusign.Document()
   let doc1_html = CreditApplicationForm(args.document_data)
 
-  const pdf_buffer = await new Promise((resolve, reject) => {
-    html_pdf.create(doc1_html).toBuffer((err, buffer) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(buffer);
-      }
-    });
-  });
 
-  doc1.documentBase64 = pdf_buffer.toString("base64");
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox']
+ })
+
+  const page = await browser.newPage();
+  await page.setContent(doc1_html);
+  const pdf = await page.pdf({ format: 'A4', printBackground: true });
+  await browser.close();
+
+  doc1.documentBase64 = pdf.toString("base64");
   doc1.name = "Credit Application Form"; // can be different from actual file name
   doc1.fileExtension = "pdf"; // Source data format. Signed docs are always pdf.
   doc1.documentId = "1"; // a label used to reference the doc
