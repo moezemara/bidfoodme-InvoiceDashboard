@@ -58,12 +58,12 @@ const ContactComponent = ({ handleOnDataChange }) => {
   };
 
   const Owner_Contact_fields = [
-    { field: "Title", headerName: "Title", type: "select", options: ["Owner", "Partner"], cellWidth: "14.3%"},
+    { field: "Title", headerName: "Title", type: "select", options: ["Owner", "Partner", "Manager"], cellWidth: "14.3%"},
     { field: "Name", headerName: "Name", type: "text", cellWidth: "14.3%" },
     { field: "Phone", headerName: "Phone number", type: "text", cellWidth: "14.3%" },
     { field: "Mobile", headerName: "Mobile number", type: "text", cellWidth: "14.3%" },
     { field: "Email", headerName: "Email", type: "text", cellWidth: "14.3%" },
-    { field: "Shareholder_Percentage", headerName: "Shareholder Percentage", type: "text", cellWidth: "14.3%"},
+    { field: "Shareholder_Percentage", headerName: "Shareholder Percentage", props:"percentage", type: "text", cellWidth: "14.3%"},
     { field: "Authorised_Signature", headerName: "Authorised Signature", type: "radio", cellWidth: "14.3%", CellAlign: 'center'}
   ];
 
@@ -78,21 +78,21 @@ const ContactComponent = ({ handleOnDataChange }) => {
 
   const Department_Contact_defaultRows = [
     {
-      Title: { data: "Manager", editable: false },
+      Title: { data: "Finance Manager", editable: false },
       Name: { data: "", editable: true },
       Phone: { data: "", editable: true },
       Mobile: { data: "", editable: true },
       Email: { data: "", editable: true }
     },
     {
-      Title: { data: "Payable", editable: false },
+      Title: { data: "Accounts Payable", editable: false },
       Name: { data: "", editable: true },
       Phone: { data: "", editable: true },
       Mobile: { data: "", editable: true },
       Email: { data: "", editable: true }
     },
     {
-      Title: { data: "Receivable", editable: false },
+      Title: { data: "Purchasing Manager", editable: false },
       Name: { data: "", editable: true },
       Phone: { data: "", editable: true },
       Mobile: { data: "", editable: true },
@@ -121,7 +121,7 @@ const ContactComponent = ({ handleOnDataChange }) => {
   if (formState.Department_Contact !== undefined && formState.Department_Contact.length > 0) {
     const replaced_rows = []
     formState.Department_Contact.forEach((row) => {
-      if ((row.title === "Manager" || row.title === "Payable" || row.title === "Receivable") && !replaced_rows.includes(row.title)) {
+      if ((row.title === "Finance Manager" || row.title === "Accounts Payable" || row.title === "Purchasing Manager") && !replaced_rows.includes(row.title)) {
         replaced_rows.push(row.title)
         Department_Contact_defaultRows.forEach((default_row) => {
           if (default_row.Title.data === row.title) {
@@ -152,9 +152,9 @@ const ContactComponent = ({ handleOnDataChange }) => {
       <FormStepDescription>At this stage, we require your contact information</FormStepDescription>
       <BlockTitle>Owners/Partners</BlockTitle>
       <BlockDescription>Please add at least one field to the table before submitting</BlockDescription>
-      <DataTable onDataTableChange={handleOwner_ContactChange} columns={Owner_Contact_fields} defaultRows={Owner_contact_defaultRows} addRow_bTn_ColsPan={4} unique_key={'Owner_Contact'} checkBox={true}/>
-      <Typography variant="h6" className={`${classes.label} tbl_title`}>Account department</Typography>
-      <DataTable onDataTableChange={handleDepartment_ContactChange} columns={Department_Contact_fields} defaultRows={Department_Contact_defaultRows} unique_key={'Department_Contact'} />
+      <DataTable onDataTableChange={handleOwner_ContactChange} columns={Owner_Contact_fields} defaultRows={Owner_contact_defaultRows} addRow_bTn_ColsPan={4} unique_key={'Owner_Contact'} checkBox={true} maxRows={3}/>
+      <Typography variant="h6" className={`${classes.label} tbl_title`}>Finance department</Typography>
+      <DataTable onDataTableChange={handleDepartment_ContactChange} columns={Department_Contact_fields} defaultRows={Department_Contact_defaultRows} unique_key={'Department_Contact'} maxRows={3}/>
     </ContactSecWrapper>
   );
 };

@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import {
   Grid,
   TextField,
-  InputAdornment
+  InputAdornment,
+  FormControlLabel,
+  Checkbox,
+  Select,
+  MenuItem
 } from '@mui/material';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -12,6 +16,7 @@ import { FormStepName, FormStepDescription, CustomInputLabel, InputTitle } from 
 import dayjs from 'dayjs';
 
 import { RegisterBranchContext } from '../Contexts/RegisterBranchContext';
+import Countries from '../utils/Countries';
 
 const GeneralInfoComponent = ({ handleOnDataChange }) => {
   const { data, updateData } = React.useContext(RegisterBranchContext);
@@ -20,16 +25,28 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
   const [formState, setFormState] = useState({
     outlet_legal_name: data.general_info.outlet_legal_name || '',
     outlet_trade_name: data.general_info.outlet_trade_name || '',
-    outlet_address: data.general_info.outlet_address || '',
-    country: data.general_info.country || '',
-    city: data.general_info.city || '',
-    phone: data.general_info.phone || '',
-    po_box: data.general_info.po_box || '',
+    outlet_group_name: data.general_info.outlet_group_name || '',
+    billing_outlet_address: data.general_info.billing_outlet_address || '',
+    billing_country: data.general_info.billing_country || '',
+    billing_city: data.general_info.billing_city || '',
+    billing_phone: data.general_info.billing_phone || '',
+    billing_po_box: data.general_info.billing_po_box || '',
+    delivery_outlet_address: data.general_info.delivery_outlet_address || '',
+    delivery_country: data.general_info.delivery_country || '',
+    delivery_city: data.general_info.delivery_city || '',
+    delivery_phone: data.general_info.delivery_phone || '',
+    delivery_po_box: data.general_info.delivery_po_box || '',
     service_years: data.general_info.service_years || '',
     vat_number: data.general_info.vat_number || '',
     license_expiration: data.general_info.license_expiration || '',
     license_number: data.general_info.license_number || '',
+    website_url: data.general_info.website_url || '',
+    use_same_billing_address: data.general_info.use_same_billing_address || false
+
   });
+
+  // convert conuntries to list of names
+  const countries = Countries.map((country) => country.name);
 
   // function to update form data and call callback
   const handleFormDataChange = (field, value) => {
@@ -46,7 +63,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
       <FormStepDescription>Let's begin by filling out your general information</FormStepDescription>
       <Grid container rowSpacing={2} columnSpacing={{ md: 4 }}>
         <Grid item xs={12}>
-          <InputTitle>Outlet / Group</InputTitle>
+          <InputTitle>Outlet</InputTitle>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -71,41 +88,171 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
           </CustomInputLabel>
         </Grid>
         <Grid item xs={12}>
-          <InputTitle>Outlet Invoicing Address</InputTitle>
+          <TextField
+            fullWidth
+            id="outlet_group_name"
+            onChange={(e) => handleFormDataChange('outlet_group_name', e.target.value)}
+            value={formState.outlet_group_name}
+          />
+          <CustomInputLabel htmlFor="outlet_group_name">
+            Group Name
+          </CustomInputLabel>
+        </Grid>
+        
+        <Grid item xs={12}>
+          <InputTitle>Outlet Billing Address</InputTitle>
         </Grid>
         <Grid item xs={12} sm={12}>
         <TextField
             fullWidth
-            id="outlet_address_input"
-            onChange={(e) => handleFormDataChange('outlet_address', e.target.value)}
-            value={formState.outlet_address}
+            id="billing_outlet_address_input"
+            onChange={(e) => handleFormDataChange('billing_outlet_address', e.target.value)}
+            value={formState.billing_outlet_address}
           />
-          <CustomInputLabel htmlFor="outlet_address_input">
+          <CustomInputLabel htmlFor="billing_outlet_address_input">
             Full address
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Select
+            fullWidth
+            id="billing_country_input"
+            onChange={(e) => handleFormDataChange('billing_country', e.target.value)}
+            value={formState.billing_country}
+          >
+            {countries.map((country) => (
+              <MenuItem key={country} value={country}>
+                {country}
+              </MenuItem>
+            ))}
+          </Select>
+          <CustomInputLabel htmlFor="billing_country_input">
+            Country
           </CustomInputLabel>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            id="city_input"
-            onChange={(e) => handleFormDataChange('country', e.target.value)}
-            value={formState.country}
+            id="billing_city_input"
+            onChange={(e) => handleFormDataChange('billing_city', e.target.value)}
+            value={formState.billing_city}
           />
-          <CustomInputLabel htmlFor="city_input">
+          <CustomInputLabel htmlFor="billing_city_input">
             City
           </CustomInputLabel>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            id="country_input"
-            onChange={(e) => handleFormDataChange('city', e.target.value)}
-            value={formState.city}
+            id="billing_phone_input"
+            onChange={(e) => handleFormDataChange('billing_phone', e.target.value)}
+            value={formState.billing_phone}
           />
-          <CustomInputLabel htmlFor="country_input">
-            Country
+          <CustomInputLabel htmlFor="billing_phone_input">
+            Phone number
           </CustomInputLabel>
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            id="billing_po_box"
+            onChange={(e) => handleFormDataChange('billing_po_box', e.target.value)}
+            value={formState.billing_po_box}
+          />
+          <CustomInputLabel htmlFor="billing_po_box">
+            P.O. Box
+          </CustomInputLabel>
+        </Grid>
+
+        <Grid item xs={12}>
+          <InputTitle>Outlet Delivery Address</InputTitle>
+        </Grid>
+
+        <Grid item xs={12} sm={12}>
+        <FormControlLabel
+            control={
+              <Checkbox
+                checked={formState.use_same_billing_address}
+                onChange={(e) => handleFormDataChange('use_same_billing_address', e.target.checked)}
+                name="use_same_billing_address"
+                color="primary"
+              />
+            }
+            label="Use same as billing address"
+          />
+        </Grid>
+        
+        {formState.use_same_billing_address ?
+          undefined
+          :
+          <>
+          <Grid item xs={12} sm={12}>
+          <TextField
+              fullWidth
+              id="delivery_outlet_address_input"
+              onChange={(e) => handleFormDataChange('delivery_outlet_address', e.target.value)}
+              value={formState.delivery_outlet_address}
+              disabled={formState.use_same_billing_address}
+            />
+            <CustomInputLabel htmlFor="delivery_outlet_address_input">
+              Full address
+            </CustomInputLabel>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Select
+              fullWidth
+              id="delivery_country_input"
+              onChange={(e) => handleFormDataChange('delivery_country', e.target.value)}
+              value={formState.delivery_country}
+            >
+              {countries.map((country) => (
+                <MenuItem key={country} value={country}>
+                  {country}
+                </MenuItem>
+              ))}
+            </Select>
+            <CustomInputLabel htmlFor="delivery_country_input">
+              Country
+            </CustomInputLabel>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="delivery_city_input"
+              onChange={(e) => handleFormDataChange('delivery_city', e.target.value)}
+              value={formState.delivery_city}
+              disabled={formState.use_same_billing_address}
+            />
+            <CustomInputLabel htmlFor="delivery_city_input">
+              City
+            </CustomInputLabel>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="delivery_phone_input"
+              onChange={(e) => handleFormDataChange('delivery_phone', e.target.value)}
+              value={formState.delivery_phone}
+              disabled={formState.use_same_billing_address}
+            />
+            <CustomInputLabel htmlFor="delivery_phone_input">
+              Phone number
+            </CustomInputLabel>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="delivery_po_box"
+              onChange={(e) => handleFormDataChange('delivery_po_box', e.target.value)}
+              value={formState.delivery_po_box}
+              disabled={formState.use_same_billing_address}
+            />
+            <CustomInputLabel htmlFor="delivery_po_box">
+              P.O. Box
+            </CustomInputLabel>
+          </Grid>
+          </>    
+        }
         <Grid item xs={12}>
           <InputTitle>Trade License</InputTitle>
         </Grid >
@@ -124,47 +271,24 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
           </CustomInputLabel>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              inputVariant="outlined"
-              views={['month', 'year']}
-              placeholder="Example : 10/23"
-              slotProps={{ textField: { fullWidth: true } }}
-              onChange={(newValue) => handleFormDataChange('license_expiration', dayjs(newValue).format('YYYY-MM'))}
-              dateFormat="yy-mm"
-              inputFormat="yy-mm"
-              value={formState.license_expiration ? dayjs(data.general_info.license_expiration) : null}
-            />
-            <CustomInputLabel htmlFor="trade-license-number">
-              Trade license expiration date
-            </CustomInputLabel>
-          </LocalizationProvider>
-        </Grid>
-
-        <Grid item xs={12} sm={6}>
-        <InputTitle>Phone number</InputTitle>
-          <TextField
-            fullWidth
-            onChange={(e) => handleFormDataChange('phone', e.target.value)}
-            value={formState.phone}
-          />
-          <CustomInputLabel htmlFor="">
-            &nbsp;
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          inputVariant="outlined"
+          views={['day', 'month', 'year']}
+          placeholder="Example : 23/10/2023"
+          slotProps={{ textField: { fullWidth: true } }}
+          onChange={(newValue) => handleFormDataChange('license_expiration', dayjs(newValue).format('DD/MM/YYYY'))}
+          format="DD/MM/YYYY"
+          inputFormat="DD/MM/YYYY"
+          value={formState.license_expiration ? dayjs(data.general_info.license_expiration, 'DD/MM/YYYY') : null}
+        />
+          <CustomInputLabel htmlFor="trade-license-number">
+            Trade license expiry date
           </CustomInputLabel>
+        </LocalizationProvider>
         </Grid>
         <Grid item xs={12} sm={6}>
-        <InputTitle>P.O. Box</InputTitle>
-          <TextField
-            fullWidth
-            onChange={(e) => handleFormDataChange('po_box', e.target.value)}
-            value={formState.po_box}
-          />
-          <CustomInputLabel htmlFor="">
-            &nbsp;
-          </CustomInputLabel>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <InputTitle>Number of years in fund service</InputTitle>
+        <InputTitle>Number of years in food service industry</InputTitle>
           <TextField
           fullWidth
           onChange={(e) => handleFormDataChange('service_years', e.target.value)}
@@ -177,6 +301,14 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             fullWidth
             onChange={(e) => handleFormDataChange('vat_number', e.target.value)}
             value={formState.vat_number}
+          />
+        </Grid>
+        <Grid item xs={12} sm={0}>
+        <InputTitle>Website</InputTitle>
+          <TextField
+            fullWidth
+            onChange={(e) => handleFormDataChange('website_url', e.target.value)}
+            value={formState.website_url}
           />
         </Grid>
       </Grid >

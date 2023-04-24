@@ -1,5 +1,6 @@
 {
     "api":{
-        "url":"http://caf.bidfoodme.com:3000/v1/"
-    }
+        "url":"http://127.0.0.1:3001/v1/"
+    },
+    "comment": "http://caf.bidfoodme.com:3000/v1/"
 }

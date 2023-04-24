@@ -18,13 +18,14 @@ export default async function VerifyFinish(database, application_id) {
     }
 
     // contacts (check for titles owner, partner, department) SelectContactsByApplicationIdAndContactTitle
-    const get_contacts_info_action_owner = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'owner'})
-    const get_contacts_info_action_partner = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'partner'})
-    const get_contacts_info_action_manager = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'manager'})
-    const get_contacts_info_action_payable = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'payable'})
-    const get_contacts_info_action_receivable = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'receivable'})
+    const get_contacts_info_action_owner = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Owner'})
+    const get_contacts_info_action_partner = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Partner'})
+    const get_contacts_info_action_manager = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Manager'})
+    const get_contacts_info_action_financemanager = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Finance Manager'})
+    const get_contacts_info_action_payable = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Accounts Payable'})
+    const get_contacts_info_action_purchasing = await database.RequestCredit.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Purchasing Manager'})
 
-    if (get_contacts_info_action_owner.length == 0 && get_contacts_info_action_partner.length == 0){
+    if (get_contacts_info_action_owner.length == 0 && get_contacts_info_action_partner.length == 0 && get_contacts_info_action_manager.length == 0){
         return {status: false, message: 'Please complete owners or partners contacts info'}
     }
 
@@ -42,21 +43,26 @@ export default async function VerifyFinish(database, application_id) {
         }
     }
 
-    if (authorised_signature == false){
-        return {status: false, message: 'Please select authorised signature'}
+    for (let i = 0; i < get_contacts_info_action_manager.length; i++){
+        if (get_contacts_info_action_manager[i].authorised_signature == 'Yes'){
+            authorised_signature = true
+        }
     }
-    
 
-    if (get_contacts_info_action_manager.length == 0){
-        return {status: false, message: 'Please complete manager contacts info'}
+    if (authorised_signature == false){
+        return {status: false, message: 'Please select authorised signaturer for owners or partners contacts info'}
+    }
+
+    if (get_contacts_info_action_financemanager.length == 0){
+        return {status: false, message: 'Please complete finance manager contact info'}
     }
 
     if (get_contacts_info_action_payable.length == 0){
-        return {status: false, message: 'Please complete payable contacts info'}
+        return {status: false, message: 'Please complete accounts payable contact info'}
     }
 
-    if (get_contacts_info_action_receivable.length == 0){
-        return {status: false, message: 'Please complete receivable contacts info'}
+    if (get_contacts_info_action_purchasing.length == 0){
+        return {status: false, message: 'Please complete purchasing manager contact info'}
     }
 
 

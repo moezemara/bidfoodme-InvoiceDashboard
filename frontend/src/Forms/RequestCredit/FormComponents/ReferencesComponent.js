@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import {
   Grid,
   TextField,
-  Typography
+  Typography,
+  Select,
+  MenuItem
 } from '@mui/material';
 
 import DataTable from './DataTable/DataTable';
-import { LabelStyle, FormStepName, FormStepDescription, CustomInputLabel, InputTitle, ContentWrapper } from './FormComponentsStyles';
+import { LabelStyle, FormStepName, InputTitle, ContentWrapper } from './FormComponentsStyles';
 import { RequestCreditContext } from '../Contexts/RequestCreditContext';
 
 const ReferencesComponent = ({ handleOnDataChange }) => {
@@ -18,7 +20,7 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
   // state for the whole form
   const [formState, setFormState] = useState({
     bank_name: data.references_info.bank_name || "",
-    bank_city: data.references_info.bank_city || "",
+    bank_branch: data.references_info.bank_branch || "",
     bank_swift: data.references_info.bank_swift || "",
     bank_iban: data.references_info.bank_iban || "",
     bank_account_number: data.references_info.bank_account_number || "",
@@ -34,7 +36,6 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
       convertedArray.push({
         name: row.Name.data,
         contact: row.Contact.data,
-        designation: row.Designation.data,
         address: row.Address.data,
         phone: row.Phone.data,
         email: row.Email.data
@@ -57,11 +58,10 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
   };
 
   const columns = [
-    { field: "Name", headerName: "Name", type: "text", cellWidth: "16%" },
-    { field: "Contact", headerName: "Contact", type: "text", cellWidth: "16%" },
-    { field: "Designation", headerName: "Designation", type: "text", cellWidth: "16%" },
-    { field: "Address", headerName: "Address", type: "text", cellWidth: "16%" },
-    { field: "Phone", headerName: "Phone", type: "text", cellWidth: "16%" },
+    { field: "Name", headerName: "Company Name", type: "text", cellWidth: "16%" },
+    { field: "Contact", headerName: "Contact Person", type: "text", cellWidth: "16%" },
+    { field: "Address", headerName: "Company Address", type: "text", cellWidth: "16%" },
+    { field: "Phone", headerName: "Phone Number", type: "text", cellWidth: "16%" },
     { field: "Email", headerName: "Email", type: "text", cellWidth: "16%" }
   ];
 
@@ -72,7 +72,6 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
       supplier_information_default_rows.push({
         Name: { data: row.name, editable: true },
         Contact: { data: row.contact, editable: true },
-        Designation: { data: row.designation, editable: true },
         Address: { data: row.address, editable: true },
         Phone: { data: row.phone, editable: true },
         Email: { data: row.email, editable: true }
@@ -85,11 +84,11 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
     <section className='reference_sec'>
       <ContentWrapper>
         <FormStepName>References</FormStepName>
-        <FormStepDescription>In this step, please provide your financial information</FormStepDescription>
-        <Typography variant="h6" className={`${classes.label} tblTop_title`}>Banking Details</Typography>
+        {/* <FormStepDescription>In this step, please provide your financial information</FormStepDescription> */}
+        <Typography variant="h6" className={`${classes.label} tblTop_title`}>Bank Details</Typography>
         <Grid container rowSpacing={2} columnSpacing={{ md: 4 }}>
           <Grid item xs={12} sm={6}>
-          <InputTitle>Name</InputTitle>
+          <InputTitle>Bank Name</InputTitle>
             <TextField
               fullWidth
               onChange={(e) => handleFormDataChange('bank_name', e.target.value)}
@@ -97,11 +96,11 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-          <InputTitle>City</InputTitle>
+          <InputTitle>Branch</InputTitle>
             <TextField
               fullWidth
-              onChange={(e) => handleFormDataChange('bank_city', e.target.value)}
-              value={formState.bank_city}
+              onChange={(e) => handleFormDataChange('bank_branch', e.target.value)}
+              value={formState.bank_branch}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -113,7 +112,7 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-          <InputTitle>IBAN</InputTitle>
+          <InputTitle>IBAN Number</InputTitle>
             <TextField
               fullWidth
               onChange={(e) => handleFormDataChange('bank_iban', e.target.value)}
@@ -121,37 +120,31 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <InputTitle>Account</InputTitle>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <InputTitle></InputTitle>
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          <InputTitle>Account Number</InputTitle>
             <TextField
               fullWidth
-              id='account_id'
+              id='account_number_input'
               onChange={(e) => handleFormDataChange('bank_account_number', e.target.value)}
               value={formState.bank_account_number}
             />
-            <CustomInputLabel htmlFor="account_id" style={{ marginTop: "10px" }}>
-              Account Number
-            </CustomInputLabel>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField
+          <InputTitle>Account Type</InputTitle>
+            <Select
               fullWidth
-              id='account_id_2'
+              id='account_type_input'
               onChange={(e) => handleFormDataChange('bank_account_type', e.target.value)}
               value={formState.bank_account_type}
-            />
-            <CustomInputLabel htmlFor="account_id_2" style={{ marginTop: "10px" }}>
-              Account type
-            </CustomInputLabel>
+            >
+              <MenuItem value="Current">Current</MenuItem>
+              <MenuItem value="Saving">Saving</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Select>
           </Grid>
         </Grid>
-        <Typography variant="h6" className={`${classes.label} tbl_title`} style={{ marginTop: '75px' }}>Supplier Information</Typography>
+        <Typography variant="h6" className={`${classes.label} tbl_title`} style={{ marginTop: '75px' }}>Top 3 Supplier References</Typography>
+        <DataTable onDataTableChange={handleSupplier_InformationChange} columns={columns} defaultRows={supplier_information_default_rows} addRow_bTn_ColsPan={6} unique_key={'Supplier_Information'} maxRows={3}/>
       </ContentWrapper>
-      <DataTable onDataTableChange={handleSupplier_InformationChange} columns={columns} defaultRows={supplier_information_default_rows} addRow_bTn_ColsPan={6} unique_key={'Supplier_Information'}/>
     </section>
   );
 };

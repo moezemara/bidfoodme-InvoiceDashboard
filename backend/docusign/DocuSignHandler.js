@@ -5,6 +5,7 @@ import fs from 'fs-extra'
 import puppeteer from 'puppeteer'
 
 import CreditApplicationForm from './documents/CreditApplicationForm.js'
+import CustomerOutletInformationSheet from './documents/CustomerOutletInformationSheet.js'
 
 export async function refreshAccessToken(token) {
     let data = {
@@ -62,7 +63,18 @@ async function makeEnvelope(args) {
 
   // add the documents
   let doc1 = new docusign.Document()
-  let doc1_html = CreditApplicationForm(args.document_data)
+
+  let doc1_html = ''
+  if (args.document_data.document_type == 'CustomerOutletInformationSheet') {
+    doc1_html = CustomerOutletInformationSheet(args.document_data)
+    doc1.name = "Customer Outlet Information Sheet";
+  }
+  else if (args.document_data.document_type == 'CreditApplicationForm') {
+    doc1_html = CreditApplicationForm(args.document_data)
+    doc1.name = "Credit Application Form";
+  }else{
+    return false
+  }
 
 
   const browser = await puppeteer.launch({
@@ -76,7 +88,6 @@ async function makeEnvelope(args) {
   await browser.close();
 
   doc1.documentBase64 = pdf.toString("base64");
-  doc1.name = "Credit Application Form"; // can be different from actual file name
   doc1.fileExtension = "pdf"; // Source data format. Signed docs are always pdf.
   doc1.documentId = "1"; // a label used to reference the doc
 

@@ -129,22 +129,22 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              id='account_id'
+              id='bank_account_number_input'
               onChange={(e) => handleFormDataChange('bank_account_number', e.target.value)}
               value={formState.bank_account_number}
             />
-            <CustomInputLabel htmlFor="account_id" style={{ marginTop: "10px" }}>
+            <CustomInputLabel htmlFor="bank_account_number_input" style={{ marginTop: "10px" }}>
               Account Number
             </CustomInputLabel>
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              id='account_id_2'
+              id='bank_account_type_input'
               onChange={(e) => handleFormDataChange('bank_account_type', e.target.value)}
               value={formState.bank_account_type}
             />
-            <CustomInputLabel htmlFor="account_id_2" style={{ marginTop: "10px" }}>
+            <CustomInputLabel htmlFor="bank_account_type_input" style={{ marginTop: "10px" }}>
               Account type
             </CustomInputLabel>
           </Grid>

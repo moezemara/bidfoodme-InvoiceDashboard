@@ -4,7 +4,6 @@ CREATE TABLE `suppliers` (
     `application_id` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `contact` VARCHAR(255) NOT NULL,
-    `designation` VARCHAR(255) NOT NULL,
     `address` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
@@ -47,7 +46,6 @@ export default class Suppliers {
                 `SELECT
                 name,
                 contact,
-                designation,
                 address,
                 phone,
                 email                
@@ -90,11 +88,10 @@ export default class Suppliers {
     UpdateSupplierByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE requestcredit_suppliers SET name = ?, contact = ?, designation = ?, address = ?, phone = ?, email = ? WHERE application_id = ? AND id = ?`,
+                `UPDATE requestcredit_suppliers SET name = ?, contact = ?, address = ?, phone = ?, email = ? WHERE application_id = ? AND id = ?`,
                 [
                     data.name,
                     data.contact,
-                    data.designation,
                     data.address,
                     data.phone,
                     data.email,
@@ -116,12 +113,11 @@ export default class Suppliers {
     InsertSupplier(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO requestcredit_suppliers (application_id, name, contact, designation, address, phone, email) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO requestcredit_suppliers (application_id, name, contact, address, phone, email) VALUES (?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
                     data.name,
                     data.contact,
-                    data.designation,
                     data.address,
                     data.phone,
                     data.email

@@ -3,7 +3,7 @@ CREATE TABLE `bank_info` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `application_id` VARCHAR(255) NOT NULL,
     `bank_name` VARCHAR(255) NOT NULL,
-    `bank_city` VARCHAR(255) NOT NULL,
+    `bank_branch` VARCHAR(255) NOT NULL,
     `bank_account_number` VARCHAR(255) NOT NULL,
     `bank_iban` VARCHAR(255) NOT NULL,
     `bank_swift` VARCHAR(255) NOT NULL,
@@ -46,7 +46,7 @@ export default class BankInfo {
             this.pool.query(
                 `SELECT
                 bank_name,
-                bank_city,
+                bank_branch,
                 bank_account_number,
                 bank_iban,
                 bank_swift,
@@ -70,10 +70,10 @@ export default class BankInfo {
     UpdateBankInfoByApplicationId(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `UPDATE requestcredit_bank_info SET bank_name = ?, bank_city = ?, bank_account_number = ?, bank_iban = ?, bank_swift = ?, bank_account_type = ? WHERE application_id = ?`,
+                `UPDATE requestcredit_bank_info SET bank_name = ?, bank_branch = ?, bank_account_number = ?, bank_iban = ?, bank_swift = ?, bank_account_type = ? WHERE application_id = ?`,
                 [
                     data.bank_name,
-                    data.bank_city,
+                    data.bank_branch,
                     data.bank_account_number,
                     data.bank_iban,
                     data.bank_swift,
@@ -95,11 +95,11 @@ export default class BankInfo {
     InsertBankInfo(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO requestcredit_bank_info (application_id, bank_name, bank_city, bank_account_number, bank_iban, bank_swift, bank_account_type) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO requestcredit_bank_info (application_id, bank_name, bank_branch, bank_account_number, bank_iban, bank_swift, bank_account_type) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
                     data.bank_name,
-                    data.bank_city,
+                    data.bank_branch,
                     data.bank_account_number,
                     data.bank_iban,
                     data.bank_swift,

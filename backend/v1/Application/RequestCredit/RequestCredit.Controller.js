@@ -391,8 +391,9 @@ async function DocuSign(database, application_id) {
         ...get_bank_info_action[0],
         ...get_requests_info_action[0],
         suppliers: get_suppliers_info_action,
-        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner"),
-        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner"),
+        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner" || contact.title == "Manager"),
+        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager"),
+        document_type: "CreditApplicationForm"
     }
 
 

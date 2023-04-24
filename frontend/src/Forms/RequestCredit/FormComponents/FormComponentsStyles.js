@@ -140,6 +140,10 @@ export const ContactSecWrapper = styled.section`
 
 export const ContentWrapper = styled.div`
   margin:0 25px;
+
+  .MuiPaper-root{
+    padding-bottom:2px;
+  }
   
   @media(max-width:900px){
     margin:0;

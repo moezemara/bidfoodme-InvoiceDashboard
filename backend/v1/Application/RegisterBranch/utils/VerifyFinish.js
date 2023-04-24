@@ -18,41 +18,51 @@ export default async function VerifyFinish(database, application_id) {
     }
 
     // contacts (check for titles owner, partner, department) SelectContactsByApplicationIdAndContactTitle
-    const get_contacts_info_action_owner = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'owner'})
-    const get_contacts_info_action_partner = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'partner'})
-    const get_contacts_info_action_manager = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'manager'})
-    const get_contacts_info_action_payable = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'payable'})
-    const get_contacts_info_action_receivable = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'receivable'})
+    const get_contacts_info_action_owner = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Owner'})
+    const get_contacts_info_action_partner = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Partner'})
+    const get_contacts_info_action_manager = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Manager'})
+    const get_contacts_info_action_financemanager = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Finance Manager'})
+    const get_contacts_info_action_payable = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Accounts Payable'})
+    const get_contacts_info_action_purchasing = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Purchasing Manager'})
 
-    if (get_contacts_info_action_owner.length == 0 && get_contacts_info_action_partner.length == 0){
+    if (get_contacts_info_action_owner.length == 0 && get_contacts_info_action_partner.length == 0 && get_contacts_info_action_manager.length == 0){
         return {status: false, message: 'Please complete owners or partners contacts info'}
     }
 
-    if (get_contacts_info_action_manager.length == 0){
-        return {status: false, message: 'Please complete manager contacts info'}
+    let authorised_signature = false
+
+    for (let i = 0; i < get_contacts_info_action_owner.length; i++){
+        if (get_contacts_info_action_owner[i].authorised_signature == 'Yes'){
+            authorised_signature = true
+        }
+    }
+
+    for (let i = 0; i < get_contacts_info_action_partner.length; i++){
+        if (get_contacts_info_action_partner[i].authorised_signature == 'Yes'){
+            authorised_signature = true
+        }
+    }
+
+    for (let i = 0; i < get_contacts_info_action_manager.length; i++){
+        if (get_contacts_info_action_manager[i].authorised_signature == 'Yes'){
+            authorised_signature = true
+        }
+    }
+
+    if (authorised_signature == false){
+        return {status: false, message: 'Please select authorised signaturer for owners or partners contacts info'}
+    }
+
+    if (get_contacts_info_action_financemanager.length == 0){
+        return {status: false, message: 'Please complete finance manager contact info'}
     }
 
     if (get_contacts_info_action_payable.length == 0){
-        return {status: false, message: 'Please complete payable contacts info'}
+        return {status: false, message: 'Please complete accounts payable contact info'}
     }
 
-    if (get_contacts_info_action_receivable.length == 0){
-        return {status: false, message: 'Please complete receivable contacts info'}
-    }
-
-
-    // bank
-    const get_bank_info_action = await database.RegisterBranch.BankInfo.SelectBankInfoByApplicationId({application_id: application_id})
-
-    if (get_bank_info_action.length == 0){
-        return {status: false, message: 'Please complete bank info'}
-    }
-
-    // suppliers
-    const get_suppliers_info_action = await database.RegisterBranch.Suppliers.SelectSuppliersByApplicationId({application_id: application_id})
-    
-    if (get_suppliers_info_action.length == 0){
-        return {status: false, message: 'Please complete suppliers info'}
+    if (get_contacts_info_action_purchasing.length == 0){
+        return {status: false, message: 'Please complete purchasing manager contact info'}
     }
 
     // uploads

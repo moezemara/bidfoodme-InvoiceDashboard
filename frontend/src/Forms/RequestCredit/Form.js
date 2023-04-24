@@ -11,7 +11,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Timer from './utils/Timer';
 import { RequestCreditContext } from './Contexts/RequestCreditContext';
 import * as ApplicationApi from './utils/ApplicationApi';
-
+import Dialog from './utils/Dialog';
 
 const Form = () => {
   const [searchParams] = useSearchParams();
@@ -41,12 +41,23 @@ const Form = () => {
   const [referencesTimerValue, setReferencesTimerValue] = useState(0);
   const [uploadTimerValue, setUploadTimerValue] = useState(0);
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogContent, setDialogContent] = useState({});
+
   // handle next and back button click
-  const handleNextClick = () => {
+  const handleNextClick = async () => {
+    const saveResponse = await handleSaveClick();
+    // if (!saveResponse) {
+    //   return
+    // }
     setCurrentStep(currentStep + 1);
   };
 
-  const handleBackClick = () => {
+  const handleBackClick = async () => {
+    const saveResponse = await handleSaveClick();
+    // if (!saveResponse) {
+    //   return
+    // }
     setCurrentStep(currentStep - 1);
   };
 
@@ -114,20 +125,23 @@ const Form = () => {
     let submissionData = []
 
     const steps_keys = {
-      'general': ["outlet_legal_name", "outlet_trade_name", "outlet_address", "country", "city", "phone", "po_box", "service_years"],
+      'general': ["outlet_legal_name", "outlet_trade_name", 
+      "billing_outlet_address", "billing_country", "billing_city", "billing_phone", "billing_po_box", 
+      "delivery_outlet_address", "delivery_country", "delivery_city", "delivery_phone", "delivery_po_box", 
+      "service_years", "website_url"],
       'license': ["vat_number", "license_number", "license_expiration"],
       'contacts': ["Owner_Contact", "Department_Contact"],
-      'bank': ["bank_name", "bank_city", "bank_account_number", "bank_iban", "bank_swift", "bank_account_type"],
-      'suppliers': ["name", "contact", "designation", "address", "phone", "email"],
-      'uploads': ["tradelicensefile", "ownerpassportfile", "ownervisafile", "ownerelofile", "vatfile"],
-      'requests': ["credit_period", "credit_limit"]
+      'bank': ["bank_name", "bank_branch", "bank_account_number", "bank_iban", "bank_swift", "bank_account_type"],
+      'suppliers': ["name", "contact", "address", "phone", "email"],
+      'uploads': ["tradelicensefile", "ownerpassportfile", "ownervisafile", "ownereidfile", "vatfile"],
+      'requests': ["credit_limit"]
     }
 
     const uploads_original_names = {
       "tradelicensefile": "license",
       "ownerpassportfile": "owner_pp",
       "ownervisafile": "owner_visa",
-      "ownerelofile": "owner_elo",
+      "ownereidfile": "owner_eid",
       "vatfile": "vat"
     }
 
@@ -136,6 +150,15 @@ const Form = () => {
     switch (step) {
       case 'general':
       case 'license':
+
+        if (data.general_info["use_same_billing_address"] === true) {
+          data.general_info["delivery_outlet_address"] = data.general_info["billing_outlet_address"]
+          data.general_info["delivery_country"] = data.general_info["billing_country"]
+          data.general_info["delivery_city"] = data.general_info["billing_city"]
+          data.general_info["delivery_phone"] = data.general_info["billing_phone"]
+          data.general_info["delivery_po_box"] = data.general_info["billing_po_box"]
+        }
+
         for (let i = 0; i < steps_keys[step].length; i++) {
           const key = steps_keys[step][i];
           fieldData[key] = data.general_info[key];
@@ -214,26 +237,51 @@ const Form = () => {
       let response = ''
       if (currentSteps[i] === 'uploads') {
         response = await ApplicationApi.SaveProgressUploads(token, stepData)
+        response = response.data
       } else {
         response = await ApplicationApi.SaveProgress(token, currentSteps[i], stepData)
       }
-      console.log(response)      
+
+      setIsDialogOpen(true)
+      console.log(response)
+      if (response.success !== 1) {
+        setDialogContent(response.message)
+        return false
+      }else{
+        setDialogContent("Your progress has been saved successfully")
+      }
     }
 
     let response = await ApplicationApi.UpdateTime(token, currentTimerValue[0], { time_spent: currentTimerValue[1] })
     console.log(response)
 
+    return true
   };
 
   const handleFinishClick = async () => {
+    // check if agreement is checked
+    if (data.upload_info['confirm_info'] !== "yes") {
+      setIsDialogOpen(true)
+      setDialogContent("Please agree to the terms and conditions")
+      return false
+    }
+
     const response = await ApplicationApi.Finish(token)
     console.log(response)
+
+    setIsDialogOpen(true)
+    if (response.success !== 1) {
+      setDialogContent(response.message)
+      return false
+    }else{
+      setDialogContent("Form has been submitted successfully, you will receive an email shortly")
+    }
   }
 
   const LoadSavedProgress_Parent = async () => {
     const loadedData = await LoadSavedProgress(token);
-    if (loadedData === null) {
-      setData(loadedData);
+    if (loadedData != data){
+      setData(loadedData)
     }
   }
 
@@ -263,6 +311,7 @@ const Form = () => {
             <FormStyles.FormDescription>Lorem ipsum dolor sit amet, consectetur adipiscing elit</FormStyles.FormDescription>
           </div>
           <FormStyles.FormStepContainer>
+            <Dialog handleDialogPopUp={isDialogOpen} dialogContent={dialogContent} setIsDialogOpen={setIsDialogOpen}></Dialog>
             <div className={`customContainer`}>
               <FormStyles.FormStep active={currentStep >= 1} className={`${currentStep === 1 ? "active" : ""}`}>
                 <div className="step-number"> {currentStep < 2 ? '1' : <CheckIcon />}</div>

@@ -163,7 +163,7 @@ export default function CreateDocument(data){
                                 <td class="pt">
                                     <div class="flex">
                                         <label for="">Full Address (For Invoicing):</label>
-                                        <value>${data.outlet_address || ""}</value>
+                                        <value>${data.billing_outlet_address || ""}</value>
                                     </div>
                                 </td>
                             </tr>
@@ -174,19 +174,19 @@ export default function CreateDocument(data){
                                             <td>
                                                 <div class="flex">
                                                     <label for="">P.O. Box:</label>
-                                                    <value>${data.po_box || ""}</value>
+                                                    <value>${data.billing_po_box || ""}</value>
                                                 </div>
                                             </td>									
                                             <td>
                                                 <div class="flex">
                                                     <label for="">City:</label>
-                                                    <value>${data.city || ""}</value>
+                                                    <value>${data.billing_city || ""}</value>
                                                 </div>
                                             </td>									
                                             <td>
                                                 <div class="flex">
                                                     <label for="">Country:</label>
-                                                    <value>${data.country || ""}</value>
+                                                    <value>${data.billing_country || ""}</value>
                                                 </div>
                                             </td>
                                         </tr>
@@ -200,7 +200,7 @@ export default function CreateDocument(data){
                                             <td width="25%">
                                                 <div class="flex">
                                                     <label for="">Phone No.:</label>
-                                                    <value>${data.phone || ""}</value>
+                                                    <value>${data.billing_phone || ""}</value>
                                                 </div>
                                             </td>									
                                             <td width="55%">
@@ -282,8 +282,8 @@ export default function CreateDocument(data){
                                                 </td>									
                                                 <td>
                                                     <div class="flex">
-                                                        <label for="">City:</label>
-                                                        <value>${data.bank_city}</value>
+                                                        <label for="">Branch:</label>
+                                                        <value>${data.bank_branch}</value>
                                                     </div>
                                                 </td>									
                                                 <td>
@@ -369,7 +369,6 @@ export default function CreateDocument(data){
                 </tr>
             </table>
             <h3 style="margin-top:3em;">Agreed: <span style="color:white;">**signature**/</span></h3>
-
             <br><br><br>
         </section>
     </body>
@@ -477,7 +476,6 @@ function LoadSuppliersTable(data){
                 <tr>								
                     <td width="20%" align="center" valign="middle">Name</td>
                     <td width="15%" align="center" valign="middle">Contact</td>
-                    <td width="15%" align="center" valign="middle">Designation</td>
                     <td width="15%" align="center" valign="middle">Address</td>								
                     <td width="15%" align="center" valign="middle">Phone No.</td>								
                     <td width="15%" align="center" valign="middle">Email</td>								
@@ -488,7 +486,6 @@ function LoadSuppliersTable(data){
                         return `<tr>
                         <td align="center" valign="middle">${item.name || ""}</td>
                         <td align="center" valign="middle">${item.contact || ""}</td>
-                        <td align="center" valign="middle">${item.designation || ""}</td>
                         <td align="center" valign="middle">${item.address || ""}</td>
                         <td align="center" valign="middle">${item.phone || ""}</td>
                         <td align="center" valign="middle">${item.email || ""}</td>

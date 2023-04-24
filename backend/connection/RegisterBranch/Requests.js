@@ -49,12 +49,10 @@ export default class Requests {
         return new Promise((resolve, reject) =>{
             this.pool.query(
                 `UPDATE registerbranch_requests SET
-                credit_limit = ?,
-                credit_period = ?
+                credit_limit = ?
                 WHERE application_id = ?`,
                 [
                     data.credit_limit,
-                    data.credit_period,
                     data.application_id
                 ],
                 (error, results, fields) => {
@@ -72,11 +70,10 @@ export default class Requests {
     InsertRequest(data){
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO registerbranch_requests (application_id, credit_limit, credit_period) VALUES (?, ?, ?)`,
+                `INSERT INTO registerbranch_requests (application_id, credit_limit) VALUES (?, ?)`,
                 [
                     data.application_id,
-                    data.credit_limit,
-                    data.credit_period
+                    data.credit_limit
                 ],
                 (error, results, fields) => {
                     if (error) {

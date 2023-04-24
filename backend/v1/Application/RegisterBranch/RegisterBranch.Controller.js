@@ -6,6 +6,7 @@ import * as schema from './RegisterBranch.Schema.js'
 import { ValidateFields } from './utils/FileUtils.js'
 import upload from './utils/multer.js'
 import config from '../../../config/Config.js'
+import {refreshAccessToken, sendEnvelope} from '../../../docusign/DocuSignHandler.js'
 
 export async function CreateApplication(req, res) {
     const database = req.app.get('database');
@@ -61,15 +62,8 @@ export async function LoadSavedProgress(req, res) {
         // get contacts info
         const get_contacts_info_action = await database.RegisterBranch.Contacts.SelectContactsByApplicationId({application_id: active_application.application_id})
 
-        // get bank info
-        const get_bank_info_action = await database.RegisterBranch.BankInfo.SelectBankInfoByApplicationId({application_id: active_application.application_id})
-        const bank_info = get_bank_info_action[0]
-
         // get documents info
         const get_documents_info_action = await database.RegisterBranch.Documents.SelectDocumentsByApplicationId({application_id: active_application.application_id})
-
-        // get suppliers info
-        const get_suppliers_info_action = await database.RegisterBranch.Suppliers.SelectSuppliersByApplicationId({application_id: active_application.application_id})
 
         // get requests info
         const get_requests_info_action = await database.RegisterBranch.Requests.SelectRequestByApplicationId({application_id: active_application.application_id})
@@ -80,9 +74,7 @@ export async function LoadSavedProgress(req, res) {
             general_info: general_info,
             license_info: license_info,
             contacts_info: get_contacts_info_action,
-            bank_info: bank_info,
             documents_info: get_documents_info_action,
-            suppliers_info: get_suppliers_info_action,
             requests_info: requests_info
         })
 
@@ -150,32 +142,6 @@ export async function SavePageProgress(req, res, next) {
                 for (let i = 0; i < data.length; i++) {
                     const contact = data[i];
                     const create_contacts_info_action = await database.RegisterBranch.Contacts.InsertContact({application_id: application_id, ...contact})
-                }
-                break;
-            case 'bank':
-                const direct_check_body_bank = direct_check(req.body, schema.SavePageProgress_body_bank)
-                if(!direct_check_body_bank.status){
-                    return config.ApplicationMode == 'DEVELOPMENT' ? response.fail(res, direct_check_body_bank.message) : response.fail(res, 'Invalid request body')
-                }
-                const get_bank_info_action = await database.RegisterBranch.BankInfo.SelectBankInfoByApplicationId({application_id: application_id})
-                if (get_bank_info_action.length == 0){
-                    const create_bank_info_action = await database.RegisterBranch.BankInfo.InsertBankInfo({application_id: application_id, ...data})
-                }else{
-                    const update_bank_info_action = await database.RegisterBranch.BankInfo.UpdateBankInfoByApplicationId({application_id: application_id, ...data})
-                }
-                break;
-            case 'suppliers':
-                const direct_check_body_suppliers = direct_check(req.body, schema.SavePageProgress_body_suppliers)
-                if(!direct_check_body_suppliers.status){
-                    return config.ApplicationMode == 'DEVELOPMENT' ? response.fail(res, direct_check_body_suppliers.message) : response.fail(res, 'Invalid request body')
-                }
-                // delete all suppliers and add new ones
-                const delete_suppliers_info_action = await database.RegisterBranch.Suppliers.DeleteSuppliersByApplicationId({application_id: application_id})
-                
-                for (let i = 0; i < data.length; i++) {
-                    const supplier = data[i];
-                    // add supplier
-                    const create_suppliers_info_action = await database.RegisterBranch.Suppliers.InsertSupplier({application_id: application_id, ...supplier})
                 }
                 break;
             case 'uploads':
@@ -302,7 +268,6 @@ export async function FinishApplication(req, res) {
         total_time_spent += 
             get_time_spent_action[0].general + 
             get_time_spent_action[0].contacts + 
-            get_time_spent_action[0].references +
             get_time_spent_action[0].uploads
 
 
@@ -334,9 +299,78 @@ export async function FinishApplication(req, res) {
             }
         )
 
+        
+        // sign document
+        const sign_document_action = await DocuSign(database, application_id)
 
-        return response.success(res, 'Application finished successfully')
+
+
+        return response.success(res, 'Application finished successfully, envelope_id: ' + sign_document_action)
     } catch (error) {
         return response.system(res, error)
     }
+}
+
+async function DocuSign(database, application_id) {
+    let token = await database.DocuSign.SelectAccessToken()
+
+    if (token === undefined) {
+        token = await database.DocuSign.SelectLastExpiredToken()
+        if (token === undefined) {
+            return response.fail(res, 'No token found')
+        }
+    }
+
+    // if token is expired, refresh it
+    // token.created_at is in date format
+    const create_time = Math.floor(token.created_at.getTime() / 1000)
+    const current_time = Math.floor(Date.now() / 1000)
+
+
+    if (current_time - create_time + 60 > token.expires_in) {
+        const new_token = await refreshAccessToken(token)
+
+        if (new_token == false) {
+            return response.fail(res, 'Failed to refresh token')
+        }
+
+        await database.DocuSign.UpdateTokenStatus({id: token.id, expired: 1})
+        await database.DocuSign.InsertAccessToken(new_token)
+        token = new_token
+    }
+
+
+    // get form data
+    const get_general_info_action = await database.RegisterBranch.General.SelectGeneralInfoByApplicationId({application_id: application_id})
+    const get_license_info_action = await database.RegisterBranch.LicenseInfo.SelectLicenseInfoByApplicationId({application_id: application_id})
+    const get_contacts_info_action = await database.RegisterBranch.Contacts.SelectContactsByApplicationId({application_id: application_id})
+    const get_requests_info_action = await database.RegisterBranch.Requests.SelectRequestByApplicationId({application_id: application_id})
+
+
+    const document_data = {
+        ...get_general_info_action[0],
+        ...get_license_info_action[0],
+        ...get_requests_info_action[0],
+        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner" || contact.title == "Manager"),
+        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager"),
+        document_type: "CustomerOutletInformationSheet"
+    }
+
+
+    const envelopeArgs = {
+        signerEmail: document_data.owners.filter(owner => owner.authorised_signature == "Yes")[0].email,
+        signerName: document_data.outlet_legal_name,
+        status: "sent",
+        document_data: document_data
+    }
+    
+    const args = {
+        accessToken: token.access_token,
+        envelopeArgs: envelopeArgs
+    }
+
+
+    const envelope = await sendEnvelope(args)
+
+    return envelope
 }
