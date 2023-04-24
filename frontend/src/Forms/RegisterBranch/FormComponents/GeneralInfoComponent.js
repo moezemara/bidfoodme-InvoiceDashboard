@@ -41,7 +41,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
   };
 
   return (
-    <>
+    <section className='general_sec'>
       <FormStepName>General Information</FormStepName>
       <FormStepDescription>Let's begin by filling out your general information</FormStepDescription>
       <Grid container rowSpacing={2} columnSpacing={{ md: 4 }}>
@@ -140,13 +140,9 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             </CustomInputLabel>
           </LocalizationProvider>
         </Grid>
-        <Grid item xs={6}>
-          <InputTitle>Phone number</InputTitle>
-        </Grid >
-        <Grid item xs={6}>
-          <InputTitle>P.O. Box</InputTitle>
-        </Grid >
+
         <Grid item xs={12} sm={6}>
+        <InputTitle>Phone number</InputTitle>
           <TextField
             fullWidth
             onChange={(e) => handleFormDataChange('phone', e.target.value)}
@@ -157,6 +153,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
           </CustomInputLabel>
         </Grid>
         <Grid item xs={12} sm={6}>
+        <InputTitle>P.O. Box</InputTitle>
           <TextField
             fullWidth
             onChange={(e) => handleFormDataChange('po_box', e.target.value)}
@@ -166,13 +163,8 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             &nbsp;
           </CustomInputLabel>
         </Grid>
-        <Grid item xs={6}>
-          <InputTitle>Number of years in fund service</InputTitle>
-        </Grid>
-        <Grid item xs={6}>
-          <InputTitle>Vat registration number</InputTitle>
-        </Grid>
         <Grid item xs={12} sm={6}>
+        <InputTitle>Number of years in fund service</InputTitle>
           <TextField
           fullWidth
           onChange={(e) => handleFormDataChange('service_years', e.target.value)}
@@ -180,6 +172,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
+        <InputTitle>Vat registration number</InputTitle>
           <TextField
             fullWidth
             onChange={(e) => handleFormDataChange('vat_number', e.target.value)}
@@ -187,7 +180,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
           />
         </Grid>
       </Grid >
-    </>
+    </section>
   );
 };
 

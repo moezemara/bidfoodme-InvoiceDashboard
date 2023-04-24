@@ -18,12 +18,16 @@ export const FormContainer = styled.div`
   border-radius: 1rem;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
   padding: 3rem;
-  max-width: 60rem;
+  max-width: 66rem;
   width: 100%;
+  box-sizing: border-box;s
+  
+  @media (max-width: 1199px) {
+    box-sizing: border-box;
+  }
 
   @media (max-width: 768px) {
-    max-width: 100%;
-    border-radius: 0;
+    max-width: 100%;    
     box-shadow: none;
     padding: 1rem;
   }
@@ -58,7 +62,7 @@ export const FormDivider = styled.div`
   background-repeat: repeat-x;
 
   @media (max-width: 768px) {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -72,6 +76,12 @@ export const FormName = styled.h2`
     font-size: 1.5rem;
     margin-bottom: 1rem;
   }
+  @media (max-width: 575px) {
+    font-size: 1.4rem;    
+  }
+  @media (max-width: 360px) {
+    font-size: 1.3rem;    
+  }
 `;
 
 export const FormButton = styled.button`
@@ -81,8 +91,7 @@ export const FormButton = styled.button`
   border-radius: 5px;
   border: none;
   font-size: 1rem;
-  font-weight: 550;
-  margin-right: 1.5rem;
+  font-weight: 550;  
   transition: all 0.3s ease-in-out;
   cursor:pointer;
   min-width:190px;
@@ -105,30 +114,29 @@ export const FormButton = styled.button`
 
   @media (max-width: 768px) {
     font-size: 1rem;
-    padding: 0.3rem 0.8rem;
-    margin-right: 0.5rem;
+    padding: 0.7rem 2rem;    
+    min-width:125px;
+  }  
+
+  @media (max-width: 480px) {
+    padding: 0.6rem 1.3rem;   
+    min-width:100px;
   }
 `;
-
-// export const FormButtonDisabled = styled(FormButton)`
-//   background-color: #ccc;
-//   cursor: not-allowed;
-//   color: #999;
-//   &:hover {
-//     background-color: #ccc;
-//     color: #999;
-//   }
-// `;
 
 export const FormFooter = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 2rem;
   align-items: center;
-  
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
+  grid-gap:15px 30px;
+  flex-wrap:wrap;
+
+  @media (max-width: 768px) {  
+    grid-gap:15px;
+  }
+  @media (max-width: 480px) {  
+    margin-top:20px; 
   }
 `;
 
@@ -140,7 +148,7 @@ export const FormDescription = styled.p`
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 `;
 
@@ -154,12 +162,18 @@ export const FormStepContainer = styled.div`
     display: flex;
     justify-content: space-between;
     margin:0 auto;
+
+    @media screen and (max-width: 768px) {
+      width:100%;
+      flex-wrap:wrap;      
+    }
   }
   
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1.4rem;
     
     .form-step-divider {
       margin-top: 0.5rem;
@@ -193,7 +207,7 @@ export const FormStep = styled.div`
   &:last-child {
     margin-right: 0;    
   } 
-  
+
   .step-number {    
     position:relative;
     width: 3.2rem;
@@ -211,6 +225,13 @@ export const FormStep = styled.div`
     font-size: 1.2rem;
     background-color: #e4fbe8;
     color:#34d24d;    
+
+    @media (max-width: 1199px) {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1rem;
+    }
+    
   }
   &:not(:last-child){
     &:after{
@@ -222,8 +243,16 @@ export const FormStep = styled.div`
       top: 1.6rem;
       -webkit-transform: translateY(-50%);
           -ms-transform: translateY(-50%);
-              transform: translateY(-50%);  
-    }  
+              transform: translateY(-50%); 
+              
+      @media (max-width: 1199px) {
+        width:calc(100vh - 93vh);
+        top: 1.2rem;
+      } 
+      @media screen and (max-width: 525px) {
+       display:none;
+      }
+    }        
   }
   
   .step-name {
@@ -231,6 +260,10 @@ export const FormStep = styled.div`
     font-size: 0.9rem;
     text-align: center;
     color:#34d24d;
+
+    @media screen and (max-width:480px) {
+      font-size: 0.7rem;
+    }
   }
 
 
@@ -265,8 +298,10 @@ export const FormStep = styled.div`
 
   /* Responsive styles */
   @media screen and (max-width: 768px) {
-    width: 100%;
-    margin-bottom: 2rem;
+    width:100px;    
+  }
+  @media screen and (max-width:480px) {
+    width:55px;    
   }
 `;
 
@@ -280,7 +315,78 @@ export const FormStepCard = styled.div`
   margin: 0 auto; /* Center the form step card horizontally */
 
   /* Responsive styles */
+  @media screen and (max-width: 900px) {
+
+    padding: 1rem 1.8rem;
+    box-sizing:border-box;
+    width:90%;
+    
+    .general_sec .MuiGrid-container,
+    .reference_sec .MuiGrid-container{
+      grid-gap:0 24px;
+    }
+    .upload_sec .MuiGrid-container{
+      grid-gap:15px 24px;
+    }
+    .general_sec .MuiGrid-grid-sm-6,
+    .general_sec .MuiGrid-grid-xs-6,
+    .reference_sec .MuiGrid-grid-sm-6,
+    .reference_sec .MuiGrid-grid-xs-6,
+    .upload_sec .MuiGrid-grid-xs-6,
+    .upload_sec .MuiGrid-grid-sm-6{
+      flex-basis:calc(50% - 12px);      
+    }
+  }
   @media screen and (max-width: 768px) {
-    width: 90%;
+    width: 100%;
+    box-sizing:border-box;    
+    padding: 1rem 1.2rem;
+
+    .general_sec .MuiOutlinedInput-input,
+    .reference_sec .MuiOutlinedInput-input,
+    .upload_sec .MuiOutlinedInput-input{
+      height:12px;
+      display:inline-flex;
+      align-items:center;
+      min-height:initial !important;
+    }
+
+    .general_sec .tblTop_title,
+    .reference_sec .tblTop_title,
+    .upload_sec .tblTop_title{
+      margin-top:30px;
+      line-height:1;
+      font-size:18px;
+    }
+    .general_sec .tbl_title, 
+    .reference_sec .tbl_title,
+    .upload_sec .tbl_title{
+      margin-top:40px !important;
+      line-height:1;
+      font-size:18px;
+    }
+    .upload_sec .res_block_upload {
+      display:block !important;
+    }
+  }
+  @media screen and (max-width: 575px) {    
+    
+    .general_sec .MuiGrid-container,
+    .reference_sec .MuiGrid-container{
+      grid-gap:0;
+    }
+    .general_sec .MuiGrid-grid-sm-6,
+    .general_sec .MuiGrid-grid-xs-6,
+    .reference_sec .MuiGrid-grid-sm-6,
+    .reference_sec .MuiGrid-grid-xs-6,
+    .upload_sec .MuiGrid-grid-sm-6,
+    .upload_sec .MuiGrid-grid-xs-6{
+      flex-basis:100%;      
+    }    
+
+    .general_sec .MuiOutlinedInput-input,
+    .reference_sec .MuiOutlinedInput-input{
+      height:8px;
+    }   
   }
 `;

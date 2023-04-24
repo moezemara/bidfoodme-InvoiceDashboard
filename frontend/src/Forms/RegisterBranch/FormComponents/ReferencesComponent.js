@@ -82,19 +82,14 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
 
 
   return (
-    <>
+    <section className='reference_sec'>
       <ContentWrapper>
         <FormStepName>References</FormStepName>
         <FormStepDescription>In this step, please provide your financial information</FormStepDescription>
-        <Typography variant="h6" className={classes.label}>Banking Details</Typography>
+        <Typography variant="h6" className={`${classes.label} tblTop_title`}>Banking Details</Typography>
         <Grid container rowSpacing={2} columnSpacing={{ md: 4 }}>
           <Grid item xs={12} sm={6}>
-            <InputTitle>Name</InputTitle>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <InputTitle>City</InputTitle>
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          <InputTitle>Name</InputTitle>
             <TextField
               fullWidth
               onChange={(e) => handleFormDataChange('bank_name', e.target.value)}
@@ -102,6 +97,7 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+          <InputTitle>City</InputTitle>
             <TextField
               fullWidth
               onChange={(e) => handleFormDataChange('bank_city', e.target.value)}
@@ -109,12 +105,7 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <InputTitle>Swift</InputTitle>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <InputTitle>IBAN</InputTitle>
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          <InputTitle>Swift</InputTitle>
             <TextField
               fullWidth
               onChange={(e) => handleFormDataChange('bank_swift', e.target.value)}
@@ -122,6 +113,7 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+          <InputTitle>IBAN</InputTitle>
             <TextField
               fullWidth
               onChange={(e) => handleFormDataChange('bank_iban', e.target.value)}
@@ -157,10 +149,10 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
             </CustomInputLabel>
           </Grid>
         </Grid>
-        <Typography variant="h6" className={classes.label} style={{ marginTop: '75px' }}>Supplier Information</Typography>
+        <Typography variant="h6" className={`${classes.label} tbl_title`} style={{ marginTop: '75px' }}>Supplier Information</Typography>
       </ContentWrapper>
-      <DataTable onDataTableChange={handleSupplier_InformationChange} columns={columns} defaultRows={supplier_information_default_rows} addRow_bTn_ColsPan={6} unique_key={'Supplier_Information_1'} />
-    </>
+      <DataTable onDataTableChange={handleSupplier_InformationChange} columns={columns} defaultRows={supplier_information_default_rows} addRow_bTn_ColsPan={6} unique_key={'Supplier_Information'}/>
+    </section>
   );
 };
 

@@ -264,23 +264,23 @@ const Form = () => {
               <FormStyles.FormStep active={currentStep >= 1} className={`${currentStep === 1 ? "active" : ""}`}>
                 <div className="step-number"> {currentStep < 2 ? '1' : <CheckIcon />}</div>
                 <div className="step-name">General Information</div>
-                <div className={`form-step-divider`} />
+                {/* <div className={`form-step-divider`} /> */}
               </FormStyles.FormStep>
               <FormStyles.FormStep active={currentStep >= 2} className={`${currentStep === 2 ? "active" : ""}`}>
                 <div className="step-number">{currentStep < 3 ? '2' : <CheckIcon />}</div>
                 <div className="step-name">Contact</div>
-                <div className={`form-step-divider`} />
+                {/* <div className={`form-step-divider`} /> */}
               </FormStyles.FormStep>
               <FormStyles.FormStep active={currentStep >= 3} className={`${currentStep === 3 ? "active" : ""}`}>
                 <div className="step-number">{currentStep < 4 ? '3' : <CheckIcon />}</div>
                 <div className="step-name">References</div>
-                <div className={`form-step-divider`} />
+                {/* <div className={`form-step-divider`} /> */}
               </FormStyles.FormStep>
               <FormStyles.FormStep active={currentStep >= 4} className={`${currentStep === 4 ? "active" : ""}`}>
                 <div>
                   <div className="step-number">{currentStep < 5 ? '4' : <CheckIcon />}</div>
                   <div className="step-name">Upload</div>
-                  <div className={`form-step-divider`} />
+                  {/* <div className={`form-step-divider`} /> */}
                 </div>
               </FormStyles.FormStep>
             </div>

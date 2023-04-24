@@ -152,9 +152,9 @@ const ContactComponent = ({ handleOnDataChange }) => {
       <FormStepDescription>At this stage, we require your contact information</FormStepDescription>
       <BlockTitle>Owners/Partners</BlockTitle>
       <BlockDescription>Please add at least one field to the table before submitting</BlockDescription>
-      <DataTable onDataTableChange={handleOwner_ContactChange} columns={Owner_Contact_fields} defaultRows={Owner_contact_defaultRows} addRow_bTn_ColsPan={4} unique_key={'Owner_Contact_1'} checkBox={true}/>
-      <Typography variant="h6" className={classes.label}>Account department</Typography>
-      <DataTable onDataTableChange={handleDepartment_ContactChange} columns={Department_Contact_fields} defaultRows={Department_Contact_defaultRows} unique_key={'Department_Contact_1'} />
+      <DataTable onDataTableChange={handleOwner_ContactChange} columns={Owner_Contact_fields} defaultRows={Owner_contact_defaultRows} addRow_bTn_ColsPan={4} unique_key={'Owner_Contact'} checkBox={true}/>
+      <Typography variant="h6" className={`${classes.label} tbl_title`}>Account department</Typography>
+      <DataTable onDataTableChange={handleDepartment_ContactChange} columns={Department_Contact_fields} defaultRows={Department_Contact_defaultRows} unique_key={'Department_Contact'} />
     </ContactSecWrapper>
   );
 };

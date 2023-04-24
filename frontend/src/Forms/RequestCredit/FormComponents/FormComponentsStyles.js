@@ -25,16 +25,22 @@ export const UploadLabelStyle = makeStyles({
 export const FormStepName = styled.h3`
   font-size: 1.5rem;
   font-weight: 500;
-  margin-bottom: -0.6rem;
+  margin-bottom: 0;
   text-align: center;
   color:#232323;
 
-  @media screen and (max-width: 768px) {
-    font-size: 1.2rem;
+  @media screen and (max-width: 900px) {
+    margin-top:15px;
   }
 
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
+  @media screen and (max-width: 575px) {
+    margin-top:0.5rem;
+  }
   @media screen and (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
 `;
 
@@ -42,12 +48,19 @@ export const FormStepDescription = styled.p`
   font-size: 1rem;
   color:#808080;
   padding-bottom: 2rem;
+  margin-top: 0.4rem;
   margin-bottom: 1rem;
   text-align: center;
   font-weight:400;
 
+  @media screen and (max-width: 900px) {
+    padding-bottom: 1rem;
+  }
+
   @media screen and (max-width: 768px) {
     font-size: 0.9rem;
+    margin-bottom: 2rem;
+    padding-bottom: 0;
   }
 
   @media screen and (max-width: 480px) {
@@ -61,14 +74,34 @@ export const CustomInputLabel = styled.label`
   margin-top: 8px; 
   font-weight: normal;
   font-size: 14px;  
+  @media screen and (max-width: 768px) {
+    margin-top:5px;
+    font-size:13px;
+  }
+  @media screen and (max-width: 575px) {
+    &.blank{
+      displaY:none;
+    }
+  }
 `;
 
 export const InputTitle = styled.h6`
 font-weight:500;
 font-size:18px;
-margin-bottom:0;
+margin-bottom:16px;
 margin-top:5px;
 padding:0;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;   
+    margin-bottom:10px; 
+  }  
+  @media screen and (max-width: 575px) {
+    &.blank{
+      displaY:none;
+    }
+  }
+
 `;
 
 export const BlockTitle = styled.h2`
@@ -77,6 +110,10 @@ export const BlockTitle = styled.h2`
   margin-bottom:0;
   margin-top:5px;
   padding:0;
+
+  // @media screen and (max-width: 768px) {
+  //   font-size: 16px;
+  // }
 `;
 
 export const BlockDescription = styled.h2`
@@ -85,6 +122,13 @@ export const BlockDescription = styled.h2`
   margin-bottom:0;  
   color:#a8a6a6;
   padding:0;
+
+  @media screen and (max-width: 768px) {
+    font-size: 15px;
+  }
+  @media screen and (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 export const ContactSecWrapper = styled.section`
@@ -96,6 +140,15 @@ export const ContactSecWrapper = styled.section`
 
 export const ContentWrapper = styled.div`
   margin:0 25px;
+  
+  @media(max-width:900px){
+    margin:0;
+
+    .fileUpload_label{
+      font-size:16px;
+      margin-bottom:10px;
+    }
+  }
 `;
 export const CustomTable = styled.table`
   width:100%;
@@ -117,6 +170,10 @@ export const CustomTable = styled.table`
       font-size:16px;
       line-height:1;
       padding:15px 10px;
+      
+      @media(max-width:767px){
+        padding:10px 8px;
+      }
     }
     .MuiSelect-select{
       padding:15px 10px;
@@ -154,6 +211,10 @@ export const CustomTable = styled.table`
     th{
       background-color:#e5ebff;
       padding:15px 10px;
+
+      @media(max-width:767px){
+        padding:10px 8px;
+      }
     }
   }  
   tbody{
@@ -254,6 +315,28 @@ export const CustomFileUploadLabel = styled.div`
       font-weight:400;
       font-size:14px;
     }
+
+    @media(max-width:575px){
+      font-size:13px;
+
+     
+    }
+  }
+
+  @media(max-width:575px){
+    padding:30px;
+
+    .iconWrapper{
+      width:50px;
+      height:50px;
+    }
+    .content_sp{
+      font-size:13px;
+      .max_content{
+        font-size:13px;
+      }
+    }
+
   }
 `;
 export const FileName = styled.div`

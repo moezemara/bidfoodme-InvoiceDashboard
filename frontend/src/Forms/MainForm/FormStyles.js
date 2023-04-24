@@ -7,6 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 2rem;
+  box-sizing:border-box;
 
   @media (max-width: 768px) {
     padding: 1rem;
@@ -18,12 +19,12 @@ export const FormContainer = styled.div`
   border-radius: 1rem;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
   padding: 3rem;
-  max-width: 60rem;
+  max-width: 66rem;
   width: 100%;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    max-width: 100%;
-    border-radius: 0;
+    max-width: 100%;    
     box-shadow: none;
     padding: 1rem;
   }
@@ -147,6 +148,16 @@ export const FormButton = styled.button`
     font-size: 1rem;
     padding: 0.3rem 0.8rem;
     margin-right: 0.5rem;
+    &.lg_btn{
+      min-width:230px;
+      a{
+        padding:15px 25px !important;
+      }
+      &:last-child{
+        margin-top:30px !important;
+        margin-bottom:30px !important;
+      }
+    }    
   }
 `;
 export const FormCustomContainer = styled.div`
@@ -174,7 +185,7 @@ export const FormDescription = styled.p`
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 `;
 
