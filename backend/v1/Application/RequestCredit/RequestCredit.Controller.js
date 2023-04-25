@@ -203,10 +203,12 @@ export async function SavePageProgress(req, res, next) {
                     return response.fail(res, 'Failed to validate uploaded documents')
                 }
 
+                const files = req.files
 
                 // delete all documents that are in req.files
-                if (Object.keys(req.files).length > 0){
-                    for(const file of req.files){
+                if (Object.keys(files).length > 0){
+                    for(const property in files){
+                        const file = files[property][0];
                         const delete_documents_info_action = await database.RequestCredit.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: file.fieldname})
                     }
                 }
@@ -217,7 +219,6 @@ export async function SavePageProgress(req, res, next) {
                 }
 
                 // loop on documents and add them one by one
-                const files = req.files
 
                 for (const property in files) {
                     const file = files[property][0];
