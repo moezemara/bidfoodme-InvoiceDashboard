@@ -66,6 +66,28 @@ export default async function VerifyFinish(database, application_id) {
     }
 
 
+    // ensure that department emails are not same as owners and partners
+    const owner_emails = get_contacts_info_action_owner.map((contact) => contact.email)
+    const partner_emails = get_contacts_info_action_partner.map((contact) => contact.email)
+    const manager_emails = get_contacts_info_action_manager.map((contact) => contact.email)
+    const finance_manager_emails = get_contacts_info_action_financemanager.map((contact) => contact.email)
+    const accounts_payable_emails = get_contacts_info_action_payable.map((contact) => contact.email)
+    const purchasing_manager_emails = get_contacts_info_action_purchasing.map((contact) => contact.email)
+
+    const owners_emails = [...owner_emails, ...partner_emails, ...manager_emails]
+
+    if (owners_emails.includes(finance_manager_emails[0])){
+        return {status: false, message: 'Finance manager email should not be same as owners or partners'}
+    }
+
+    if (owners_emails.includes(accounts_payable_emails[0])){
+        return {status: false, message: 'Accounts payable email should not be same as owners or partners'}
+    }
+
+    if (owners_emails.includes(purchasing_manager_emails[0])){
+        return {status: false, message: 'Purchasing manager email should not be same as owners or partners'}
+    }
+
     // bank
     const get_bank_info_action = await database.RequestCredit.BankInfo.SelectBankInfoByApplicationId({application_id: application_id})
 
