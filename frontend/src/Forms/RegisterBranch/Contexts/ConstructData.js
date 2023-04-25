@@ -25,7 +25,7 @@ function ConstructUploads(uploads){
         tradelicensefile: null,
         ownerpassportfile: null,
         ownervisafile: null,
-        ownerelofile: null,
+        ownereidfile: null,
         vatfile: null,
         hasVatCert: 'no'
     }
@@ -50,9 +50,9 @@ function ConstructUploads(uploads){
                     upload_info.ownervisafile = {}
                     upload_info.ownervisafile.name = upload.originalname
                     break
-                case 'owner_elo':
-                    upload_info.ownerelofile = {}
-                    upload_info.ownerelofile.name = upload.originalname
+                case 'owner_eid':
+                    upload_info.ownereidfile = {}
+                    upload_info.ownereidfile.name = upload.originalname
                     break
                 default:
                     break
