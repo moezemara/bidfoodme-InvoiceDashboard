@@ -145,26 +145,52 @@ export async function SavePageProgress(req, res, next) {
                 }
                 break;
             case 'uploads':
+                const direct_check_body_uploads = direct_check(req.body, schema.SavePageProgress_body_uploads)
+                if(!direct_check_body_uploads.status){
+                    return config.ApplicationMode == 'DEVELOPMENT' ? response.fail(res, direct_check_body_uploads.message) : response.fail(res, 'Invalid request body')
+                }
 
                 if(req.files == undefined){
-                    return response.fail(res, 'No files selected')
+                    return response.fail(res, 'No documents found')
+                }
+                
+                const previous_documents = await database.RequestCredit.Documents.SelectDocumentsByApplicationId({application_id: application_id})
+
+                if(previous_documents.length == 0 && req.files.length == 0){
+                    return response.fail(res, 'No documents found')
                 }
 
-                const validateFields = ValidateFields(req.files)
+                const previous_fields = previous_documents.map(document => document.fieldname)
+
+                const validateFields = ValidateFields(req.files, previous_fields)
 
                 if(!validateFields){
-                    return response.fail(res, 'Invalid request body')
+                    return response.fail(res, 'Failed to validate uploaded documents')
                 }
 
 
-                // delete all documents and add new ones
-                const delete_documents_info_action = await database.RegisterBranch.Documents.DeleteDocumentsByApplicationId({application_id: application_id})
+                // delete all documents that are in req.files
+                for(let i = 0; i < req.files.length; i++){
+                    const file = req.files[i];
+                    const delete_documents_info_action = await database.RequestCredit.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: file.fieldname})
+                }
+
+                // delete vat document if hasVatCert is false
+                if (data.hasVatCert == 'no'){
+                    const delete_documents_info_action = await database.RequestCredit.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: 'vat'})
+                }
+
                 // loop on documents and add them one by one
                 const files = req.files
 
                 for (const property in files) {
                     const file = files[property][0];
-                    const create_documents_info_action = await database.RegisterBranch.Documents.InsertDocument({application_id: application_id, ...file})
+                    
+                    if (data.hasVatCert == 'no' && file.fieldname == 'vat'){
+                        continue;
+                    }
+
+                    const create_documents_info_action = await database.RequestCredit.Documents.InsertDocument({application_id: application_id, ...file})
                 }
                 break;
             case 'requests':

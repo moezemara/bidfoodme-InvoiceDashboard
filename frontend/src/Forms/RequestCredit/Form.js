@@ -133,7 +133,7 @@ const Form = () => {
       'contacts': ["Owner_Contact", "Department_Contact"],
       'bank': ["bank_name", "bank_branch", "bank_account_number", "bank_iban", "bank_swift", "bank_account_type"],
       'suppliers': ["name", "contact", "address", "phone", "email"],
-      'uploads': ["tradelicensefile", "ownerpassportfile", "ownervisafile", "ownereidfile", "vatfile"],
+      'uploads': ["tradelicensefile", "ownerpassportfile", "ownervisafile", "ownereidfile", "vatfile", "hasVatCert"],
       'requests': ["credit_limit"]
     }
 

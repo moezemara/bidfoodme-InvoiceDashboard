@@ -28,7 +28,7 @@ function UploadComponent({ handleOnDataChange }) {
     ownervisafile: data.upload_info.ownervisafile || null,
     ownereidfile: data.upload_info.ownereidfile || null,
     vatfile: data.upload_info.vatfile || null,
-    hasVatCert: data.upload_info.hasVatCert || "",
+    hasVatCert: data.upload_info.hasVatCert || false,
     credit_limit: data.upload_info.credit_limit || "",
     confirm_info: data.upload_info.confirm_info || false
   });
@@ -94,7 +94,7 @@ function UploadComponent({ handleOnDataChange }) {
 
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' , mt: 5 }}>
       <p>Could you confirm if you hold a VAT certification?</p>
-      <RadioGroup onChange={e => handleFormDataChange("hasVatCert", e.target.value)} sx={{ flexDirection: 'row' }} value={formState.hasVatCert || ""}>
+      <RadioGroup onChange={e => handleFormDataChange("hasVatCert", e.target.value)} sx={{ flexDirection: 'row' }} value={formState.hasVatCert || false}>
         <FormControlLabel
           control={<Radio />}
           value="yes"

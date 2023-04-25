@@ -44,14 +44,14 @@ export default class Documents {
         })
     }
 
-    // select documents by application id and document type
-    SelectDocumentsByApplicationIdAndDocumentType(data) {
+    // select documents by application id and field name
+    SelectDocumentsByApplicationIdAndFieldName(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
                 `SELECT * FROM requestcredit_documents WHERE application_id = ? AND fieldname = ?`,
                 [
                     data.application_id,
-                    data.document_type
+                    data.fieldname
                 ],
                 (error, results, fields) => {
                     if (error) {
@@ -91,14 +91,14 @@ export default class Documents {
         })
     }
 
-    // delete documents by application id and document number
-    DeleteDocumentsByApplicationIdAndDocumentType(data) {
+    // delete documents by application id and field name
+    DeleteDocumentsByApplicationIdAndFieldName(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `DELETE FROM requestcredit_documents WHERE application_id = ? AND document_type = ?`,
+                `DELETE FROM requestcredit_documents WHERE application_id = ? AND fieldname = ?`,
                 [
                     data.application_id,
-                    data.document_type
+                    data.fieldname
                 ],
                 (error, results, fields) => {
                     if (error) {
