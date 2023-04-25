@@ -168,11 +168,11 @@ export async function SavePageProgress(req, res, next) {
                     return response.fail(res, 'Failed to validate uploaded documents')
                 }
 
-
                 // delete all documents that are in req.files
-                for(let i = 0; i < req.files.length; i++){
-                    const file = req.files[i];
-                    const delete_documents_info_action = await database.RequestCredit.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: file.fieldname})
+                if (Object.keys(req.files).length > 0){
+                    for(const file of req.files){
+                        const delete_documents_info_action = await database.RequestCredit.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: file.fieldname})
+                    }
                 }
 
                 // delete vat document if hasVatCert is false
