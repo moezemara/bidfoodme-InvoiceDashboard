@@ -86,7 +86,7 @@ function UploadComponent({ handleOnDataChange }) {
         handleChange={e => handleFormDataChange("ownereidfile", e)}
         name="file"
         types={fileTypes}
-        label={formState.ownerelofile ? formState.ownerelofile.name : "Upload File"}
+        label={formState.ownereidfile ? formState.ownereidfile.name : "Upload File"}
         />
         </Grid>
     </Grid>
