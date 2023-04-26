@@ -168,78 +168,72 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             label="Use same as billing address"
           />
         </Grid>
-        
-        {formState.use_same_billing_address ?
-          undefined
-          :
-          <>
-          <Grid item xs={12} sm={12}>
+        <Grid item xs={12} sm={12}>
+        <TextField
+            fullWidth
+            id="delivery_outlet_address_input"
+            onChange={(e) => handleFormDataChange('delivery_outlet_address', e.target.value)}
+            value={formState.delivery_outlet_address}
+            disabled={formState.use_same_billing_address}
+          />
+          <CustomInputLabel htmlFor="delivery_outlet_address_input">
+            Full address
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Select
+            fullWidth
+            id="delivery_country_input"
+            onChange={(e) => handleFormDataChange('delivery_country', e.target.value)}
+            value={formState.delivery_country}
+            disabled={formState.use_same_billing_address}
+          >
+            {countries.map((country) => (
+              <MenuItem key={country} value={country}>
+                {country}
+              </MenuItem>
+            ))}
+          </Select>
+          <CustomInputLabel htmlFor="delivery_country_input">
+            Country
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
           <TextField
-              fullWidth
-              id="delivery_outlet_address_input"
-              onChange={(e) => handleFormDataChange('delivery_outlet_address', e.target.value)}
-              value={formState.delivery_outlet_address}
-              disabled={formState.use_same_billing_address}
-            />
-            <CustomInputLabel htmlFor="delivery_outlet_address_input">
-              Full address
-            </CustomInputLabel>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Select
-              fullWidth
-              id="delivery_country_input"
-              onChange={(e) => handleFormDataChange('delivery_country', e.target.value)}
-              value={formState.delivery_country}
-            >
-              {countries.map((country) => (
-                <MenuItem key={country} value={country}>
-                  {country}
-                </MenuItem>
-              ))}
-            </Select>
-            <CustomInputLabel htmlFor="delivery_country_input">
-              Country
-            </CustomInputLabel>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              id="delivery_city_input"
-              onChange={(e) => handleFormDataChange('delivery_city', e.target.value)}
-              value={formState.delivery_city}
-              disabled={formState.use_same_billing_address}
-            />
-            <CustomInputLabel htmlFor="delivery_city_input">
-              City
-            </CustomInputLabel>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              id="delivery_phone_input"
-              onChange={(e) => handleFormDataChange('delivery_phone', e.target.value)}
-              value={formState.delivery_phone}
-              disabled={formState.use_same_billing_address}
-            />
-            <CustomInputLabel htmlFor="delivery_phone_input">
-              Phone number
-            </CustomInputLabel>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              id="delivery_po_box"
-              onChange={(e) => handleFormDataChange('delivery_po_box', e.target.value)}
-              value={formState.delivery_po_box}
-              disabled={formState.use_same_billing_address}
-            />
-            <CustomInputLabel htmlFor="delivery_po_box">
-              P.O. Box
-            </CustomInputLabel>
-          </Grid>
-          </>    
-        }
+            fullWidth
+            id="delivery_city_input"
+            onChange={(e) => handleFormDataChange('delivery_city', e.target.value)}
+            value={formState.delivery_city}
+            disabled={formState.use_same_billing_address}
+          />
+          <CustomInputLabel htmlFor="delivery_city_input">
+            City
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            id="delivery_phone_input"
+            onChange={(e) => handleFormDataChange('delivery_phone', e.target.value)}
+            value={formState.delivery_phone}
+            disabled={formState.use_same_billing_address}
+          />
+          <CustomInputLabel htmlFor="delivery_phone_input">
+            Phone number
+          </CustomInputLabel>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            id="delivery_po_box"
+            onChange={(e) => handleFormDataChange('delivery_po_box', e.target.value)}
+            value={formState.delivery_po_box}
+            disabled={formState.use_same_billing_address}
+          />
+          <CustomInputLabel htmlFor="delivery_po_box">
+            P.O. Box
+          </CustomInputLabel>
+        </Grid>
         <Grid item xs={12}>
           <InputTitle>Trade License</InputTitle>
         </Grid >
@@ -247,7 +241,6 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
           <TextField
             fullWidth
             id="trade-license-number"
-            placeholder="1234 1234 1234 1234"
             InputProps={{ maxLength: 19 }}
             endadornment={<InputAdornment position="end"> </InputAdornment>}
             onChange={(e) => handleFormDataChange('license_number', e.target.value)}

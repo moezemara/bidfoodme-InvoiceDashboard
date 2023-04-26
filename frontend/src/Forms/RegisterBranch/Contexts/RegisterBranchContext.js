@@ -16,10 +16,7 @@ export const RegisterBranchProvider = ({ children }) => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   // handle fields change in all form pages
-  const updateData = (key, value) => {
-
-    // console.log(key, value)
-    
+  const updateData = (key, value) => {    
 
     const newData = {
       ...data,

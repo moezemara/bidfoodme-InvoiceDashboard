@@ -4,7 +4,7 @@ import path from 'path';
 import config from '../../../../config/Config.js';
 
 function ValidateFileType (mimetype) {
-    const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    const validTypes = ['application/pdf'];
     return validTypes.includes(mimetype);
 }
 

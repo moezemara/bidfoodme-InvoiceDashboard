@@ -69,7 +69,7 @@ export const FormDivider = styled.div`
 export const FormName = styled.h2`
   font-size: 1.7rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 4rem;
   text-align: center;  
 
   @media (max-width: 768px) {

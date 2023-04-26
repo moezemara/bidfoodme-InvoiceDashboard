@@ -36,6 +36,7 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
       convertedArray.push({
         name: row.Name.data,
         contact: row.Contact.data,
+        designation: row.Designation.data,
         address: row.Address.data,
         phone: row.Phone.data,
         email: row.Email.data
@@ -60,6 +61,7 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
   const columns = [
     { field: "Name", headerName: "Company Name", type: "text", cellWidth: "16%" },
     { field: "Contact", headerName: "Contact Person", type: "text", cellWidth: "16%" },
+    { field: "Designation", headerName: "Designation", type: "text", cellWidth: "16%" },
     { field: "Address", headerName: "Company Address", type: "text", cellWidth: "16%" },
     { field: "Phone", headerName: "Phone Number", type: "text", cellWidth: "16%" },
     { field: "Email", headerName: "Email", type: "text", cellWidth: "16%" }
@@ -72,6 +74,7 @@ const ReferencesComponent = ({ handleOnDataChange }) => {
       supplier_information_default_rows.push({
         Name: { data: row.name, editable: true },
         Contact: { data: row.contact, editable: true },
+        Designation: { data: row.designation, editable: true },
         Address: { data: row.address, editable: true },
         Phone: { data: row.phone, editable: true },
         Email: { data: row.email, editable: true }

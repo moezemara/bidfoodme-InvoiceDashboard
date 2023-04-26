@@ -54,3 +54,20 @@ export function admin(req, res, next) {
 
     next()
 }
+
+export function docusign(req, res, next) {
+    // check for admin token in header
+    const username = req.headers["php-auth-user"]
+    const password = req.headers["php-auth-pw"]
+
+    if(!username || !password){
+        return response.fail(res, 'Unauthorized')
+    }
+
+    // check if token is the same as the one in config
+    if(username != config.docusign.webhook.username || password != config.docusign.webhook.password){
+        return response.fail(res, 'Unauthorized')
+    }
+
+    next()
+}

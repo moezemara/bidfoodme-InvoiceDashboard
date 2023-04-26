@@ -132,8 +132,8 @@ const Form = () => {
       'license': ["vat_number", "license_number", "license_expiration"],
       'contacts': ["Owner_Contact", "Department_Contact"],
       'bank': ["bank_name", "bank_branch", "bank_account_number", "bank_iban", "bank_swift", "bank_account_type"],
-      'suppliers': ["name", "contact", "address", "phone", "email"],
-      'uploads': ["tradelicensefile", "ownerpassportfile", "ownervisafile", "ownereidfile", "vatfile", "hasVatCert"],
+      'suppliers': ["name", "contact", "designation", "address", "phone", "email"],
+      'uploads': ["tradelicensefile", "ownerpassportfile", "ownervisafile", "ownereidfile", "powerofattorneyfile", "vatfile", "hasVatCert"],
       'requests': ["credit_limit"]
     }
 
@@ -142,6 +142,7 @@ const Form = () => {
       "ownerpassportfile": "owner_pp",
       "ownervisafile": "owner_visa",
       "ownereidfile": "owner_eid",
+      "powerofattorneyfile": "power_of_attorney",
       "vatfile": "vat"
     }
 
@@ -167,7 +168,6 @@ const Form = () => {
         break;
       case 'contacts':
         const contactData = data.contacts_info;
-        console.log(contactData)
 
         if (contactData.Owner_Contact){
           submissionData.push(...contactData.Owner_Contact)
@@ -181,7 +181,7 @@ const Form = () => {
         for (let i = 0; i < submissionData.length; i++) {
           // loop on keys
           for (const key in submissionData[i]) {
-            if (submissionData[i][key] === null) {
+            if (submissionData[i][key] === null || submissionData[i][key] === undefined || submissionData[i][key] === "") {
               delete submissionData[i][key];
             }
           }
@@ -230,9 +230,7 @@ const Form = () => {
 
     // get the current timer value
     const currentTimerValue = getCurrentTimerValue();
-    console.log(currentSteps)
     for (let i = 0; i < currentSteps.length; i++) {
-      console.log(currentSteps[i])
       const stepData = getStepData(currentSteps[i]);
       let response = ''
       if (currentSteps[i] === 'uploads') {
@@ -243,7 +241,6 @@ const Form = () => {
       }
 
       setIsDialogOpen(true)
-      console.log(response)
       if (response.success !== 1) {
         setDialogContent(response.message)
         return false
@@ -253,7 +250,6 @@ const Form = () => {
     }
 
     let response = await ApplicationApi.UpdateTime(token, currentTimerValue[0], { time_spent: currentTimerValue[1] })
-    console.log(response)
 
     return true
   };
@@ -267,7 +263,6 @@ const Form = () => {
     }
 
     const response = await ApplicationApi.Finish(token)
-    console.log(response)
 
     setIsDialogOpen(true)
     if (response.success !== 1) {
@@ -305,10 +300,8 @@ const Form = () => {
           <FormStyles.FormDivider />
           <div>
             <FormStyles.FormName>
-              BidFood Request Form
+              Credit Application Form
             </FormStyles.FormName>
-
-            <FormStyles.FormDescription>Lorem ipsum dolor sit amet, consectetur adipiscing elit</FormStyles.FormDescription>
           </div>
           <FormStyles.FormStepContainer>
             <Dialog handleDialogPopUp={isDialogOpen} dialogContent={dialogContent} setIsDialogOpen={setIsDialogOpen}></Dialog>

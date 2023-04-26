@@ -13,7 +13,8 @@ import {
   TableFooter,
   IconButton,
   RadioGroup,
-  Radio
+  Radio,
+  InputAdornment
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Delete } from "@mui/icons-material";
@@ -114,6 +115,10 @@ function DataTable(props) {
                             margin="dense"
                             fullWidth
                             disabled={!data[column.field].editable}
+                            InputProps={{
+                              endAdornment: column.props === 'percentage' ? <InputAdornment position="end">%</InputAdornment> : undefined
+                            }}
+                            sx={{ width: 170 }}
                           />
                         ) : column.type === "select" ? (
                           <Select
@@ -164,6 +169,7 @@ function DataTable(props) {
           <TableFooter>
             <TableRow>
             {
+              props.maxRows === rowsData.length ? undefined :
               !props.addRow_bTn_ColsPan === ''
                 ?
                 <TableCell align="center" colSpan={props.addRow_bTn_ColsPan}>

@@ -20,7 +20,6 @@ CREATE TABLE `docusign_sessions` (
     PRIMARY KEY (`id`)
 )
 
-
 -- Request credit
 CREATE TABLE `requestcredit_applications` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -31,6 +30,20 @@ CREATE TABLE `requestcredit_applications` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`account_id`) REFERENCES `Account`(`account_id`),
     UNIQUE (`application_id`)
+);
+
+CREATE TABLE `requestcredit_docusign_envelopes` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `envelope_id` VARCHAR(255) NOT NULL,
+    `application_id` VARCHAR(255) NOT NULL,
+    `recipient_email` VARCHAR(255) NOT NULL,
+    `status` VARCHAR(255) NOT NULL DEFAULT 'Created',
+    `signing_date` DATETIME NULL,
+    `created_at` DATETIME NOT NULL DEFAULT now(),
+    `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`application_id`) REFERENCES `requestcredit_applications`(`application_id`),
+    UNIQUE (`envelope_id`)
 );
 
 CREATE TABLE `requestcredit_general` (
@@ -108,6 +121,7 @@ CREATE TABLE `requestcredit_suppliers` (
     `application_id` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `contact` VARCHAR(255) NOT NULL,
+    `designation` VARCHAR(255) NOT NULL,
     `address` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
@@ -170,8 +184,6 @@ BEGIN
 END
 
 -- register branch
-
-
 CREATE TABLE `registerbranch_applications` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `account_id` VARCHAR(255) NOT NULL,
@@ -181,6 +193,20 @@ CREATE TABLE `registerbranch_applications` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`account_id`) REFERENCES `Account`(`account_id`),
     UNIQUE (`application_id`)
+);
+
+CREATE TABLE `registerbranch_docusign_envelopes` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `envelope_id` VARCHAR(255) NOT NULL,
+    `application_id` VARCHAR(255) NOT NULL,
+    `recipient_email` VARCHAR(255) NOT NULL,
+    `status` VARCHAR(255) NOT NULL DEFAULT 'Created',
+    `signing_date` DATETIME NULL,
+    `created_at` DATETIME NOT NULL DEFAULT now(),
+    `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`application_id`) REFERENCES `registerbranch_applications`(`application_id`),
+    UNIQUE (`envelope_id`)
 );
 
 CREATE TABLE `registerbranch_general` (

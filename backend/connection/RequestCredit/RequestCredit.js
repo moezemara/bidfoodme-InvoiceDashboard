@@ -7,6 +7,7 @@ import Documents from './Documents.js'
 import Suppliers from './Suppliers.js'
 import Requests from './Requests.js'
 import ApplicationTime from './ApplicationTime.js'
+import DocusignEnvelopes from './DocusignEnvelopes.js'
 
 export default class RequestCredit {
     constructor(pool){
@@ -20,6 +21,7 @@ export default class RequestCredit {
         this.Suppliers = new Suppliers(this.pool)
         this.Requests = new Requests(this.pool)
         this.ApplicationTime = new ApplicationTime(this.pool)
+        this.DocusignEnvelopes = new DocusignEnvelopes(this.pool)
     }
 
 }

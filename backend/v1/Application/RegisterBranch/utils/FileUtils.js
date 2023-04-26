@@ -4,7 +4,7 @@ import path from 'path';
 import config from '../../../../config/Config.js';
 
 function ValidateFileType (mimetype) {
-    const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    const validTypes = ['application/pdf'];
     return validTypes.includes(mimetype);
 }
 
@@ -36,8 +36,8 @@ function ValidateFields(objList, previous_fields) {
   }
   
   // Check for allowed fields and required fields
-  const allowedFields = config.Applications.RequestCredit.UploadFields.map(obj => obj.field);
-  const requiredFields = config.Applications.RequestCredit.UploadFields.filter(obj => obj.required).map(obj => obj.field);
+  const allowedFields = config.Applications.RegisterBranch.UploadFields.map(obj => obj.field);
+  const requiredFields = config.Applications.RegisterBranch.UploadFields.filter(obj => obj.required).map(obj => obj.field);
   let fieldnames = []
 
   if (objList && Object.keys(objList).length > 0) {

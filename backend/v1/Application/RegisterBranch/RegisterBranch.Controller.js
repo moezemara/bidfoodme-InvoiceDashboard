@@ -154,7 +154,7 @@ export async function SavePageProgress(req, res, next) {
                     return response.fail(res, 'No documents found')
                 }
                 
-                const previous_documents = await database.RequestCredit.Documents.SelectDocumentsByApplicationId({application_id: application_id})
+                const previous_documents = await database.RegisterBranch.Documents.SelectDocumentsByApplicationId({application_id: application_id})
 
                 if(previous_documents.length == 0 && req.files.length == 0){
                     return response.fail(res, 'No documents found')
@@ -174,13 +174,13 @@ export async function SavePageProgress(req, res, next) {
                 if (Object.keys(files).length > 0){
                     for(const property in files){
                         const file = files[property][0];
-                        const delete_documents_info_action = await database.RequestCredit.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: file.fieldname})
+                        const delete_documents_info_action = await database.RegisterBranch.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: file.fieldname})
                     }
                 }
 
                 // delete vat document if hasVatCert is false
                 if (data.hasVatCert == 'no'){
-                    const delete_documents_info_action = await database.RequestCredit.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: 'vat'})
+                    const delete_documents_info_action = await database.RegisterBranch.Documents.DeleteDocumentsByApplicationIdAndFieldName({application_id: application_id, fieldname: 'vat'})
                 }
 
                 // loop on documents and add them one by one
@@ -192,7 +192,7 @@ export async function SavePageProgress(req, res, next) {
                         continue;
                     }
 
-                    const create_documents_info_action = await database.RequestCredit.Documents.InsertDocument({application_id: application_id, ...file})
+                    const create_documents_info_action = await database.RegisterBranch.Documents.InsertDocument({application_id: application_id, ...file})
                 }
                 break;
             case 'requests':
@@ -303,6 +303,14 @@ export async function FinishApplication(req, res) {
             total_time_spent = 0
         }
 
+        // update application status
+        const update_application_status_action = await database.RegisterBranch.Applications.UpdateApplicationStatusByApplicationId(
+            {
+                application_id: application_id,
+                status: 'submitted'
+            }
+        )
+
         // update total time spent
         const update_application_time_action = await database.RegisterBranch.ApplicationTime.UpdateTimeSpentOnStepByApplicationId(
             {
@@ -319,18 +327,8 @@ export async function FinishApplication(req, res) {
             }
         )
 
-        // update application status
-        const update_application_status_action = await database.RegisterBranch.Applications.UpdateApplicationStatusByApplicationId(
-            {
-                application_id: application_id,
-                status: 'submitted'
-            }
-        )
-
-        
         // sign document
         const sign_document_action = await DocuSign(database, application_id)
-
 
 
         return response.success(res, 'Application finished successfully, envelope_id: ' + sign_document_action)
@@ -379,15 +377,15 @@ async function DocuSign(database, application_id) {
         ...get_general_info_action[0],
         ...get_license_info_action[0],
         ...get_requests_info_action[0],
-        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner" || contact.title == "Manager"),
-        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager"),
+        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner" || contact.title == "Manager" || contact.title == "Authorized Signatory"),
+        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager" || contact.title == "Authorized Signatory"),
         document_type: "CustomerOutletInformationSheet"
     }
 
 
     const envelopeArgs = {
         signerEmail: document_data.owners.filter(owner => owner.authorised_signature == "Yes")[0].email,
-        signerName: document_data.outlet_legal_name,
+        signerName: document_data.owners.filter(owner => owner.authorised_signature == "Yes")[0].name,
         status: "sent",
         document_data: document_data
     }
@@ -397,8 +395,15 @@ async function DocuSign(database, application_id) {
         envelopeArgs: envelopeArgs
     }
 
-
     const envelope = await sendEnvelope(args)
+
+    // save envelope
+    const save_envelope_action = await database.RegisterBranch.DocusignEnvelopes.InsertEnvelope({
+        application_id: application_id,
+        envelope_id: envelope,
+        recipient_email: envelopeArgs.signerEmail
+    })
+
 
     return envelope
 }

@@ -36,7 +36,7 @@ export const SavePageProgress_body_contacts = joi.array().items(joi.object({
     mobile: joi.number().integer().optional().label('Contact Mobile'),
     email: joi.string().email().optional().label('Contact Email'),
     shareholder_percentage: joi.number().integer().min(0).max(100).optional().label('Shareholder Percentage'),
-    authorised_signature: joi.string().optional().label('Authorised Signature')
+    authorised_signature: joi.string().valid("Yes").optional().label('Authorised Signature')
 }))
 
 export const SavePageProgress_body_bank = joi.object({
@@ -52,6 +52,7 @@ export const SavePageProgress_body_suppliers = joi.array().items(joi.object({
     name: joi.string().required().label('Supplier Name'),
     contact: joi.string().required().label('Supplier Contact'),
     address: joi.string().required().label('Supplier Address'),
+    designation: joi.string().required().label('Supplier Designation'),
     phone: joi.number().integer().required().label('Supplier Phone'),
     email: joi.string().email().required().label('Supplier Email'),
 }))
@@ -62,7 +63,8 @@ export const SavePageProgress_body_uploads = joi.object({
     vat: joi.optional().label('VAT Certificate'),
     owner_pp: joi.optional().label('Owner Passport'),
     owner_visa: joi.optional().label('Owner Visa'),
-    owner_eid: joi.optional().label('Owner EID')
+    owner_eid: joi.optional().label('Owner EID'),
+    power_of_attorney: joi.optional().label('Power of Attorney'),
 })
 
 export const SavePageProgress_body_requests = joi.object({

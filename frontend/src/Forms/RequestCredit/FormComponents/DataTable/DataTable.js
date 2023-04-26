@@ -118,6 +118,7 @@ function DataTable(props) {
                             InputProps={{
                               endAdornment: column.props === 'percentage' ? <InputAdornment position="end">%</InputAdornment> : undefined
                             }}
+                            sx={{ width: 170 }}
                           />
                         ) : column.type === "select" ? (
                           <Select

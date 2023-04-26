@@ -1,4 +1,4 @@
-import {} from './Application.Controller.js';
+import {DocuSignWebHook} from './Application.Controller.js';
 import express from 'express'
 import * as auth from '../../utils/AuthChecker.js'
 //import * as schema from '../../config/schema.js'
@@ -9,6 +9,6 @@ const router = express.Router()
 
 router.use('/RegisterBranch/', RegisterBranch)
 router.use('/RequestCredit/', RequestCredit)
-
+router.use('/DocuSignWebHook/', auth.docusign, DocuSignWebHook)
 
 export default router;

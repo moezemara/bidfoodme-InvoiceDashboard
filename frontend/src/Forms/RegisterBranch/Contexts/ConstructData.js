@@ -5,7 +5,7 @@ function ConstructContact(contacts){
     
     if (contacts !== undefined && contacts.length > 0) {
         contacts.forEach((contact) => {
-            if((contact.title === "Owner" || contact.title === "Partner")) {
+            if((contact.title === "Owner" || contact.title === "Partner" || contact.title === "Manager" || contact.title === "Authorized Signatory")) {
                 ownerContacts.push(contact)
             } else {
                 departmentContacts.push(contact)
@@ -26,6 +26,7 @@ function ConstructUploads(uploads){
         ownerpassportfile: null,
         ownervisafile: null,
         ownereidfile: null,
+        powerofattorneyfile: null,
         vatfile: null,
         hasVatCert: 'no'
     }
@@ -54,6 +55,9 @@ function ConstructUploads(uploads){
                     upload_info.ownereidfile = {}
                     upload_info.ownereidfile.name = upload.originalname
                     break
+                case 'power_of_attorney':
+                    upload_info.powerofattorneyfile = {}
+                    upload_info.powerofattorneyfile.name = upload.originalname
                 default:
                     break
             }

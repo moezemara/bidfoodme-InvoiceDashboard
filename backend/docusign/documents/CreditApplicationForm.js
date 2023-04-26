@@ -119,7 +119,7 @@ export default function CreateDocument(data){
         </style>
     </head>
     <body>
-        <section style="width:100%;max-width:800px;margin: 0 auto;padding:0 30px;">
+        <section style="width:120%;max-width:900px;margin: 0 auto;padding:0 30px;">
             <table class="main_tbl" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td class="brand_name">
@@ -162,7 +162,7 @@ export default function CreateDocument(data){
                             <tr>
                                 <td class="pt">
                                     <div class="flex">
-                                        <label for="">Full Address (For Invoicing):</label>
+                                        <label for="">Billing Outlet Address:</label>
                                         <value>${data.billing_outlet_address || ""}</value>
                                     </div>
                                 </td>
@@ -202,13 +202,77 @@ export default function CreateDocument(data){
                                                     <label for="">Phone No.:</label>
                                                     <value>${data.billing_phone || ""}</value>
                                                 </div>
+                                            </td>																
+                                            <td width="20%">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt">
+                                    <div class="flex">
+                                        <label for="">Shipping Outlet Address:</label>
+                                        <value>${data.delivery_outlet_address || ""}</value>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p0">
+                                    <table width="100%">
+                                        <tr>
+                                            <td>
+                                                <div class="flex">
+                                                    <label for="">P.O. Box:</label>
+                                                    <value>${data.delivery_po_box || ""}</value>
+                                                </div>
                                             </td>									
+                                            <td>
+                                                <div class="flex">
+                                                    <label for="">City:</label>
+                                                    <value>${data.delivery_city || ""}</value>
+                                                </div>
+                                            </td>									
+                                            <td>
+                                                <div class="flex">
+                                                    <label for="">Country:</label>
+                                                    <value>${data.delivery_country || ""}</value>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p0">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="25%">
+                                                <div class="flex">
+                                                    <label for="">Phone No.:</label>
+                                                    <value>${data.delivery_phone || ""}</value>
+                                                </div>
+                                            </td>																
+                                            <td width="20%">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p0">
+                                    <table width="100%">
+                                        <tr>								
                                             <td width="55%">
                                                 <div class="flex">
                                                     <label for="">No. of years in the Food Service Industry:</label>
                                                     <value>${data.service_years || ""}</value>
                                                 </div>
-                                            </td>									
+                                            </td>	
+                                            <td width="25%">
+                                                <div class="flex">
+                                                    <label for="">Website:</label>
+                                                    <value>${data.website_url || ""}</value>
+                                                </div>
+                                            </td>								
                                             <td width="20%">&nbsp;</td>
                                         </tr>
                                     </table>
@@ -390,26 +454,30 @@ function LoadOwnersTable(data){
             <table width="100%" class="border_tbl" cellpadding="0" cellspacing="0" style="margin-top:10px;">
                 <thead>
                     <tr>
-                        <td colspan="5" align="center" bgcolor="#244061" style="text-transform:capitalize;color: #fff;letter-spacing: 0.5px;">
+                        <td colspan="7" align="center" bgcolor="#244061" style="text-transform:capitalize;color: #fff;letter-spacing: 0.5px;">
                             Owner/Partner Details
                         </td>
                     </tr>
                     <tr>
+                        <td width="19%" align="center" valign="middle">Title</td>
                         <td width="21%" align="center" valign="middle">Name</td>
                         <td width="14%" align="center" valign="middle">Phone</td>
                         <td width="14%" align="center" valign="middle">Mobile</td>
                         <td width="23%" align="center" valign="middle">Email</td>
-                        <td width="23%" align="center" valign="middle">% of Shareholder</td>								
+                        <td width="23%" align="center" valign="middle">% of Shareholder</td>	
+                        <td width="23%" align="center" valign="middle">Authorised Signature</td>							
                     </tr>
                 </thead>						
                 ${
                     data.map((item, index) => {
                         return `<tr>
+                        <td align="center" valign="middle">${item.title || ""}</td>
                         <td align="center" valign="middle">${item.name || ""}</td>
                         <td align="center" valign="middle">${item.phone || ""}</td>
                         <td align="center" valign="middle">${item.mobile || ""}</td>
                         <td align="center" valign="middle">${item.email || ""}</td>
                         <td align="center" valign="middle">${item.shareholder_percentage || ""}</td>
+                        <td align="center" valign="middle">${item.authorised_signature || "No"}</td>
                         </tr>`
 
                     }).join('')
@@ -475,10 +543,11 @@ function LoadSuppliersTable(data){
                 </tr>
                 <tr>								
                     <td width="20%" align="center" valign="middle">Name</td>
-                    <td width="15%" align="center" valign="middle">Contact</td>
-                    <td width="15%" align="center" valign="middle">Address</td>								
-                    <td width="15%" align="center" valign="middle">Phone No.</td>								
-                    <td width="15%" align="center" valign="middle">Email</td>								
+                    <td width="12%" align="center" valign="middle">Contact</td>
+                    <td width="12%" align="center" valign="middle">Designation</td>
+                    <td width="12%" align="center" valign="middle">Address</td>								
+                    <td width="12%" align="center" valign="middle">Phone No.</td>								
+                    <td width="12%" align="center" valign="middle">Email</td>								
                 </tr>							
                 </thead>					
                 ${
@@ -486,6 +555,7 @@ function LoadSuppliersTable(data){
                         return `<tr>
                         <td align="center" valign="middle">${item.name || ""}</td>
                         <td align="center" valign="middle">${item.contact || ""}</td>
+                        <td align="center" valign="middle">${item.designation || ""}</td>
                         <td align="center" valign="middle">${item.address || ""}</td>
                         <td align="center" valign="middle">${item.phone || ""}</td>
                         <td align="center" valign="middle">${item.email || ""}</td>

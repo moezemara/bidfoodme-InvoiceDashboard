@@ -7,13 +7,14 @@ import {
     Box,
     Radio,
     RadioGroup,
-    Typography
+    Typography,
+    InputAdornment
   } from '@mui/material';
 import { LabelStyle, UploadLabelStyle, FormStepDescription } from './FormComponentsStyles';
 import { RegisterBranchContext } from '../Contexts/RegisterBranchContext';
 
 
-const fileTypes = ["JPEG", "PNG", "PDF"];
+const fileTypes = ["PDF"];
 
 function UploadComponent({ handleOnDataChange }) {
   const UploadLabelClass = UploadLabelStyle();
@@ -27,6 +28,7 @@ function UploadComponent({ handleOnDataChange }) {
     ownerpassportfile: data.upload_info.ownerpassportfile || null,
     ownervisafile: data.upload_info.ownervisafile || null,
     ownereidfile: data.upload_info.ownereidfile || null,
+    powerofattorneyfile: data.upload_info.powerofattorneyfile || null,
     vatfile: data.upload_info.vatfile || null,
     hasVatCert: data.upload_info.hasVatCert || false,
     credit_limit: data.upload_info.credit_limit || "",
@@ -88,7 +90,17 @@ function UploadComponent({ handleOnDataChange }) {
         types={fileTypes}
         label={formState.ownereidfile ? formState.ownereidfile.name : "Upload File"}
         />
-        </Grid>
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <Typography variant="h6" className={UploadLabelClass.label}>Power of attorney</Typography>
+        <FileUploader
+        multiple={false}
+        handleChange={e => handleFormDataChange("powerofattorneyfile", e)}
+        name="file"
+        types={fileTypes}
+        label={formState.powerofattorneyfile ? formState.powerofattorneyfile.name : "Upload File"}
+        />
+      </Grid>
     </Grid>
 
 
@@ -128,6 +140,9 @@ function UploadComponent({ handleOnDataChange }) {
         id="outlined-basic" label="Credit Limit" variant="outlined" fullWidth
         onChange={e => handleFormDataChange("credit_limit", e.target.value)}
         value={formState.credit_limit}
+        InputProps={{
+          endAdornment: <InputAdornment position="end">AED</InputAdornment>
+        }}
         />
         </Grid>
         <Grid item xs={12} sm={6}>

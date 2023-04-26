@@ -339,6 +339,14 @@ export async function FinishApplication(req, res) {
             total_time_spent = 0
         }
 
+        // update application status
+        const update_application_status_action = await database.RequestCredit.Applications.UpdateApplicationStatusByApplicationId(
+            {
+                application_id: application_id,
+                status: 'submitted'
+            }
+        )
+
         // update total time spent
         const update_application_time_action = await database.RequestCredit.ApplicationTime.UpdateTimeSpentOnStepByApplicationId(
             {
@@ -352,14 +360,6 @@ export async function FinishApplication(req, res) {
         const update_submission_date_action = await database.RequestCredit.ApplicationTime.UpdateSubmissionDateByApplicationId(
             {
                 application_id: application_id
-            }
-        )
-
-        // update application status
-        const update_application_status_action = await database.RequestCredit.Applications.UpdateApplicationStatusByApplicationId(
-            {
-                application_id: application_id,
-                status: 'submitted'
             }
         )
 
@@ -419,15 +419,15 @@ async function DocuSign(database, application_id) {
         ...get_bank_info_action[0],
         ...get_requests_info_action[0],
         suppliers: get_suppliers_info_action,
-        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner" || contact.title == "Manager"),
-        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager"),
+        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner" || contact.title == "Manager" || contact.title == "Authorized Signatory"),
+        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager" || contact.title == "Authorized Signatory"),
         document_type: "CreditApplicationForm"
     }
 
 
     const envelopeArgs = {
         signerEmail: document_data.owners.filter(owner => owner.authorised_signature == "Yes")[0].email,
-        signerName: document_data.outlet_legal_name,
+        signerName: document_data.owners.filter(owner => owner.authorised_signature == "Yes")[0].name,
         status: "sent",
         document_data: document_data
     }
@@ -439,6 +439,13 @@ async function DocuSign(database, application_id) {
 
 
     const envelope = await sendEnvelope(args)
+
+    // save envelope
+    const save_envelope_action = await database.RequestCredit.DocusignEnvelopes.InsertEnvelope({
+        application_id: application_id,
+        envelope_id: envelope,
+        recipient_email: envelopeArgs.signerEmail
+    })
 
     return envelope
 }

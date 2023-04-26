@@ -58,7 +58,7 @@ const ContactComponent = ({ handleOnDataChange }) => {
   };
 
   const Owner_Contact_fields = [
-    { field: "Title", headerName: "Title", type: "select", options: ["Owner", "Partner", "Manager"], cellWidth: "14.3%"},
+    { field: "Title", headerName: "Title", type: "select", options: ["Owner", "Partner", "Manager", "Authorized Signatory"], cellWidth: "14.3%"},
     { field: "Name", headerName: "Name", type: "text", cellWidth: "14.3%" },
     { field: "Phone", headerName: "Phone number", type: "text", cellWidth: "14.3%" },
     { field: "Mobile", headerName: "Mobile number", type: "text", cellWidth: "14.3%" },
@@ -153,7 +153,7 @@ const ContactComponent = ({ handleOnDataChange }) => {
       <BlockTitle>Owners/Partners</BlockTitle>
       <BlockDescription>Please add at least one field to the table before submitting</BlockDescription>
       <DataTable onDataTableChange={handleOwner_ContactChange} columns={Owner_Contact_fields} defaultRows={Owner_contact_defaultRows} addRow_bTn_ColsPan={4} unique_key={'Owner_Contact'} checkBox={true} maxRows={3}/>
-      <Typography variant="h6" className={`${classes.label} tbl_title`}>Finance department</Typography>
+      <Typography variant="h6" className={`${classes.label} tbl_title`}>Primary Contacts</Typography>
       <DataTable onDataTableChange={handleDepartment_ContactChange} columns={Department_Contact_fields} defaultRows={Department_Contact_defaultRows} unique_key={'Department_Contact'} maxRows={3}/>
     </ContactSecWrapper>
   );

@@ -21,11 +21,12 @@ export default async function VerifyFinish(database, application_id) {
     const get_contacts_info_action_owner = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Owner'})
     const get_contacts_info_action_partner = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Partner'})
     const get_contacts_info_action_manager = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Manager'})
+    const get_contacts_info_action_authorized_signatory = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Authorized Signatory'})
     const get_contacts_info_action_financemanager = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Finance Manager'})
     const get_contacts_info_action_payable = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Accounts Payable'})
     const get_contacts_info_action_purchasing = await database.RegisterBranch.Contacts.SelectContactsByApplicationIdAndContactTitle({application_id: application_id, title: 'Purchasing Manager'})
 
-    if (get_contacts_info_action_owner.length == 0 && get_contacts_info_action_partner.length == 0 && get_contacts_info_action_manager.length == 0){
+    if (get_contacts_info_action_owner.length == 0 && get_contacts_info_action_partner.length == 0 && get_contacts_info_action_manager.length == 0 && get_contacts_info_action_authorized_signatory.length == 0){
         return {status: false, message: 'Please complete owners or partners contacts info'}
     }
 
@@ -45,6 +46,12 @@ export default async function VerifyFinish(database, application_id) {
 
     for (let i = 0; i < get_contacts_info_action_manager.length; i++){
         if (get_contacts_info_action_manager[i].authorised_signature == 'Yes'){
+            authorised_signature = true
+        }
+    }
+
+    for (let i = 0; i < get_contacts_info_action_authorized_signatory.length; i++){
+        if (get_contacts_info_action_authorized_signatory[i].authorised_signature == 'Yes'){
             authorised_signature = true
         }
     }
@@ -69,11 +76,12 @@ export default async function VerifyFinish(database, application_id) {
     const owner_emails = get_contacts_info_action_owner.map((contact) => contact.email)
     const partner_emails = get_contacts_info_action_partner.map((contact) => contact.email)
     const manager_emails = get_contacts_info_action_manager.map((contact) => contact.email)
+    const authorized_signatory_emails = get_contacts_info_action_authorized_signatory.map((contact) => contact.email)
     const finance_manager_emails = get_contacts_info_action_financemanager.map((contact) => contact.email)
     const accounts_payable_emails = get_contacts_info_action_payable.map((contact) => contact.email)
     const purchasing_manager_emails = get_contacts_info_action_purchasing.map((contact) => contact.email)
 
-    const owners_emails = [...owner_emails, ...partner_emails, ...manager_emails]
+    const owners_emails = [...owner_emails, ...partner_emails, ...manager_emails, ...authorized_signatory_emails]
 
     if (owners_emails.includes(finance_manager_emails[0])){
         return {status: false, message: 'Finance manager email should not be same as owners or partners'}
@@ -87,6 +95,21 @@ export default async function VerifyFinish(database, application_id) {
         return {status: false, message: 'Purchasing manager email should not be same as owners or partners'}
     }
     
+    // ensure that names are no duplicate for all contacts
+    const owner_names = get_contacts_info_action_owner.map((contact) => contact.name)
+    const partner_names = get_contacts_info_action_partner.map((contact) => contact.name)
+    const manager_names = get_contacts_info_action_manager.map((contact) => contact.name)
+    const authorized_signatory_names = get_contacts_info_action_authorized_signatory.map((contact) => contact.name)
+    const finance_manager_names = get_contacts_info_action_financemanager.map((contact) => contact.name)
+    const accounts_payable_names = get_contacts_info_action_payable.map((contact) => contact.name)
+    const purchasing_manager_names = get_contacts_info_action_purchasing.map((contact) => contact.name)
+
+    const contacts_names = [...owner_names, ...partner_names, ...manager_names, ...authorized_signatory_names, ...finance_manager_names, ...accounts_payable_names, ...purchasing_manager_names]
+    const duplicate_names = contacts_names.filter((name, index) => contacts_names.indexOf(name) != index)
+
+    if (duplicate_names.length > 0){
+        return {status: false, message: 'Duplicate names are not allowed for contacts'}
+    }
 
     // uploads
     const get_uploads_info_action = await database.RegisterBranch.Documents.SelectDocumentsByApplicationId({application_id: application_id})
