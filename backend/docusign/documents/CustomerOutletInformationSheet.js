@@ -311,7 +311,6 @@ function LoadOwnersTable(data){
                 ${
                     data.map((item, index) => {
                         return `<tr>
-                        <td align="center" valign="middle">${item.title || ""}</td>
                         <td align="center" valign="middle">${item.name || ""}</td>
                         <td align="center" valign="middle">${item.phone || ""}</td>
                         <td align="center" valign="middle">${item.mobile || ""}</td>
@@ -351,7 +350,6 @@ function LoadDepatmentsTable(data){
                 ${
                     data.map((item, index) => {
                         return `<tr>
-                        <td align="center" valign="middle">${item.title || ""}</td>
                         <td align="center" valign="middle">${item.name || ""}</td>
                         <td align="center" valign="middle">${item.phone || ""}</td>
                         <td align="center" valign="middle">${item.mobile || ""}</td>

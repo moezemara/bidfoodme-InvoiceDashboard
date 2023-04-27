@@ -501,7 +501,6 @@ function LoadDepatmentsTable(data){
                         </td>
                     </tr>
                     <tr>
-                        <td width="19%" align="center" valign="middle">Title</td>
                         <td width="15%" align="center" valign="middle">Name</td>
                         <td width="15%" align="center" valign="middle">Phone</td>
                         <td width="15%" align="center" valign="middle">Mobile</td>
@@ -511,7 +510,6 @@ function LoadDepatmentsTable(data){
                 ${
                     data.map((item, index) => {
                         return `<tr>
-                        <td align="center" valign="middle">${item.title || ""}</td>
                         <td align="center" valign="middle">${item.name || ""}</td>
                         <td align="center" valign="middle">${item.phone || ""}</td>
                         <td align="center" valign="middle">${item.mobile || ""}</td>
