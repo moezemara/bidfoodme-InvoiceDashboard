@@ -255,19 +255,19 @@ const Form = () => {
   };
 
   const handleFinishClick = async () => {
+    // check if agreement is checked
+    if (data.upload_info['confirm_info'] !== "yes") {
+      setIsDialogOpen(true)
+      setDialogContent("Please agree to the terms and conditions")
+      return false
+    }
+
     const handleSaveClickResponse = await handleSaveClick()
 
     if (!handleSaveClickResponse) {
       setIsDialogOpen(true)
       setDialogContent(handleSaveClickResponse.message)
       return
-    }
-
-    // check if agreement is checked
-    if (data.upload_info['confirm_info'] !== "yes") {
-      setIsDialogOpen(true)
-      setDialogContent("Please agree to the terms and conditions")
-      return false
     }
 
     const response = await ApplicationApi.Finish(token)
