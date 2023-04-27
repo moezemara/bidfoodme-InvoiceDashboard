@@ -238,7 +238,7 @@ const Form = () => {
 
     const handleSaveClickResponse = await handleSaveClick()
 
-    if (!handleSaveClickResponse) {
+    if (!handleSaveClickResponse || handleSaveClickResponse.success !== 1) {
       setIsDialogOpen(true)
       setDialogContent(handleSaveClickResponse.message)
       return
