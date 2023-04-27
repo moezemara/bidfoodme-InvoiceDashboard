@@ -56,7 +56,7 @@ app.set('trust proxy', 1)
 
 
 // enables json mode
-app.use(express.json())
+app.use(express.json({limit: '25mb'}))
 
 // handles json errors
 app.use(function(err, req, res, next) {
@@ -72,7 +72,9 @@ app.use("/v1/User", UserRouter)
 
 // handles all the unused links
 app.all("/*", (req, res) => {
-  return response.fail(res, "invalid request")
+  const url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
+
+  return response.fail(res, url)
 })
 
 // starts the app

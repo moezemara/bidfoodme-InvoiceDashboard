@@ -497,7 +497,7 @@ function LoadDepatmentsTable(data){
                 <thead>
                     <tr>
                         <td colspan="5" align="center" bgcolor="#244061" style="text-transform:capitalize;color: #fff;letter-spacing: 0.5px;">
-                            Accounts Department Details
+                        Primary Contacts
                         </td>
                     </tr>
                     <tr>
@@ -542,12 +542,12 @@ function LoadSuppliersTable(data){
                     <td colspan="6" style="border:none;"></td>
                 </tr>
                 <tr>								
-                    <td width="20%" align="center" valign="middle">Name</td>
-                    <td width="12%" align="center" valign="middle">Contact</td>
+                    <td width="20%" align="center" valign="middle">Company Name</td>
+                    <td width="12%" align="center" valign="middle">Contact Person</td>
                     <td width="12%" align="center" valign="middle">Designation</td>
-                    <td width="12%" align="center" valign="middle">Address</td>								
-                    <td width="12%" align="center" valign="middle">Phone No.</td>								
-                    <td width="12%" align="center" valign="middle">Email</td>								
+                    <td width="12%" align="center" valign="middle">Company Address</td>
+                    <td width="12%" align="center" valign="middle">Phone Number</td>
+                    <td width="12%" align="center" valign="middle">Email</td>
                 </tr>							
                 </thead>					
                 ${

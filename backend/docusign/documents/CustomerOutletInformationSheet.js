@@ -337,7 +337,7 @@ function LoadDepatmentsTable(data){
                 <thead>
                     <tr>
                         <td colspan="5" align="center" bgcolor="#244061" style="text-transform:capitalize;color: #fff;letter-spacing: 0.5px;">
-                            Accounts Department Details
+						Primary Contacts
                         </td>
                     </tr>
                     <tr>

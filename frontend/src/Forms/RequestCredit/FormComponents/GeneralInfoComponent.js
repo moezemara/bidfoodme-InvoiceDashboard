@@ -173,7 +173,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             fullWidth
             id="delivery_outlet_address_input"
             onChange={(e) => handleFormDataChange('delivery_outlet_address', e.target.value)}
-            value={formState.delivery_outlet_address}
+            value={formState.use_same_billing_address ? formState.billing_outlet_address : formState.delivery_outlet_address}
             disabled={formState.use_same_billing_address}
           />
           <CustomInputLabel htmlFor="delivery_outlet_address_input">
@@ -185,7 +185,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             fullWidth
             id="delivery_country_input"
             onChange={(e) => handleFormDataChange('delivery_country', e.target.value)}
-            value={formState.delivery_country}
+            value={formState.use_same_billing_address ? formState.billing_country : formState.delivery_country}
             disabled={formState.use_same_billing_address}
           >
             {countries.map((country) => (
@@ -203,7 +203,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             fullWidth
             id="delivery_city_input"
             onChange={(e) => handleFormDataChange('delivery_city', e.target.value)}
-            value={formState.delivery_city}
+            value={formState.use_same_billing_address ? formState.billing_city : formState.delivery_city}
             disabled={formState.use_same_billing_address}
           />
           <CustomInputLabel htmlFor="delivery_city_input">
@@ -215,7 +215,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             fullWidth
             id="delivery_phone_input"
             onChange={(e) => handleFormDataChange('delivery_phone', e.target.value)}
-            value={formState.delivery_phone}
+            value={formState.use_same_billing_address ? formState.billing_phone : formState.delivery_phone}
             disabled={formState.use_same_billing_address}
           />
           <CustomInputLabel htmlFor="delivery_phone_input">
@@ -227,7 +227,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
             fullWidth
             id="delivery_po_box"
             onChange={(e) => handleFormDataChange('delivery_po_box', e.target.value)}
-            value={formState.delivery_po_box}
+            value={formState.use_same_billing_address ? formState.billing_po_box : formState.delivery_po_box}
             disabled={formState.use_same_billing_address}
           />
           <CustomInputLabel htmlFor="delivery_po_box">
@@ -276,7 +276,7 @@ const GeneralInfoComponent = ({ handleOnDataChange }) => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-        <InputTitle>Vat registration number</InputTitle>
+        <InputTitle>VAT registration number</InputTitle>
           <TextField
             fullWidth
             onChange={(e) => handleFormDataChange('vat_number', e.target.value)}

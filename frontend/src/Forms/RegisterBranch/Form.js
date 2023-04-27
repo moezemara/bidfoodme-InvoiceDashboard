@@ -42,17 +42,17 @@ const Form = () => {
   // handle next and back button click
   const handleNextClick = async () => {
     const saveResponse = await handleSaveClick();
-    // if (!saveResponse) {
-    //   return
-    // }
+    if (!saveResponse) {
+      return
+    }
     setCurrentStep(currentStep + 1);
   };
 
   const handleBackClick = async () => {
     const saveResponse = await handleSaveClick();
-    // if (!saveResponse) {
-    //   return
-    // }
+    if (!saveResponse) {
+      return
+    }
     setCurrentStep(currentStep - 1);
   };
 
@@ -223,12 +223,20 @@ const Form = () => {
       }
     }
 
-    let response = await ApplicationApi.UpdateTime(token, currentTimerValue[0], { time_spent: currentTimerValue[1] })
+    await ApplicationApi.UpdateTime(token, currentTimerValue[0], { time_spent: currentTimerValue[1] })
 
     return true
   };
 
   const handleFinishClick = async () => {
+    const handleSaveClickResponse = await handleSaveClick()
+
+    if (!handleSaveClickResponse) {
+      setIsDialogOpen(true)
+      setDialogContent(handleSaveClickResponse.message)
+      return
+    }
+
     // check if agreement is checked
     if (data.upload_info['confirm_info'] !== "yes") {
       setIsDialogOpen(true)
@@ -248,7 +256,7 @@ const Form = () => {
 
   const LoadSavedProgress_Parent = async () => {
     const loadedData = await LoadSavedProgress(token);
-    if (loadedData != data){
+    if (loadedData !== data){
       setData(loadedData)
     }
   }

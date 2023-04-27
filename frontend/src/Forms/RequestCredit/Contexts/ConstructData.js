@@ -57,6 +57,7 @@ function ConstructUploads(uploads){
                 case 'power_of_attorney':
                     upload_info.powerofattorneyfile = {}
                     upload_info.powerofattorneyfile.name = upload.originalname
+                    break
                 default:
                     break
             }

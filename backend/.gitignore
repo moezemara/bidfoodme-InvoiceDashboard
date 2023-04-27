@@ -4,4 +4,5 @@ package-lock.json
 *.jpg
 *.png
 *.jpeg
-config/*
+config
+certs

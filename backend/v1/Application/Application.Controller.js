@@ -164,7 +164,7 @@ export async function DocuSignWebHook(req, res) {
     // construct data
     const data = {
         apiType: "processCAF",
-        customerId: 33781,
+        customerId: account_id,
         legalName: general_info.outlet_legal_name,
         tradeName: general_info.outlet_trade_name,
         billingAddress: {
@@ -210,9 +210,9 @@ export async function DocuSignWebHook(req, res) {
     
     // update docusign envelope status
     if (document_name == "Credit Application Form") {
-        const update_envelope_action = await database.RequestCredit.DocusignEnvelopes.UpdateEnvelopeStatusAndSigningDate({envelope_id: envelope_id, status: "completed", signing_date: signing_date})
+        const update_envelope_action = await database.RequestCredit.DocusignEnvelopes.UpdateEnvelopeStatusAndSigningDate({envelope_id: envelope_id, status: "completed", signing_date: new Date(signing_date)})
     }else if(document_name == "Customer Outlet Information Sheet"){
-        const update_envelope_action = await database.RegisterBranch.DocusignEnvelopes.UpdateEnvelopeStatusAndSigningDate({envelope_id: envelope_id, status: "completed", signing_date: signing_date})
+        const update_envelope_action = await database.RegisterBranch.DocusignEnvelopes.UpdateEnvelopeStatusAndSigningDate({envelope_id: envelope_id, status: "completed", signing_date: new Date(signing_date)})
     }else{
         return response.fail(res, "Invalid document name")
     }
