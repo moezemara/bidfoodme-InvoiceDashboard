@@ -224,7 +224,7 @@ const Form = () => {
     return submissionData;
   }
 
-  const handleSaveClick = async () => {
+  const handleSaveClick = async (showDialog = true) => {
     // get the current step
     const currentSteps = getCurrentStepsName();
 
@@ -240,12 +240,18 @@ const Form = () => {
         response = await ApplicationApi.SaveProgress(token, currentSteps[i], stepData)
       }
 
-      setIsDialogOpen(true)
+      
       if (response.success !== 1) {
-        setDialogContent(response.message)
+        if (showDialog){
+          setIsDialogOpen(true)
+          setDialogContent(response.message)
+        }
         return false
       }else{
-        setDialogContent("Your progress has been saved successfully")
+        if (showDialog){
+          setIsDialogOpen(true)
+          setDialogContent("Your progress has been saved successfully")
+        }
       }
     }
 
@@ -262,9 +268,9 @@ const Form = () => {
       return false
     }
 
-    const handleSaveClickResponse = await handleSaveClick()
+    const handleSaveClickResponse = await handleSaveClick(false)
 
-    if (!handleSaveClickResponse || handleSaveClickResponse.success !== 1) {
+    if (!handleSaveClickResponse) {
       setIsDialogOpen(true)
       setDialogContent(handleSaveClickResponse.message)
       return
