@@ -97,11 +97,19 @@ async function makeEnvelope(args) {
   // create a signer recipient to sign the document, identified by name and email
   // We're setting the parameters via the object constructor
   let signer1 = docusign.Signer.constructFromObject({
-    email: args.signerEmail,
-    name: args.signerName,
+    email: args.document_data.authorised_signatures[0].email,
+    name: args.document_data.authorised_signatures[0].name,
     recipientId: "1",
     routingOrder: "1",
   });
+
+  let signer2 = docusign.Signer.constructFromObject({
+    email: args.document_data.authorised_signatures[1].email,
+    name: args.document_data.authorised_signatures[1].name,
+    recipientId: "2",
+    routingOrder: "2",
+  });
+
 
 
   // Create signHere fields (also known as tabs) on the documents,
@@ -112,11 +120,18 @@ async function makeEnvelope(args) {
   // signHere2 tab will be used in both document 2 and 3 since they
   // use the same anchor string for their "signer 1" tabs.
   let signHere1 = docusign.SignHere.constructFromObject({
-      anchorString: "**signature**",
+      anchorString: "**signature_1**",
       anchorYOffset: "10",
       anchorUnits: "pixels",
       anchorXOffset: "20",
     })
+
+  let signHere2 = docusign.SignHere.constructFromObject({
+    anchorString: "**signature_2**",
+    anchorYOffset: "10",
+    anchorUnits: "pixels",
+    anchorXOffset: "20",
+  })
 
 
   // Tabs are set per recipient / signer
@@ -125,9 +140,14 @@ async function makeEnvelope(args) {
   });
   signer1.tabs = signer1Tabs;
 
+  let signer2Tabs = docusign.Tabs.constructFromObject({
+    signHereTabs: [signHere2],
+  });
+  signer2.tabs = signer2Tabs;
+
   // Add the recipients to the envelope object
   let recipients = docusign.Recipients.constructFromObject({
-    signers: [signer1]
+    signers: [signer1, signer2]
   });
   env.recipients = recipients;
 

@@ -108,8 +108,7 @@ export const BlockTitle = styled.h2`
   font-weight:500;
   font-size:18px;
   margin-bottom:0;
-  margin-top:5px;
-  padding:0;
+  padding-top:30px;
 
   // @media screen and (max-width: 768px) {
   //   font-size: 16px;

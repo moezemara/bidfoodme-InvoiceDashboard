@@ -1,6 +1,8 @@
-import joi from 'joi'
+import Joi from 'joi'
+import joi_date from '@joi/date'
 import config from '../../../config/Config.js'
-// import countries from '../../../utils/Countries.js'
+
+const joi = Joi.extend(joi_date)
 
 export const SavePageProgress_params = joi.object({
     step: joi.string().valid(...config.Applications.RegisterBranch.Pages).required().label('Step')
@@ -21,13 +23,13 @@ export const SavePageProgress_body_general = joi.object({
     delivery_phone: joi.number().integer().required().label('Outlet Delivery Phone'),
     delivery_po_box: joi.string().required().label('Outlet Delivery PO Box'),
     service_years: joi.number().integer().min(0).max(100).required().label('Service Years'),
-    website_url: joi.string().uri().required().label('Website URL')
+    website_url: joi.string().domain().required().label('Website URL')
 })
 
 export const SavePageProgress_body_license = joi.object({
     vat_number: joi.string().required().label('VAT Number'),
     license_number: joi.string().required().label('License Number'),
-    license_expiration: joi.date().required().label('License Expiry Date')
+    license_expiration: joi.date().format("DD/MM/YYYY").required().label('License Expiry Date')
 })
 
 export const SavePageProgress_body_contacts = joi.array().items(joi.object({
@@ -37,8 +39,15 @@ export const SavePageProgress_body_contacts = joi.array().items(joi.object({
     mobile: joi.number().integer().optional().label('Contact Mobile'),
     email: joi.string().email().optional().label('Contact Email'),
     shareholder_percentage: joi.number().integer().min(0).max(100).optional().label('Shareholder Percentage'),
-    authorised_signature: joi.string().valid('Yes').optional().label('Authorised Signature')
-}))
+})).label('Contacts')
+
+export const SavePageProgress_body_signatures = joi.array().min(2).max(2).items(joi.object({
+    title: joi.string().required().label('Signaturer Title'),
+    name: joi.string().required().label('Signaturer Name'),
+    phone: joi.number().integer().optional().label('Signaturer Phone'),
+    mobile: joi.number().integer().optional().label('Signaturer Mobile'),
+    email: joi.string().email().optional().label('Signaturer Email'),
+})).label('Signatures')
 
 export const SavePageProgress_body_uploads = joi.object({
     hasVatCert: joi.string().valid('yes', 'no').required().label('Has VAT Certificate'),

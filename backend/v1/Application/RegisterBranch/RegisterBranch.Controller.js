@@ -69,13 +69,18 @@ export async function LoadSavedProgress(req, res) {
         const get_requests_info_action = await database.RegisterBranch.Requests.SelectRequestByApplicationId({application_id: active_application.application_id})
         const requests_info = get_requests_info_action[0]
 
+        // get authorised signatures info
+        const get_authorised_signatures_info_action = await database.RegisterBranch.AuthorisedSignatures.SelectAuthorisedSignaturesByApplicationId({application_id: active_application.application_id})
+
+
         // return response
         return response.success(res, {
             general_info: general_info,
             license_info: license_info,
             contacts_info: get_contacts_info_action,
             documents_info: get_documents_info_action,
-            requests_info: requests_info
+            requests_info: requests_info,
+            authorised_signatures_info: get_authorised_signatures_info_action
         })
 
     } catch (error) {
@@ -193,6 +198,20 @@ export async function SavePageProgress(req, res, next) {
                     }
 
                     const create_documents_info_action = await database.RegisterBranch.Documents.InsertDocument({application_id: application_id, ...file})
+                }
+                break;
+            case 'signatures':
+                const direct_check_body_signatures = direct_check(req.body, schema.SavePageProgress_body_signatures)
+                if(!direct_check_body_signatures.status){
+                    return config.ApplicationMode == 'DEVELOPMENT' ? response.fail(res, direct_check_body_signatures.message) : response.fail(res, 'Invalid request body')
+                }
+                // delete all signatures and add new ones
+                const delete_signatures_info_action = await database.RegisterBranch.AuthorisedSignatures.DeleteSignaturesByApplicationId({application_id: application_id})
+
+                // loop on signatures and add them one by one
+                for (let i = 0; i < data.length; i++) {
+                    const signature = data[i];
+                    const create_signatures_info_action = await database.RegisterBranch.AuthorisedSignatures.InsertAuthorisedSignatures({application_id: application_id, ...signature})
                 }
                 break;
             case 'requests':
@@ -370,6 +389,7 @@ async function DocuSign(database, application_id) {
     const get_general_info_action = await database.RegisterBranch.General.SelectGeneralInfoByApplicationId({application_id: application_id})
     const get_license_info_action = await database.RegisterBranch.LicenseInfo.SelectLicenseInfoByApplicationId({application_id: application_id})
     const get_contacts_info_action = await database.RegisterBranch.Contacts.SelectContactsByApplicationId({application_id: application_id})
+    const get_signatures_info_action = await database.RegisterBranch.AuthorisedSignatures.SelectAuthorisedSignaturesByApplicationId({application_id: application_id})
     const get_requests_info_action = await database.RegisterBranch.Requests.SelectRequestByApplicationId({application_id: application_id})
 
 
@@ -377,15 +397,14 @@ async function DocuSign(database, application_id) {
         ...get_general_info_action[0],
         ...get_license_info_action[0],
         ...get_requests_info_action[0],
-        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner" || contact.title == "Manager" || contact.title == "Authorized Signatory"),
-        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager" || contact.title == "Authorized Signatory"),
+        owners: get_contacts_info_action.filter(contact => contact.title == "Owner" || contact.title == "Partner" || contact.title == "Manager"),
+        departments: get_contacts_info_action.filter(contact => contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager"),
+        authorised_signatures: get_signatures_info_action,
         document_type: "CustomerOutletInformationSheet"
     }
 
 
     const envelopeArgs = {
-        signerEmail: document_data.owners.filter(owner => owner.authorised_signature == "Yes")[0].email,
-        signerName: document_data.owners.filter(owner => owner.authorised_signature == "Yes")[0].name,
         status: "sent",
         document_data: document_data
     }
@@ -401,7 +420,7 @@ async function DocuSign(database, application_id) {
     const save_envelope_action = await database.RegisterBranch.DocusignEnvelopes.InsertEnvelope({
         application_id: application_id,
         envelope_id: envelope,
-        recipient_email: envelopeArgs.signerEmail
+        recipient_email: get_signatures_info_action[0].email
     })
 
 

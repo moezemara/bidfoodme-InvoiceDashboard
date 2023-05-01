@@ -26,8 +26,10 @@ const Form = () => {
       Owner_Contact: [],
       Department_Contact: []
     },
-    upload_info: {},
-  });
+    upload_info: {
+      authorised_signatures: []
+    },
+  })
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -77,14 +79,15 @@ const Form = () => {
     const steps = [];
     switch (currentStep) {
       case 1:
-        steps.push('general');
-        steps.push('license');
+        steps.push('general')
+        steps.push('license')
         break;
       case 2:
-        steps.push('contacts');
+        steps.push('contacts')
         break;
       case 3:
-        steps.push('uploads');
+        steps.push('uploads')
+        steps.push('signatures')
         steps.push('requests')
         break;
       default:
@@ -119,6 +122,7 @@ const Form = () => {
       'bank': ["bank_name", "bank_city", "bank_account_number", "bank_iban", "bank_swift", "bank_account_type"],
       'suppliers': ["name", "contact", "address", "phone", "email"],
       'uploads': ["tradelicensefile", "ownerpassportfile", "ownervisafile", "ownereidfile", "powerofattorneyfile", "vatfile", "hasVatCert"],
+      'signatures': ["authorised_signatures"],
       'requests': ["credit_limit"]
     }
 
@@ -191,6 +195,17 @@ const Form = () => {
 
         submissionData = fieldData;
 
+        break;
+        case 'signatures':
+          data.upload_info?.authorised_signatures.forEach((contact) => {
+            submissionData.push({
+              title: contact.title,
+              name: contact.name,
+              phone: contact.phone,
+              mobile: contact.mobile,
+              email: contact.email
+            })
+          })
         break;
       default:
         break

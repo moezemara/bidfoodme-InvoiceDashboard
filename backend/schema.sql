@@ -92,13 +92,28 @@ CREATE TABLE `requestcredit_contacts` (
     `mobile` VARCHAR(255) NULL,
     `email` VARCHAR(255) NULL,
     `shareholder_percentage` VARCHAR(255) NULL,
-    `authorised_signature` VARCHAR(255) NULL DEFAULT 'No',
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`application_id`) REFERENCES `requestcredit_applications`(`application_id`),
     UNIQUE (`application_id`, `id`)
 );
+
+CREATE TABLE `requestcredit_authorised_signatures` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `application_id` VARCHAR(255) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(255) NULL,
+    `mobile` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NULL,
+    `creation_date` DATETIME NOT NULL DEFAULT now(),
+    `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`application_id`) REFERENCES `requestcredit_applications`(`application_id`),
+    UNIQUE (`application_id`, `id`)
+);
+
 
 CREATE TABLE `requestcredit_bank_info` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -256,13 +271,28 @@ CREATE TABLE `registerbranch_contacts` (
     `mobile` VARCHAR(255) NULL,
     `email` VARCHAR(255) NULL,
     `shareholder_percentage` VARCHAR(255) NULL,
-    `authorised_signature` VARCHAR(255) NULL DEFAULT 'No',
     `creation_date` DATETIME NOT NULL DEFAULT now(),
     `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`application_id`) REFERENCES `registerbranch_applications`(`application_id`),
     UNIQUE (`application_id`, `id`)
 );
+
+CREATE TABLE `registerbranch_authorised_signatures` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `application_id` VARCHAR(255) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(255) NULL,
+    `mobile` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NULL,
+    `creation_date` DATETIME NOT NULL DEFAULT now(),
+    `last_update` DATETIME NOT NULL DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`application_id`) REFERENCES `registerbranch_applications`(`application_id`),
+    UNIQUE (`application_id`, `id`)
+);
+
 
 CREATE TABLE `registerbranch_documents` (
     `id` INT NOT NULL AUTO_INCREMENT,

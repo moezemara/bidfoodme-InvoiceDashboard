@@ -1,10 +1,9 @@
 function ConstructContact(contacts){
     const ownerContacts = []
     const departmentContacts = []
-    
     if (contacts !== undefined && contacts.length > 0) {
         contacts.forEach((contact) => {
-            if((contact.title === "Owner" || contact.title === "Partner" || contact.title === "Manager" || contact.title === "Authorized Signatory")) {
+            if((contact.title === "Owner" || contact.title === "Partner" || contact.title === "Manager")) {
                 ownerContacts.push(contact)
             } else {
                 departmentContacts.push(contact)
@@ -27,7 +26,8 @@ function ConstructUploads(uploads){
         ownereidfile: null,
         powerofattorneyfile: null,
         vatfile: null,
-        hasVatCert: 'no'
+        hasVatCert: 'no',
+        authorised_signatures: [],
     }
 
     if (uploads !== []) {
@@ -82,13 +82,14 @@ export default function ConstructData(data){
 
     const upload_info = {
         ...ConstructUploads(data.documents_info),
-        ...data.requests_info
+        ...data.requests_info,
+        authorised_signatures: data.authorised_signatures_info
     }
 
     return {
         general_info: general_info,
         contacts_info: contacts_info,
         references_info: references_info,
-        upload_info: upload_info
+        upload_info: upload_info,
     }
 }

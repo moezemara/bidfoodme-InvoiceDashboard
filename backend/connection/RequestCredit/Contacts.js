@@ -49,8 +49,7 @@ export default class Contacts {
                 email,
                 phone,
                 mobile,
-                shareholder_percentage,
-                authorised_signature
+                shareholder_percentage
                 FROM requestcredit_contacts WHERE application_id = ?`,
                 [
                     data.application_id
@@ -117,7 +116,6 @@ export default class Contacts {
                 phone = ?,
                 mobile = ?,
                 shareholder_percentage = ?
-                authorised_signature = ?
                 WHERE application_id = ? AND id = ?`,
                 [
                     data.title,
@@ -126,7 +124,6 @@ export default class Contacts {
                     data.phone,
                     data.mobile,
                     data.shareholder_percentage,
-                    data.authorised_signature,
                     data.application_id,
                     data.id
                 ],
@@ -145,7 +142,7 @@ export default class Contacts {
     InsertContact(data) {
         return new Promise((resolve, reject) =>{
             this.pool.query(
-                `INSERT INTO requestcredit_contacts (application_id, title, name, email, phone, mobile, shareholder_percentage, authorised_signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO requestcredit_contacts (application_id, title, name, email, phone, mobile, shareholder_percentage) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.application_id,
                     data.title,
@@ -154,7 +151,6 @@ export default class Contacts {
                     data.phone,
                     data.mobile,
                     data.shareholder_percentage,
-                    data.authorised_signature
                 ],
                 (error, results, fields) => {
                     if (error) {

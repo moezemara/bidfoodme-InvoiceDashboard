@@ -116,10 +116,8 @@ export async function DocuSignWebHook(req, res) {
         contact.phoneNumber = contact.phone
         contact.mobileNumber = contact.mobile
         contact.title != "Owner" && contact.title != "Partner" && contact.title != "Manager" ? undefined : contact.shareHolderPecentage = contact.shareholder_percentage + "%"
-        contact.signedByPartner = contact.authorised_signature || undefined
         delete contact.phone
         delete contact.mobile
-        delete contact.authorised_signature
         delete contact.shareholder_percentage
     })
 
@@ -132,6 +130,7 @@ export async function DocuSignWebHook(req, res) {
     const ownerPassport = documents_info.find(document => document.fieldname == "owner_pp")
     const ownerVisa = documents_info.find(document => document.fieldname == "owner_visa")
     const ownerVisaElo = documents_info.find(document => document.fieldname == "owner_eid")
+    const powerOfAttorney = documents_info.find(document => document.fieldname == "power_of_attorney")
     const vatCertification = documents_info.find(document => document.fieldname == "vat")
 
     // read documents
@@ -139,6 +138,7 @@ export async function DocuSignWebHook(req, res) {
     const ownerPassportFile = await fs.readFileSync(ownerPassport.path)
     const ownerVisaFile = await fs.readFileSync(ownerVisa.path)
     const ownerVisaEloFile = await fs.readFileSync(ownerVisaElo.path)
+    const powerOfAttorneyFile  = await fs.readFileSync(powerOfAttorney.path)
     let vatCertificationFile = null
     vatCertification != undefined ? vatCertificationFile = await fs.readFileSync(vatCertification.path) : undefined
 
@@ -147,6 +147,7 @@ export async function DocuSignWebHook(req, res) {
     const ownerPassportFileEncoded = ownerPassportFile.toString('base64')
     const ownerVisaFileEncoded = ownerVisaFile.toString('base64')
     const ownerVisaEloFileEncoded = ownerVisaEloFile.toString('base64')
+    const powerOfAttorneyFileEncoded = powerOfAttorneyFile.toString('base64')
     let vatCertificationFileEncoded = null
     vatCertification != undefined ? vatCertificationFileEncoded = vatCertificationFile.toString('base64') : undefined
     
@@ -199,6 +200,7 @@ export async function DocuSignWebHook(req, res) {
         ownerPassport: ownerPassportFileEncoded,
         ownerVisa: ownerVisaFileEncoded,
         ownerVisaElo: ownerVisaEloFileEncoded,
+        powerOfAttorney: powerOfAttorneyFileEncoded,
         vatCertification: vatCertificationFileEncoded,
         signedDocument: signed_document, // base64
         creditLimit: requests_info.credit_limit,

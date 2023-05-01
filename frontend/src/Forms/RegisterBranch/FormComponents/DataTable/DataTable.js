@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginTop: "24px",
     overflowX: "auto",
+    paddingBottom: "15px",
   },
   table: {
     minWidth: 650,
@@ -156,7 +157,7 @@ function DataTable(props) {
 
                 {/* {only show delete button if editable key is true } */}
 
-                {Object.keys(data).some((key) => !data[key].editable) ? <></> : (
+                {Object.keys(data).some((key) => !data[key].editable || props.preventDelete) ? <></> : (
                   <TableCell align="right">
                     <IconButton aria-label="delete" onClick={() => deleteTableRows(index)}>
                       <Delete />

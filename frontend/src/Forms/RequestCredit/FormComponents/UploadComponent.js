@@ -10,8 +10,9 @@ import {
     Typography,
     InputAdornment
   } from '@mui/material';
-import { LabelStyle, UploadLabelStyle, FormStepDescription } from './FormComponentsStyles';
+import { LabelStyle, UploadLabelStyle, FormStepDescription, BlockTitle } from './FormComponentsStyles';
 import { RequestCreditContext } from '../Contexts/RequestCreditContext';
+import DataTable from './DataTable/DataTable';
 
 
 const fileTypes = ["PDF"];
@@ -31,9 +32,11 @@ function UploadComponent({ handleOnDataChange }) {
     powerofattorneyfile: data.upload_info.powerofattorneyfile || null,
     vatfile: data.upload_info.vatfile || null,
     hasVatCert: data.upload_info.hasVatCert || false,
-    credit_limit: data.upload_info.credit_limit || "",
-    confirm_info: data.upload_info.confirm_info || false
+    credit_limit: data.upload_info.credit_limit || '',
+    confirm_info: data.upload_info.confirm_info || false,
+    authorised_signatures: data.upload_info.authorised_signatures || []
   });
+
 
 
   // function to update form data and call callback
@@ -45,7 +48,57 @@ function UploadComponent({ handleOnDataChange }) {
     handleOnDataChange({ ...data, upload_info: updatedFormState });
   };
 
-  
+  const handleAuthorisedSignaturesChange = (newData) => {
+    const convertedArray = []
+    newData.forEach((row) => {
+      convertedArray.push({
+        title: row.Title.data,
+        name: row.Name.data,
+        phone: row.Phone.data,
+        mobile: row.Mobile.data,
+        email: row.Email.data
+      })
+    })
+
+    handleFormDataChange("authorised_signatures", convertedArray)
+  }
+
+  const Authorised_Signatures_fields = [
+    { field: "Title", headerName: "Title", type: "text", cellWidth: "25%", CellAlign: 'center' },
+    { field: "Name", headerName: "Name", type: "text", cellWidth: "25%" },
+    { field: "Phone", headerName: "Phone number", type: "text", cellWidth: "25%" },
+    { field: "Mobile", headerName: "Mobile number", type: "text", cellWidth: "25%" },
+    { field: "Email", headerName: "Email", type: "text", cellWidth: "25%" }
+  ];
+
+  let Authorised_Signatures_defaultRows = [
+    {
+      Title: { data: "", editable: true},
+      Name: { data: "", editable: true },
+      Phone: { data: "", editable: true },
+      Mobile: { data: "", editable: true },
+      Email: { data: "", editable: true }
+    },
+    {
+      Title: { data: "", editable: true},
+      Name: { data: "", editable: true },
+      Phone: { data: "", editable: true },
+      Mobile: { data: "", editable: true },
+      Email: { data: "", editable: true }
+    }
+  ]
+
+  if (formState.authorised_signatures.length > 0) {
+    // Authorised_Signatures_defaultRows = formState.authorised_signatures
+    formState.authorised_signatures.forEach((item, index) => {
+      Authorised_Signatures_defaultRows[index].Title.data = item.title
+      Authorised_Signatures_defaultRows[index].Name.data = item.name
+      Authorised_Signatures_defaultRows[index].Phone.data = item.phone
+      Authorised_Signatures_defaultRows[index].Mobile.data = item.mobile
+      Authorised_Signatures_defaultRows[index].Email.data = item.email
+    })
+  }
+
   return (
     <div>
     <FormStepDescription>This is the final step - upload necessary files and provide your requests</FormStepDescription>
@@ -103,7 +156,6 @@ function UploadComponent({ handleOnDataChange }) {
       </Grid>
     </Grid>
 
-
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' , mt: 5 }}>
       <p>Could you confirm if you hold a VAT certification?</p>
       <RadioGroup onChange={e => handleFormDataChange("hasVatCert", e.target.value)} sx={{ flexDirection: 'row' }} value={formState.hasVatCert || false}>
@@ -119,19 +171,20 @@ function UploadComponent({ handleOnDataChange }) {
         />
       </RadioGroup>
       {formState.hasVatCert === 'yes' && (
-        <>
-        <Typography variant="h6" className={UploadLabelClass.label}>VAT Document</Typography>
-        <FileUploader
-        multiple={false}
-        handleChange={e => handleFormDataChange("vatfile", e)}
-        name="file"
-        types={fileTypes}
-        label={formState.vatfile ? formState.vatfile.name : "Upload File"}
-        />
-        </>
+        <Grid container spacing={7}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" className={UploadLabelClass.label}>VAT Document</Typography>
+            <FileUploader
+            multiple={false}
+            handleChange={e => handleFormDataChange("vatfile", e)}
+            name="file"
+            types={fileTypes}
+            label={formState.vatfile ? formState.vatfile.name : "Upload File"}
+            />
+          </Grid>
+        </Grid>
       )}
     </Box>
-
 
     <Typography variant="h6" className={LabelClass.label}>Request credit limit</Typography>
     <Grid container spacing={7}>
@@ -154,21 +207,37 @@ function UploadComponent({ handleOnDataChange }) {
         </Grid>
     </Grid>
 
-
+    <BlockTitle>Authorised Signaturers</BlockTitle>
+    <DataTable onDataTableChange={handleAuthorisedSignaturesChange} columns={Authorised_Signatures_fields} defaultRows={Authorised_Signatures_defaultRows} unique_key={'Authorised_Signatures'} maxRows={2} preventDelete={true}/>
     {/*confirm information checkbox*/}
 
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', mt: 5, p: 2, bgcolor: 'grey.100' }}>
       <Typography variant="body1" sx={{ mb: 2 }}>
-        I/We the undersigned, hereby apply with full responsibility, and confirm that the information shown
-        on this form is true and correct. I / We also authorize you to verify information from whatever sources
-        you may consider appropriate. I / We acknowledge and agree that this application will be deemed an
-        acceptance of your sale terms and conditions, as these will appear on your invoices once they are
-        accepted by our organization. I / We hereby declare and undertake to pay all the amounts due from
-        us, which may be shown as per your books of accounts on account of our dealings with your company.
-        If we fail to pay any amounts due or settle the outstanding invoices, we hereby authorize you to take
-        any legal action including taking back your goods from us for the value equivalent to the total
-        outstanding dues without any prejudice. Any changes in the information shown overleaf, will be
-        immediately communicated to you.
+      · All invoices are to be paid as per the approved Credit terms.
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      · Claims arising from invoices must be made within 7 working days.
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      · We agree to settle all payment on/before the due dates.
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      · By submitting this request, you authorise Horeca Trade LLC to make inquires into the banking and business/trade references that you have supplied.
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      · Horeca Trade LLC must be notified immediately in case of any change in the management/authorization/authorized signatories and any changes to the legal entity.
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      · Any change in legal status/ownership/Management of the Company & Address change shall be informed to Horeca Trade LLC
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      · We accept all liability of all supplies made by Horeca Trade LLC against purchase orders/delivery orders.
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      · Horeca Trade LLC reserves the right to suspend supply of material/amend the credit facility granted without notice, according to the account performance.
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      · Interest @ 12% p.a. will be charged on delayed payments.
       </Typography>
       <RadioGroup onChange={e => handleFormDataChange("confirm_info", e.target.value)} sx={{ flexDirection: 'row' }} value={formState.confirm_info || ""}>
         <FormControlLabel

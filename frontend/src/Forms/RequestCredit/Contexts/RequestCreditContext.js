@@ -10,7 +10,9 @@ export const RequestCreditProvider = ({ children }) => {
     license_info: {},
     contacts_info: {},
     references_info: {},
-    upload_info: {},
+    upload_info: {
+      authorised_signatures: [],
+    },
   });
 
   const [isDataLoaded, setIsDataLoaded] = useState(false);

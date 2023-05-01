@@ -6,6 +6,7 @@ import Documents from './Documents.js'
 import Requests from './Requests.js'
 import ApplicationTime from './ApplicationTime.js'
 import DocusignEnvelopes from './DocusignEnvelopes.js'
+import AuthorisedSignatures from './AuthorisedSignatures.js'
 
 export default class RegisterBranch {
     constructor(pool){
@@ -18,6 +19,7 @@ export default class RegisterBranch {
         this.Requests = new Requests(this.pool)
         this.ApplicationTime = new ApplicationTime(this.pool)
         this.DocusignEnvelopes = new DocusignEnvelopes(this.pool)
+        this.AuthorisedSignatures = new AuthorisedSignatures(this.pool)
     }
 
 }
