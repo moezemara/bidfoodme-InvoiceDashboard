@@ -136,6 +136,15 @@ export async function SavePageProgress(req, res, next) {
                 if(!direct_check_body_license.status){
                     return config.ApplicationMode == 'DEVELOPMENT' ? response.fail(res, direct_check_body_license.message) : response.fail(res, 'Invalid request body')
                 }
+
+                const today = new Date()
+                if (data.license_expiry_date){
+                    const license_expiry_date = new Date(data.license_expiration)
+                    if (license_expiry_date < today){
+                        return response.fail(res, 'License expiry date must be valid')
+                    }
+                }
+
                 const get_license_info_action = await database.RequestCredit.LicenseInfo.SelectLicenseInfoByApplicationId({application_id: application_id})
                 if (get_license_info_action.length == 0){
                     const create_license_info_action = await database.RequestCredit.LicenseInfo.InsertLicenseInfo({application_id: application_id, ...data})

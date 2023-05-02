@@ -88,9 +88,9 @@ export default async function VerifyFinish(database, application_id) {
 
     // suppliers
     const get_suppliers_info_action = await database.RequestCredit.Suppliers.SelectSuppliersByApplicationId({application_id: application_id})
-    
-    if (get_suppliers_info_action.length == 0){
-        return {status: false, message: 'Please complete suppliers info'}
+
+    if (get_suppliers_info_action.length != 3){
+        return {status: false, message: 'Suppliers should be 3'}
     }
 
     // uploads

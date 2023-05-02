@@ -325,6 +325,7 @@ export default function CreateDocument(data){
                 </tr>
                 ${LoadOwnersTable(data.owners)}
                 ${LoadDepatmentsTable(data.departments)}
+                ${LoadAuthorisedTable(data.authorised_signatures)}
                 <tr>
                     <td class="p0">
                         <table width="100%" class="tbl_cls" cellpadding="0" cellspacing="0" style="margin-top: 15px;">
@@ -432,6 +433,7 @@ export default function CreateDocument(data){
                     </td>
                 </tr>
             </table>
+            ${LoadTerms()}
             <h3 style="margin-top:3em;">Agreed: ${data.authorised_signatures[0].name} <span style="color:white;">**signature_1**/</span></h3>
             <h3 style="margin-top:3em;">Agreed: ${data.authorised_signatures[1].name} <span style="color:white;">**signature_2**/</span></h3>
 
@@ -565,4 +567,78 @@ function LoadSuppliersTable(data){
     </tr>`
 
     return table
+}
+
+function LoadAuthorisedTable(data){
+    const table =  `
+    <tr>
+        <td class="p0">
+            <table width="100%" class="border_tbl" cellpadding="0" cellspacing="0" style="margin-top:10px;">
+                <thead>
+                    <tr>
+                        <td colspan="7" align="center" bgcolor="#244061" style="text-transform:capitalize;color: #fff;letter-spacing: 0.5px;">
+                            Owner/Partner Details
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%" align="center" valign="middle">Title</td>
+                        <td width="20%" align="center" valign="middle">Name</td>
+                        <td width="20%" align="center" valign="middle">Phone</td>
+                        <td width="20%" align="center" valign="middle">Mobile</td>
+                        <td width="20%" align="center" valign="middle">Email</td>
+                    </tr>
+                </thead>						
+                ${
+                    data.map((item, index) => {
+                        return `<tr>
+                        <td align="center" valign="middle">${item.title || ""}</td>
+                        <td align="center" valign="middle">${item.name || ""}</td>
+                        <td align="center" valign="middle">${item.phone || ""}</td>
+                        <td align="center" valign="middle">${item.mobile || ""}</td>
+                        <td align="center" valign="middle">${item.email || ""}</td>
+                        </tr>`
+
+                    }).join('')
+                }
+            </table>
+        </td>
+    </tr>`
+    return table
+}
+
+function LoadTerms(){
+    const terms = `
+    <p>
+        <strong>Terms & Conditions:</strong>
+    </p>
+    <p>
+        <strong>1.</strong> All invoices are to be paid as per the approved Credit terms.
+    </p>
+    <p>
+        <strong>2.</strong> Claims arising from invoices must be made within 7 working days.
+    </p>
+    <p>
+        <strong>3.</strong> We agree to settle all payment on/before the due dates.
+    </p>
+    <p>
+        <strong>4.</strong> By submitting this request, you authorise Horeca Trade LLC to make inquires into the banking and business/trade references that you have supplied.
+    </p>
+    <p> 
+        <strong>5.</strong> Horeca Trade LLC must be notified immediately in case of any change in the management/authorization/authorized signatories and any changes to the legal entity.
+    </p>
+    <p>
+        <strong>6.</strong> Any change in legal status/ownership/Management of the Company & Address change shall be informed to Horeca Trade LLC
+    </p>
+    <p>
+        <strong>7.</strong> We accept all liability of all supplies made by Horeca Trade LLC against purchase orders/delivery orders.
+    </p>
+    <p>
+        <strong>8.</strong> Horeca Trade LLC reserves the right to suspend supply of material/amend the credit facility granted without notice, according to the account performance.
+    </p>
+    <p>
+        <strong>9.</strong> Interest @ 12% p.a. will be charged on delayed payments.
+    </p>
+    `
+
+    return terms
 }
